@@ -37,7 +37,6 @@ export default async function LoginPage() {
             Enter your email to sign in to your account
           </p>
         </div>
-        {/* @ts-expect-error Server Component */}
         <LoginOptions />
         {/* <p className="px-8 text-center text-sm text-muted-foreground">
           <Link
