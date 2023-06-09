@@ -1,0 +1,114 @@
+.milkdown-theme-iojcde blockquote {
+  @apply not-italic font-serif border-l-4 border-border pl-4;
+}
+
+.milkdown-theme-iojcde code {
+  @apply text-gray-12 font-mono font-normal;
+}
+
+.milkdown-theme-iojcde pre code {
+  @apply text-inherit;
+}
+
+.milkdown-theme-iojcde img {
+  @apply max-w-full !my-0 inline-block;
+}
+
+.milkdown-theme-iojcde.prose :where(blockquote):not(:where([class~="not-prose"] *)) {
+  @apply font-normal;
+}
+
+.milkdown-theme-iojcde.prose :where(ol > li):not(:where([class~="not-prose"] *))::marker,
+.milkdown-theme-iojcde.prose :where(ul > li):not(:where([class~="not-prose"] *))::marker {
+  @apply text-gray-12;
+}
+
+
+.milkdown-theme-iojcde.prose :where(blockquote p:first-of-type):not(:where([class~="not-prose"] *))::before,
+.milkdown-theme-iojcde.prose :where(blockquote p:first-of-type):not(:where([class~="not-prose"] *))::after {
+  content: '';
+}
+
+.milkdown-theme-iojcde.prose :where(code):not(:where([class~="not-prose"] *))::before,
+.milkdown-theme-iojcde.prose :where(code):not(:where([class~="not-prose"] *))::after {
+  content: '';
+}
+
+.milkdown-theme-iojcde.prose .tableWrapper {
+  @apply mb-2 overflow-x-auto relative;
+}
+
+.milkdown-theme-iojcde.prose table {
+  @apply text-sm shadow-md sm:rounded-lg !overflow-visible !m-4;
+}
+
+.milkdown-theme-iojcde.prose td, th {
+  @apply !py-3 !px-6;
+}
+
+.milkdown-theme-iojcde.prose tr {
+  @apply border-b border-border dark:border-gray-10;
+}
+
+.milkdown-theme-iojcde.prose :where(td, th) p {
+  @apply !m-0;
+}
+
+.milkdown-theme-iojcde.prose :where(td, th):nth-child(odd) {
+  @apply bg-gray-50 dark:bg-gray-12;
+}
+
+.milkdown-theme-iojcde.prose.ProseMirror .selectedCell:after {
+  @apply bg-gray-6/30;
+}
+
+/* A little workaround to turn the element into a space */
+.milkdown-theme-iojcde.prose br[data-is-inline="true"],
+.milkdown-theme-iojcde.prose br[data-is-inline="true"]::after {
+  content: ' '
+}
+
+[data-milkdown-root]{
+  @apply h-full;
+}
+
+.milkdown{
+  @apply h-full;
+}
+.ProseMirror[data-placeholder]::before {
+  color: #a9a9a9;
+  position: absolute;
+  content: attr(data-placeholder);
+  pointer-events: none;
+  font-size: 16px;
+  /* Using default height value of p element in chrome */
+  line-height: 28px;
+}
+
+/* this is a rough fix for the first cursor position when the first paragraph is empty */
+.ProseMirror > .ProseMirror-yjs-cursor:first-child {
+  margin-top: 16px;
+}
+.ProseMirror p:first-child, .ProseMirror h1:first-child, .ProseMirror h2:first-child, .ProseMirror h3:first-child, .ProseMirror h4:first-child, .ProseMirror h5:first-child, .ProseMirror h6:first-child {
+  margin-top: 16px
+}
+/* This gives the remote user caret. The colors are automatically overwritten*/
+.ProseMirror-yjs-cursor {
+  position: relative;
+  margin-left: -1px;
+  margin-right: -1px;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-color: orange;
+  word-break: normal;
+  pointer-events: none;
+}
+/* This renders the username above the caret */
+.ProseMirror-yjs-cursor > div {
+  position: absolute;
+  top: -1.05em;
+  left: -1px;
+  font-size: 16px;
+  user-select: none; 
+  white-space: nowrap;
+}
