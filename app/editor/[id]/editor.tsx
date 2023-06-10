@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  useTransition,
-} from "react";
+import React, { useCallback, useEffect, useState, useTransition } from "react";
 import { Editor, rootCtx } from "@milkdown/core";
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import { gfm } from "@milkdown/preset-gfm";
@@ -33,11 +27,9 @@ const MilkdownEditor: React.FC<{
   const { status, data: session } = useSession();
 
   const doc = new Doc();
-  const partykitProviderRef = useRef(
+  const [partykitProvider, setPartykitProvider] = useState(
     new YpartykitPrrovider("nijika.iojcde.partykit.dev", id, doc)
   );
-
-  const partykitProvider = partykitProviderRef.current;
 
   const { setSaved, setContent, setIsPending, content, isPending } =
     useEditorState();
