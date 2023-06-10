@@ -1,13 +1,13 @@
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
-import dynamic from "next/dynamic";
-import React, { useState } from "react";
+import NextDynamic from "next/dynamic";
+import React from "react";
 import { save } from "./save";
 import { Title } from "./title";
 import { Loader2 } from "lucide-react";
 
-const NoSSREditor = dynamic(() => import("@/app/editor/[id]/editor"), {
+const NoSSREditor = NextDynamic(() => import("@/app/editor/[id]/editor"), {
   ssr: false,
   loading: () => (
     <div className="flex items-center justify-center mt-48">
@@ -36,3 +36,5 @@ const EditorPage = async ({ params: { id } }: { params: { id: string } }) => {
   );
 };
 export default EditorPage;
+
+export const dynamic = "force-dynamic";

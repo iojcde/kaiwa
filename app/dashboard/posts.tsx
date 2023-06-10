@@ -18,3 +18,4 @@ export const Posts = async () => {
     </div>
   );
 };
+export const dynamic = "force-dynamic";
