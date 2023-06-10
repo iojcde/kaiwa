@@ -34,12 +34,7 @@ const MilkdownEditor: React.FC<{
 
   const doc = new Doc();
   const partykitProviderRef = useRef(
-    new YpartykitPrrovider(
-      "nijika.iojcde.partykit.dev",
-      `milkdown-${id}}`,
-      doc,
-      { connect: false }
-    )
+    new YpartykitPrrovider("nijika.iojcde.partykit.dev", id, doc)
   );
 
   const partykitProvider = partykitProviderRef.current;
@@ -106,7 +101,6 @@ const MilkdownEditor: React.FC<{
       color: "#FFC0CB",
       name: session.user.name,
     });
-    partykitProvider.connect();
   }
 
   get()?.action((ctx) => {
