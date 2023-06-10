@@ -35,7 +35,7 @@ const MilkdownEditor: React.FC<{
   const doc = new Doc();
   const partykitProviderRef = useRef(
     new YpartykitPrrovider(
-      "nijika.iojcde.partykit.dev/",
+      "nijika.iojcde.partykit.dev",
       `milkdown-${id}}`,
       doc,
       { connect: false }
@@ -44,14 +44,8 @@ const MilkdownEditor: React.FC<{
 
   const partykitProvider = partykitProviderRef.current;
 
-  const {
-    title: currentTitle,
-    setSaved,
-    setContent,
-    setIsPending,
-    content,
-    isPending,
-  } = useEditorState();
+  const { setSaved, setContent, setIsPending, content, isPending } =
+    useEditorState();
 
   const saveFn = useCallback(
     debounce(async ({ content }: { content: string }) => {
