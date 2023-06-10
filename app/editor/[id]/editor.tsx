@@ -27,9 +27,13 @@ const MilkdownEditor: React.FC<{
   const { status, data: session } = useSession();
 
   const doc = new Doc();
-  const [partykitProvider, setPartykitProvider] = useState(
-    new YpartykitPrrovider("nijika.iojcde.partykit.dev", id, doc)
-  );
+  const [partykitProvider, setPartykitProvider] =
+    useState<YpartykitPrrovider>();
+  useEffect(() => {
+    setPartykitProvider(
+      new YpartykitPrrovider("nijika.iojcde.partykit.dev", id, doc)
+    );
+  }, []);
 
   const { setSaved, setContent, setIsPending, content, isPending } =
     useEditorState();
