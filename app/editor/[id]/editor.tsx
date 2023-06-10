@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useCallback, useEffect, useState, useTransition } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import { Editor, rootCtx } from "@milkdown/core";
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import { gfm } from "@milkdown/preset-gfm";
@@ -19,20 +25,25 @@ import YpartykitPrrovider from "y-partykit/provider";
 import { Doc } from "yjs";
 import { useSession } from "next-auth/react";
 
-const doc = new Doc();
-const partykitProvider = new YpartykitPrrovider(
-  "nijika.iojcde.partykit.dev/",
-  "milkdown",
-  doc,
-  { connect: false }
-);
-
 const MilkdownEditor: React.FC<{
   content?: string;
   save: typeof save;
   id: string;
 }> = ({ content: defaultContent, id, save }) => {
   const { status, data: session } = useSession();
+
+  const doc = new Doc();
+  const partykitProviderRef = useRef(
+    new YpartykitPrrovider(
+      "nijika.iojcde.partykit.dev/",
+      `milkdown-${id}}`,
+      doc,
+      { connect: false }
+    )
+  );
+
+  const partykitProvider = partykitProviderRef.current;
+
   const {
     title: currentTitle,
     setSaved,
