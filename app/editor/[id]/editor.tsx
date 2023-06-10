@@ -25,6 +25,8 @@ import YpartykitPrrovider from "y-partykit/provider";
 import { Doc } from "yjs";
 import { useSession } from "next-auth/react";
 
+const doc = new Doc();
+
 const MilkdownEditor: React.FC<{
   content?: string;
   save: typeof save;
@@ -32,7 +34,6 @@ const MilkdownEditor: React.FC<{
 }> = ({ content: defaultContent, id, save }) => {
   const { status, data: session } = useSession();
 
-  const doc = new Doc();
   const partykitProvider = useMemo(
     () => new YpartykitPrrovider("nijika.iojcde.partykit.dev", id, doc),
     [id]
@@ -84,7 +85,7 @@ const MilkdownEditor: React.FC<{
           if (markdown !== prevMarkdown) {
             console.log("changed");
             setContent(markdown);
-            saveFn({ content: markdown });
+            // saveFn({ content: markdown });
           }
         });
       })
@@ -95,7 +96,7 @@ const MilkdownEditor: React.FC<{
   }, [setContent, defaultContent]);
 
   if (status === "authenticated") {
-    console.log("hi");
+    console.log("chanigin name");
     partykitProvider.awareness.setLocalStateField("user", {
       color: "#FFC0CB",
       name: session.user.name,
@@ -112,7 +113,13 @@ const MilkdownEditor: React.FC<{
           cursor.setAttribute("style", `border-color: ${user.color}`);
           const userDiv = document.createElement("div");
           userDiv.setAttribute("style", `background-color: ${user.color}`);
-          userDiv.classList.add("p-1", "px-2", "text-xs", "rounded-full");
+          userDiv.classList.add(
+            "p-1",
+            "px-2",
+            "text-xs",
+            "font-base",
+            "rounded-full"
+          );
           userDiv.insertBefore(document.createTextNode(user.name), null);
           cursor.insertBefore(userDiv, null);
           return cursor;
