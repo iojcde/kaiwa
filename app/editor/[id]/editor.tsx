@@ -14,12 +14,25 @@ import { listener, listenerCtx } from "@milkdown/plugin-listener";
 import { debounce } from "lodash";
 import { useEditorState } from "@/state/editor";
 import type { save } from "./save";
+import { collab, collabServiceCtx } from "@milkdown/plugin-collab";
+import YpartykitPrrovider from "y-partykit/provider";
+import { Doc } from "yjs";
+import { useSession } from "next-auth/react";
+
+const doc = new Doc();
+const partykitProvider = new YpartykitPrrovider(
+  "nijika.iojcde.partykit.dev/",
+  "milkdown",
+  doc,
+  { connect: false }
+);
 
 const MilkdownEditor: React.FC<{
   content?: string;
   save: typeof save;
   id: string;
 }> = ({ content: defaultContent, id, save }) => {
+  const { status, data: session } = useSession();
   const {
     title: currentTitle,
     setSaved,
@@ -34,101 +47,96 @@ const MilkdownEditor: React.FC<{
       setIsPending(true);
       console.log("saving content automatically");
 
-      const result = await save({
-        id,
-        content: content,
-      });
+      // const result = await save({
+      //   id,
+      //   content: content,
+      // });
 
       setIsPending(false);
-      console.log(result)
-      
+      // console.log(result);
+
       setSaved(true);
     }, 5000),
     []
   );
 
-  const { get } = useEditor(
-    (root) =>
-      Editor.make()
-        .config(theme)
-        .config((ctx) => {
-          ctx.set(rootCtx, root);
-          ctx.set(placeholderCtx, "Type here to write your post...");
-        })
-        .config((ctx) => {
-          defaultContent && ctx.set(defaultValueCtx, defaultContent);
-        })
-        .use(commonmark)
-        .use(gfm)
-        .use(clipboard)
-        .use(history)
-        .use(placeholder)
-        .use(listener)
-        .config((ctx) => {
-          const listener = ctx.get(listenerCtx);
+  const { get } = useEditor((root) =>
+    Editor.make()
+      .config(theme)
+      .config((ctx) => {
+        ctx.set(rootCtx, root);
+        ctx.set(placeholderCtx, "Type here to write your post...");
+      })
+      .config((ctx) => {
+        defaultContent && ctx.set(defaultValueCtx, defaultContent);
+      })
+      .use(commonmark)
+      .use(gfm)
+      .use(clipboard)
+      .use(history)
+      .use(placeholder)
+      .use(listener)
+      .use(collab)
+      .config((ctx) => {
+        const listener = ctx.get(listenerCtx);
 
-          listener.markdownUpdated((ctx, markdown, prevMarkdown) => {
-            setSaved(false);
-            if (markdown !== prevMarkdown) {
-              console.log("changed");
-              setContent(markdown);
-              saveFn({ content: markdown });
-            }
-          });
-        })
-    // .use(collab)
+        listener.markdownUpdated((ctx, markdown, prevMarkdown) => {
+          setSaved(false);
+          if (markdown !== prevMarkdown) {
+            console.log("changed");
+            setContent(markdown);
+            saveFn({ content: markdown });
+          }
+        });
+      })
   );
 
   useEffect(() => {
     setContent(defaultContent ?? "");
   }, [setContent, defaultContent]);
 
-  // const doc = new Doc();
-  // const wsProvider = new WebsocketProvider(
-  //   "ws://localhost:1234",
-  //   "milkdown",
-  //   doc
-  // );
+  if (status === "authenticated") {
+    console.log("hi");
+    partykitProvider.awareness.setLocalStateField("user", {
+      color: "#FFC0CB",
+      name: session.user.name,
+    });
+    partykitProvider.connect();
+  }
 
-  // if (status === "authenticated") {
-  //   wsProvider.awareness.setLocalStateField("user", {
-  //     color: "#FFC0CB",
-  //     name: session?.user.name,
-  //   });
-  // }
-  // get()?.action((ctx) => {
-  //   const collabService = ctx.get(collabServiceCtx);
-  //   collabService.setOptions({
-  //     yCursorOpts: {
-  //       cursorBuilder: (user) => {
-  //         const cursor = document.createElement("span");
-  //         cursor.classList.add("ProseMirror-yjs-cursor");
-  //         cursor.setAttribute("style", `border-color: ${user.color}`);
-  //         const userDiv = document.createElement("div");
-  //         userDiv.setAttribute("style", `background-color: ${user.color}`);
-  //         userDiv.classList.add("p-1", "px-2", "text-xs", "rounded-full");
-  //         userDiv.insertBefore(document.createTextNode(user.name), null);
-  //         cursor.insertBefore(userDiv, null);
-  //         return cursor;
-  //       },
-  //     },
-  //   });
+  get()?.action((ctx) => {
+    const collabService = ctx.get(collabServiceCtx);
+    collabService.setOptions({
+      yCursorOpts: {
+        cursorBuilder: (user) => {
+          const cursor = document.createElement("span");
+          cursor.classList.add("ProseMirror-yjs-cursor");
+          cursor.setAttribute("style", `border-color: ${user.color}`);
+          const userDiv = document.createElement("div");
+          userDiv.setAttribute("style", `background-color: ${user.color}`);
+          userDiv.classList.add("p-1", "px-2", "text-xs", "rounded-full");
+          userDiv.insertBefore(document.createTextNode(user.name), null);
+          cursor.insertBefore(userDiv, null);
+          return cursor;
+        },
+      },
+    });
 
-  // collabService
-  //   // bind doc and awareness
-  //   .bindDoc(doc)
-  //   .setAwareness(wsProvider.awareness)
-  //   // connect yjs with milkdown
-  //   .connect();
+    collabService
+      // bind doc and awareness
+      .bindDoc(doc)
+      .setAwareness(partykitProvider.awareness)
+      // connect yjs with milkdown
+      .connect();
 
-  // wsProvider.once("synced", async (isSynced: boolean) => {
-  //   collabService
-  //     // apply your template
-  //     .applyTemplate(content)
-  //     // don't forget connect
-  //     .connect();
-  // });
-  // });
+    partykitProvider.once("synced", async (isSynced: boolean) => {
+      collabService
+        // apply your template
+        .applyTemplate(content)
+        // don't forget connect
+        .connect();
+    });
+  });
 
   return (
     <div>
