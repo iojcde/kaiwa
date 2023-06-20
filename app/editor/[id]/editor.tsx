@@ -64,7 +64,7 @@ const MilkdownEditor: React.FC<{
     Editor.make()
       .config(theme)
       .config((ctx) => {
-        ctx.set(rootCtx, root);
+        ctx.set(rootCtx, root as Node);
         ctx.set(placeholderCtx, "Type here to write your post...");
       })
       .config((ctx) => {
