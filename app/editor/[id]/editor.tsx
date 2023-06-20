@@ -21,7 +21,7 @@ import { debounce } from "lodash";
 import { useEditorState } from "@/state/editor";
 import type { save } from "./save";
 import { collab, collabServiceCtx } from "@milkdown/plugin-collab";
-import YpartykitPrrovider from "y-partykit/provider";
+import YpartykitProvider from "y-partykit/provider";
 import { Doc } from "yjs";
 import { useSession } from "next-auth/react";
 
@@ -35,7 +35,7 @@ const MilkdownEditor: React.FC<{
   const { status, data: session } = useSession();
 
   const partykitProvider = useMemo(
-    () => new YpartykitPrrovider("nijika.iojcde.partykit.dev", id, doc),
+    () => new YpartykitProvider("nijika.iojcde.partykit.dev", id, doc),
     [id]
   );
 
@@ -117,7 +117,7 @@ const MilkdownEditor: React.FC<{
             "p-1",
             "px-2",
             "text-xs",
-            "font-base",
+            "font-normal",
             "rounded-full"
           );
           userDiv.insertBefore(document.createTextNode(user.name), null);

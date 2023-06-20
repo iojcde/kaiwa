@@ -7,7 +7,7 @@ export const PostCard = ({ post }: { post: Post }) => (
       href={`/editor/${post.id}`}
       className="font-3xl font-semibold tracking-tight hover:underline"
     >
-      {post.title}
+      {post.title != "" ? post.title : "Untitled Post"}
     </Link>
     <p></p>
     <span className="text-sm text-gray-10">

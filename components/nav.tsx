@@ -7,7 +7,7 @@ export const Nav = () => {
       <div className="max-w-screen-xl mx-auto w-full flex items-center px-6 justify-between">
         <Link
           href="/dashboard"
-          className="font-semibold text-xl flex gap-2 items-center"
+          className="font-medium text-xl font-display flex gap-2 items-center"
         >
           <svg
             viewBox="0 0 24 24"
@@ -20,7 +20,7 @@ export const Nav = () => {
           >
             <circle cx="12" cy="12" r="10"></circle>
           </svg>
-          Nijika
+          Indent
         </Link>
         <div>
           <UserNav />

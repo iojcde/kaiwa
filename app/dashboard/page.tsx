@@ -40,4 +40,4 @@ const Dashboard = async () => {
 
 export default Dashboard;
 
-// export const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic";

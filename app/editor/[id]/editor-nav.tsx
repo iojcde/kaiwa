@@ -39,7 +39,7 @@ export const EditorNav: React.FC<{ id: string; save: typeof save }> = ({
         <ChevronLeft size={16} />
         Back
       </Link>
-      <div className="flex items-center gap-2">
+      {/* <div className="flex items-center gap-2">
         <Button
           size="sm"
           onClick={() => saveFn({ title, content: content ?? "" })}
@@ -51,7 +51,7 @@ export const EditorNav: React.FC<{ id: string; save: typeof save }> = ({
           )}
           {isPending ? "Saving" : saved ? "Saved" : "Save"}
         </Button>
-      </div>
+      </div> */}
     </nav>
   );
 };

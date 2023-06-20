@@ -27,7 +27,7 @@ export const Title: React.FC<{
       setIsPending(false);
       console.log(result);
       setSaved(true);
-    }, 5000),
+    }, 1000),
     []
   );
 
