@@ -26,14 +26,14 @@ const EditorPage = async ({
 }) => {
   const session = await getServerSession(authOptions);
 
-  const doc = new Doc(); 
+  const doc = new Doc();
   const provider = new YProvider("nijika.iojcde.partykit.dev", room, doc);
 
   provider;
 
   return (
     <div className="px-6 w-full max-w-screen-md mx-auto mt-8">
-      <NoSSREditor content={"wwwwwwwwww"} save={save} room={room} />
+      <NoSSREditor save={save} room={room} />
     </div>
   );
 };
