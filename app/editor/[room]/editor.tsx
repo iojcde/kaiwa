@@ -44,10 +44,10 @@ const MilkdownEditor: React.FC<{
         connect: false,
       }
     );
-    p.url += `&token=${encodeURIComponent(session?.wsToken)}&userID=${
+    p.url += `&token=${encodeURIComponent(session?.wsToken)}&userid=${
       session?.user.id
     }`;
-    p.connect();
+    session.wsToken && session.user.id && p.connect();
 
     return p;
   }, [room, status]);

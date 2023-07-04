@@ -13,7 +13,7 @@ const config = {
     //   any shared in-memory state between `onBefore*` and `on*` methods.
     // - Throwing an error in this callback will lead to a rejected connection.
     const token = new URL(req.url).searchParams.get("token");
-    const userID = new URL(req.url).searchParams.get("userID");
+    const userID = new URL(req.url).searchParams.get("userid");
 
     const asdf = await fetch("https://nijika.jcde.xyz/api/ws-auth", {
       method: "POST",
