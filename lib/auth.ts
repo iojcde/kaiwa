@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
       });
 
       if (dbUser.wsToken == null) {
-        db.user.update({
+        dbUser = await db.user.update({
           where: { id: dbUser.id },
           data: {
             wsToken: require("crypto").randomBytes(256).toString("base64"),
