@@ -7,7 +7,10 @@ import { save } from "./save";
 import { Title } from "./title";
 import { Loader2 } from "lucide-react";
 
-const NoSSREditor = NextDynamic(() => import("@/app/editor/[id]/editor"), {
+import YProvider from "y-partykit/provider";
+import { Doc } from "yjs";
+
+const NoSSREditor = NextDynamic(() => import("@/app/editor/[room]/editor"), {
   ssr: false,
   loading: () => (
     <div className="flex items-center justify-center mt-48">
@@ -16,22 +19,21 @@ const NoSSREditor = NextDynamic(() => import("@/app/editor/[id]/editor"), {
   ),
 });
 
-const EditorPage = async ({ params: { id } }: { params: { id: string } }) => {
-  const post = await db.post.findUnique({ where: { id } });
+const EditorPage = async ({
+  params: { room },
+}: {
+  params: { room: string };
+}) => {
   const session = await getServerSession(authOptions);
 
-  if (post?.authorId != session?.user.id || !post) {
-    return <p>Not your post</p>;
-  }
+  const doc = new Doc(); 
+  const provider = new YProvider("nijika.iojcde.partykit.dev", room, doc);
+
+  provider;
 
   return (
     <div className="px-6 w-full max-w-screen-md mx-auto mt-8">
-      <Title
-        save={save}
-        id={id}
-        defaultTitle={post?.title ?? "Untitled Post"}
-      />
-      <NoSSREditor content={post?.content ?? ""} save={save} id={id} />
+      <NoSSREditor content={"wwwwwwwwww"} save={save} room={room} />
     </div>
   );
 };

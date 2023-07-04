@@ -14,8 +14,11 @@ import { commonmark } from "@milkdown/preset-commonmark";
 import { theme } from "@/milkdown/theme";
 import { clipboard } from "@milkdown/plugin-clipboard";
 import { history } from "@milkdown/plugin-history";
-import { defaultValueCtx } from "@milkdown/core";
-import { placeholder, placeholderCtx } from "@/milkdown/plugins/placeholder";
+import {
+  placeholder,
+  placeholderCtx,
+  placeholderEnabledCtx,
+} from "@/milkdown/plugins/placeholder";
 import { listener, listenerCtx } from "@milkdown/plugin-listener";
 import { debounce } from "lodash";
 import { useEditorState } from "@/state/editor";
@@ -24,41 +27,33 @@ import { collab, collabServiceCtx } from "@milkdown/plugin-collab";
 import YpartykitProvider from "y-partykit/provider";
 import { Doc } from "yjs";
 import { useSession } from "next-auth/react";
-
 const doc = new Doc();
 
 const MilkdownEditor: React.FC<{
-  content?: string;
   save: typeof save;
-  id: string;
-}> = ({ content: defaultContent, id, save }) => {
+  room: string;
+}> = ({ room, save }) => {
   const { status, data: session } = useSession();
+  console.log("wsToken", session?.wsToken);
+  const partykitProvider = useMemo(() => {
+    const p = new YpartykitProvider(
+      `nijika.iojcde.partykit.dev/party`,
+      room,
+      doc,
+      {
+        connect: false,
+      }
+    );
+    p.url += `&token=${encodeURIComponent(session?.wsToken)}&userID=${
+      session?.user.id
+    }`;
+    p.connect();
 
-  const partykitProvider = useMemo(
-    () => new YpartykitProvider("nijika.iojcde.partykit.dev", id, doc),
-    [id]
-  );
+    return p;
+  }, [room, status]);
 
   const { setSaved, setContent, setIsPending, content, isPending } =
     useEditorState();
-
-  const saveFn = useCallback(
-    debounce(async ({ content }: { content: string }) => {
-      setIsPending(true);
-      console.log("saving content automatically");
-
-      // const result = await save({
-      //   id,
-      //   content: content,
-      // });
-
-      setIsPending(false);
-      // console.log(result);
-
-      setSaved(true);
-    }, 5000),
-    []
-  );
 
   const { get } = useEditor((root) =>
     Editor.make()
@@ -67,16 +62,13 @@ const MilkdownEditor: React.FC<{
         ctx.set(rootCtx, root as Node);
         ctx.set(placeholderCtx, "Type here to write your post...");
       })
-      .config((ctx) => {
-        defaultContent && ctx.set(defaultValueCtx, defaultContent);
-      })
       .use(commonmark)
       .use(gfm)
       .use(clipboard)
       .use(history)
+      .use(collab)
       .use(placeholder)
       .use(listener)
-      .use(collab)
       .config((ctx) => {
         const listener = ctx.get(listenerCtx);
 
@@ -91,10 +83,6 @@ const MilkdownEditor: React.FC<{
       })
   );
 
-  useEffect(() => {
-    setContent(defaultContent ?? "");
-  }, [setContent, defaultContent]);
-
   if (status === "authenticated") {
     console.log("chanigin name");
     partykitProvider.awareness.setLocalStateField("user", {
@@ -105,6 +93,8 @@ const MilkdownEditor: React.FC<{
 
   get()?.action((ctx) => {
     const collabService = ctx.get(collabServiceCtx);
+    const placeholderEnabled = ctx.get(placeholderEnabledCtx);
+
     collabService.setOptions({
       yCursorOpts: {
         cursorBuilder: (user) => {
@@ -135,30 +125,27 @@ const MilkdownEditor: React.FC<{
       .connect();
 
     partykitProvider.once("synced", async (isSynced: boolean) => {
-      collabService
-        // apply your template
-        .applyTemplate(content)
-        // don't forget connect
-        .connect();
+      console.log("wow");
+      ctx.set(placeholderEnabledCtx, true);
     });
   });
 
   return (
-    <div>
+    <div
+      className={partykitProvider.wsconnected ? "connected" : "disconnected"}
+    >
       <Milkdown />
     </div>
   );
 };
 
 const MilkdownEditorWrapper: React.FC<{
-  content?: string;
-
   save: typeof save;
-  id: string;
-}> = ({ content, save, id }) => {
+  room: string;
+}> = ({ save, room }) => {
   return (
     <MilkdownProvider>
-      <MilkdownEditor content={content} save={save} id={id} />
+      <MilkdownEditor save={save} room={room} />
     </MilkdownProvider>
   );
 };

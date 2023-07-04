@@ -75,6 +75,8 @@
 .milkdown{
   @apply h-full;
 }
+
+ 
 .ProseMirror[data-placeholder]::before {
   color: #a9a9a9;
   position: absolute;

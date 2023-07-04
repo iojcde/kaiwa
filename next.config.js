@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    enableUndici: true,
+  experimental: { 
     serverActions:true
 
   }

@@ -37,6 +37,7 @@ export const authOptions: NextAuthOptions = {
         name: dbUser.name,
         email: dbUser.email,
         picture: dbUser.image,
+        wsToken: require('crypto').randomBytes(256).toString('base64')
       };
     },
     async session({ token, session }) {
@@ -45,6 +46,7 @@ export const authOptions: NextAuthOptions = {
         session.user.name = token.name;
         session.user.email = token.email;
         session.user.image = token.picture;
+        session.wsToken = token.wsToken
       }
 
       return session;

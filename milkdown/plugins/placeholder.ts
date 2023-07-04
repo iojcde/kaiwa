@@ -8,6 +8,9 @@ export const placeholderCtx = createSlice(
   "Please input here...",
   "placeholder"
 );
+
+export const placeholderEnabledCtx = createSlice(false, "placeholderEnabled");
+
 export const placeholderTimerCtx = createSlice(
   [] as TimerType[],
   "editorStateTimer"
@@ -20,6 +23,7 @@ const key = new PluginKey("MILKDOWN_PLACEHOLDER");
 export const placeholder: MilkdownPlugin = (ctx) => {
   ctx
     .inject(placeholderCtx)
+    .inject(placeholderEnabledCtx)
     .inject(placeholderTimerCtx, [InitReady])
     .record(PlaceholderReady);
 
@@ -36,7 +40,8 @@ export const placeholder: MilkdownPlugin = (ctx) => {
         doc.childCount === 1 &&
         doc.firstChild?.isTextblock &&
         doc.firstChild?.content.size === 0 &&
-        doc.firstChild?.type.name === "paragraph"
+        doc.firstChild?.type.name === "paragraph" &&
+        ctx.get(placeholderEnabledCtx)
       ) {
         view.dom.setAttribute("data-placeholder", placeholder);
       } else {

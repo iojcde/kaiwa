@@ -1,5 +1,6 @@
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
+import { getToken } from "next-auth/jwt";
 import Link from "next/link";
 
 export default async function Home() {
