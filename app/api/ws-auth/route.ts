@@ -8,13 +8,13 @@ const wsAuth = async (req: Request) => {
   }
   const { check, userID } = await req.json();
 
-  const session = await db.session.findFirst({ where: { userId: userID } });
+  const user = await db.user.findFirst({ where: { id: userID } });
 
-  console.log("session", session.wsToken);
+  console.log("session", user.wsToken);
 
   console.log("check:", check);
 
-  if (session.wsToken == check) {
+  if (user.wsToken == check) {
     return new Response("OK", { status: 200 });
   } else {
     return new Response("Unauthorized", { status: 401 });
