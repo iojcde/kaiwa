@@ -36,14 +36,9 @@ const MilkdownEditor: React.FC<{
   const { status, data: session } = useSession();
 
   const partykitProvider = useMemo(() => {
-    const p = new YpartykitProvider(
-      `nijika.iojcde.partykit.dev/party`,
-      room,
-      doc,
-      {
-        connect: false,
-      }
-    );
+    const p = new YpartykitProvider(`nijika.iojcde.partykit.dev`, room, doc, {
+      connect: false,
+    });
     p.url += `&token=${encodeURIComponent(session?.wsToken)}&userid=${
       session?.user.id
     }`;
@@ -65,9 +60,9 @@ const MilkdownEditor: React.FC<{
       .use(commonmark)
       .use(gfm)
       .use(clipboard)
+      .use(placeholder)
       .use(history)
       .use(collab)
-      .use(placeholder)
       .use(listener)
       .config((ctx) => {
         const listener = ctx.get(listenerCtx);
@@ -82,18 +77,18 @@ const MilkdownEditor: React.FC<{
         });
       })
   );
-
-  if (status === "authenticated") {
-    console.log("chanigin name");
-    partykitProvider.awareness.setLocalStateField("user", {
-      color: "#FFC0CB",
-      name: session.user.name,
-    });
-  }
+  useEffect(() => {
+    if (status === "authenticated") {
+      console.log("chanigin name");
+      partykitProvider.awareness.setLocalStateField("user", {
+        color: "#FFC0CB",
+        name: session.user.name,
+      });
+    }
+  }, [status, session]);
 
   get()?.action((ctx) => {
     const collabService = ctx.get(collabServiceCtx);
-    const placeholderEnabled = ctx.get(placeholderEnabledCtx);
 
     collabService.setOptions({
       yCursorOpts: {
@@ -125,7 +120,6 @@ const MilkdownEditor: React.FC<{
       .connect();
 
     partykitProvider.once("synced", async (isSynced: boolean) => {
-      console.log("wow");
       ctx.set(placeholderEnabledCtx, true);
     });
   });

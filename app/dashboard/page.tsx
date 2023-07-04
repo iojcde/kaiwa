@@ -7,6 +7,7 @@ import { PostCard } from "./post-card";
 import { authOptions } from "@/lib/auth";
 import { Posts } from "./posts";
 import { Suspense } from "react";
+import { randomRoomName } from "@/lib/randomRoomName";
 
 const Dashboard = async () => {
   const session = await getServerSession(authOptions);
@@ -16,7 +17,12 @@ const Dashboard = async () => {
     if (session?.user.id === undefined) throw new Error("No user id");
 
     const post = await db.post.create({
-      data: { title: "Untitled Post", content: "", authorId: session?.user.id },
+      data: {
+        id: randomRoomName(),
+        title: "Untitled Post",
+        content: "",
+        authorId: session?.user.id,
+      },
     });
     redirect(`/editor/${post.id}`);
   };

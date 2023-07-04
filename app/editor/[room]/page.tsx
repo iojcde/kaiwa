@@ -7,9 +7,6 @@ import { save } from "./save";
 import { Title } from "./title";
 import { Loader2 } from "lucide-react";
 
-import YProvider from "y-partykit/provider";
-import { Doc } from "yjs";
-
 const NoSSREditor = NextDynamic(() => import("@/app/editor/[room]/editor"), {
   ssr: false,
   loading: () => (
@@ -26,13 +23,8 @@ const EditorPage = async ({
 }) => {
   const session = await getServerSession(authOptions);
 
-  const doc = new Doc();
-  const provider = new YProvider("nijika.iojcde.partykit.dev", room, doc);
-
-  provider;
-
   return (
-    <div className="px-6 w-full max-w-screen-md mx-auto mt-8">
+    <div className="px-6 w-full max-w-screen-md mx-auto mt-32">
       <NoSSREditor save={save} room={room} />
     </div>
   );
