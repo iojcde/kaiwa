@@ -2,8 +2,8 @@
 // <reference types="@cloudflare/workers-types" />
 
 import { jwtDecrypt } from "jose";
-import { onConnect } from "y-partykit";
-import hkdf from "@panva/hkdf";
+import { onConnect } from "y-partykit"; 
+
 const config = {
   async onConnect(ws, room) {
     return onConnect(ws, room, { persist: true });

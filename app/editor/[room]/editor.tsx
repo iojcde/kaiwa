@@ -34,7 +34,7 @@ const MilkdownEditor: React.FC<{
   room: string;
 }> = ({ room, save }) => {
   const { status, data: session } = useSession();
-  console.log("wsToken", session?.wsToken);
+
   const partykitProvider = useMemo(() => {
     const p = new YpartykitProvider(
       `nijika.iojcde.partykit.dev/party`,
@@ -47,7 +47,7 @@ const MilkdownEditor: React.FC<{
     p.url += `&token=${encodeURIComponent(session?.wsToken)}&userid=${
       session?.user.id
     }`;
-    session.wsToken && session.user.id && p.connect();
+    status == "authenticated" && p.connect();
 
     return p;
   }, [room, status]);

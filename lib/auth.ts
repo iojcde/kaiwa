@@ -25,7 +25,7 @@ export const authOptions: NextAuthOptions = {
         },
       });
 
-      if (trigger == "signUp") {
+      if (dbUser.wsToken == null) {
         db.user.update({
           where: { id: dbUser.id },
           data: {
