@@ -19,20 +19,28 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, trigger, user }) {
-      const dbUser = await db.user.findFirst({
+      let dbUser = await db.user.findFirst({
         where: {
           email: token.email,
         },
       });
 
       if (trigger == "signUp") {
-        const wsToken = require("crypto").randomBytes(256).toString("base64");
-        if (user) {
-          token.id = user?.id;
-          token.wsToken = wsToken;
-        }
-        return token;
+        db.user.update({
+          where: { id: dbUser.id },
+          data: {
+            wsToken: require("crypto").randomBytes(256).toString("base64"),
+          },
+        });
       }
+
+      // if (!dbUser) {
+      //   if (user) {
+      //     token.id = user?.id;
+      //     token.wsToken =
+      //   }
+      //   return token;
+      // }
 
       return {
         id: dbUser.id,
