@@ -8,8 +8,6 @@ const wsAuth = async (req: Request) => {
   }
   const { check, userID } = await req.json();
 
-  console.log(await req.json());
-
   const session = await db.session.findFirst({ where: { userId: userID } });
 
   console.log("session", session.wsToken);
