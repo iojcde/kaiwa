@@ -18,16 +18,18 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, trigger, user }) {
       const dbUser = await db.user.findFirst({
         where: {
           email: token.email,
         },
       });
 
-      if (!dbUser) {
+      if (trigger == "signUp") {
+        const wsToken = require("crypto").randomBytes(256).toString("base64");
         if (user) {
           token.id = user?.id;
+          token.wsToken = wsToken;
         }
         return token;
       }
@@ -37,7 +39,7 @@ export const authOptions: NextAuthOptions = {
         name: dbUser.name,
         email: dbUser.email,
         picture: dbUser.image,
-        wsToken: require('crypto').randomBytes(256).toString('base64')
+        wsToken: dbUser.wsToken,
       };
     },
     async session({ token, session }) {
@@ -46,7 +48,7 @@ export const authOptions: NextAuthOptions = {
         session.user.name = token.name;
         session.user.email = token.email;
         session.user.image = token.picture;
-        session.wsToken = token.wsToken
+        session.wsToken = token.wsToken;
       }
 
       return session;

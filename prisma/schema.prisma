@@ -56,7 +56,6 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  wsToken      String  @unique
 }
 
 model User {
@@ -65,6 +64,7 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  wsToken      String  @unique
   accounts      Account[]
   sessions      Session[]
 
