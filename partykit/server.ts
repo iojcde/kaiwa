@@ -1,5 +1,6 @@
-/// <reference no-default-lib="true"/>
-/// <reference types="@cloudflare/workers-types" />
+//  <reference no-default-lib="true"/>
+// <reference types="@cloudflare/workers-types" />
+
 import { jwtDecrypt } from "jose";
 import { onConnect } from "y-partykit";
 import hkdf from "@panva/hkdf";
