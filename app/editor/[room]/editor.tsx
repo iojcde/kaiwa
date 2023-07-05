@@ -19,14 +19,13 @@ import {
   placeholderCtx,
   placeholderEnabledCtx,
 } from "@/milkdown/plugins/placeholder";
-import { listener, listenerCtx } from "@milkdown/plugin-listener";
-import { debounce } from "lodash";
 import { useEditorState } from "@/state/editor";
 import type { save } from "./save";
 import { collab, collabServiceCtx } from "@milkdown/plugin-collab";
 import YpartykitProvider from "y-partykit/provider";
 import { Doc } from "yjs";
 import { useSession } from "next-auth/react";
+
 const doc = new Doc();
 
 const MilkdownEditor: React.FC<{
@@ -42,13 +41,11 @@ const MilkdownEditor: React.FC<{
     p.url += `&token=${encodeURIComponent(session?.wsToken)}&userid=${
       session?.user.id
     }`;
-    status == "authenticated" && p.connect();
 
     return p;
-  }, [room, status]);
+  }, [room, status]); 
 
-  const { setSaved, setContent, setIsPending, content, isPending } =
-    useEditorState();
+  status == "authenticated" && partykitProvider.connect();
 
   const { get } = useEditor((root) =>
     Editor.make()
@@ -63,54 +60,40 @@ const MilkdownEditor: React.FC<{
       .use(placeholder)
       .use(history)
       .use(collab)
-      .use(listener)
-      .config((ctx) => {
-        const listener = ctx.get(listenerCtx);
-
-        listener.markdownUpdated((ctx, markdown, prevMarkdown) => {
-          setSaved(false);
-          if (markdown !== prevMarkdown) {
-            console.log("changed");
-            setContent(markdown);
-            // saveFn({ content: markdown });
-          }
-        });
-      })
   );
-  useEffect(() => {
-    if (status === "authenticated") {
-      console.log("chanigin name");
-      partykitProvider.awareness.setLocalStateField("user", {
-        color: "#FFC0CB",
-        name: session.user.name,
-      });
-    }
-  }, [status, session]);
+
+  if (status == "authenticated") {
+    partykitProvider.awareness.setLocalStateField("user", {
+      color: "#FFC0CB",
+      name: session.user.name,
+    });
+    console.log("poopoo", partykitProvider.awareness.getLocalState());
+  }
 
   get()?.action((ctx) => {
     const collabService = ctx.get(collabServiceCtx);
-
-    collabService.setOptions({
-      yCursorOpts: {
-        cursorBuilder: (user) => {
-          const cursor = document.createElement("span");
-          cursor.classList.add("ProseMirror-yjs-cursor");
-          cursor.setAttribute("style", `border-color: ${user.color}`);
-          const userDiv = document.createElement("div");
-          userDiv.setAttribute("style", `background-color: ${user.color}`);
-          userDiv.classList.add(
-            "p-1",
-            "px-2",
-            "text-xs",
-            "font-normal",
-            "rounded-full"
-          );
-          userDiv.insertBefore(document.createTextNode(user.name), null);
-          cursor.insertBefore(userDiv, null);
-          return cursor;
-        },
-      },
-    });
+    // collabService.setOptions({
+    //   yCursorOpts: {
+    //     cursorBuilder: (user) => {
+    //       console.log("why no user kewkkekwk cursrobuildr");
+    //       const cursor = document.createElement("span");
+    //       cursor.classList.add("ProseMirror-yjs-cursor");
+    //       cursor.setAttribute("style", `border-color: ${user.color}`);
+    //       const userDiv = document.createElement("div");
+    //       userDiv.setAttribute("style", `background-color: ${user.color}`);
+    //       userDiv.classList.add(
+    //         "p-1",
+    //         "px-2",
+    //         "text-xs",
+    //         "font-normal",
+    //         "rounded-full"
+    //       );
+    //       userDiv.insertBefore(document.createTextNode(user.name), null);
+    //       cursor.insertBefore(userDiv, null);
+    //       return cursor;
+    //     },
+    //   },
+    // });
 
     collabService
       // bind doc and awareness
@@ -123,11 +106,11 @@ const MilkdownEditor: React.FC<{
       ctx.set(placeholderEnabledCtx, true);
     });
   });
-
   return (
     <div
       className={partykitProvider.wsconnected ? "connected" : "disconnected"}
     >
+      {JSON.stringify(partykitProvider.awareness.getLocalState())}
       <Milkdown />
     </div>
   );

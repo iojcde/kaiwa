@@ -8,6 +8,7 @@ export const Posts = async () => {
 
   const posts = await db.post.findMany({
     where: { authorId: session?.user.id },
+    orderBy: { updatedAt: "desc" },
   });
 
   return (
