@@ -68,7 +68,9 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  tasks Post[]
+  posts Post[]
+
+  access Access[]
 }
 
 model VerificationToken {
@@ -87,6 +89,23 @@ model Post {
   title     String
   content   String?
   author    User?    @relation(fields: [authorId], references: [id])
-
+ 
   authorId  String
+  access Access[]
+}
+
+enum AccessLevel {
+  Viewer
+  Editor
+}
+
+model Access {
+  id String @id @default(cuid())
+  level AccessLevel
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId String
+
 }

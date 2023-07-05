@@ -19,12 +19,13 @@ import {
   placeholderCtx,
   placeholderEnabledCtx,
 } from "@/milkdown/plugins/placeholder";
-import { useEditorState } from "@/state/editor";
 import type { save } from "./save";
 import { collab, collabServiceCtx } from "@milkdown/plugin-collab";
 import YpartykitProvider from "y-partykit/provider";
 import { Doc } from "yjs";
 import { useSession } from "next-auth/react";
+import { EditorNav } from "./editor-nav";
+import { createCollabProvider, useCollabProvider } from "@/state/collab";
 
 const doc = new Doc();
 
@@ -33,17 +34,10 @@ const MilkdownEditor: React.FC<{
   room: string;
 }> = ({ room, save }) => {
   const { status, data: session } = useSession();
-
-  const partykitProvider = useMemo(() => {
-    const p = new YpartykitProvider(`nijika.iojcde.partykit.dev`, room, doc, {
-      connect: false,
-    });
-    p.url += `&token=${encodeURIComponent(session?.wsToken)}&userid=${
-      session?.user.id
-    }`;
-
-    return p;
-  }, [room, status]); 
+  useEffect(() => {
+    createCollabProvider(room, session.accessToken);
+  });
+  const collabProvider = useCollabProvider();
 
   status == "authenticated" && partykitProvider.connect();
 
@@ -67,33 +61,34 @@ const MilkdownEditor: React.FC<{
       color: "#FFC0CB",
       name: session.user.name,
     });
-    console.log("poopoo", partykitProvider.awareness.getLocalState());
+  } else {
+    return;
   }
 
   get()?.action((ctx) => {
     const collabService = ctx.get(collabServiceCtx);
-    // collabService.setOptions({
-    //   yCursorOpts: {
-    //     cursorBuilder: (user) => {
-    //       console.log("why no user kewkkekwk cursrobuildr");
-    //       const cursor = document.createElement("span");
-    //       cursor.classList.add("ProseMirror-yjs-cursor");
-    //       cursor.setAttribute("style", `border-color: ${user.color}`);
-    //       const userDiv = document.createElement("div");
-    //       userDiv.setAttribute("style", `background-color: ${user.color}`);
-    //       userDiv.classList.add(
-    //         "p-1",
-    //         "px-2",
-    //         "text-xs",
-    //         "font-normal",
-    //         "rounded-full"
-    //       );
-    //       userDiv.insertBefore(document.createTextNode(user.name), null);
-    //       cursor.insertBefore(userDiv, null);
-    //       return cursor;
-    //     },
-    //   },
-    // });
+    collabService.setOptions({
+      yCursorOpts: {
+        cursorBuilder: (user) => {
+          console.log("why no user kewkkekwk cursrobuildr");
+          const cursor = document.createElement("span");
+          cursor.classList.add("ProseMirror-yjs-cursor");
+          cursor.setAttribute("style", `border-color: ${user.color}`);
+          const userDiv = document.createElement("div");
+          userDiv.setAttribute("style", `background-color: ${user.color}`);
+          userDiv.classList.add(
+            "p-1",
+            "px-2",
+            "text-xs",
+            "font-normal",
+            "rounded-full"
+          );
+          userDiv.insertBefore(document.createTextNode(user.name), null);
+          cursor.insertBefore(userDiv, null);
+          return cursor;
+        },
+      },
+    });
 
     collabService
       // bind doc and awareness
@@ -110,7 +105,7 @@ const MilkdownEditor: React.FC<{
     <div
       className={partykitProvider.wsconnected ? "connected" : "disconnected"}
     >
-      {JSON.stringify(partykitProvider.awareness.getLocalState())}
+      <EditorNav />
       <Milkdown />
     </div>
   );

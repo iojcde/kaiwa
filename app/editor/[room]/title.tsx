@@ -1,6 +1,6 @@
 "use client";
 
-import { useEditorState } from "@/state/editor";
+import { useEditorState } from "@/state/collab";
 import { debounce } from "lodash";
 import { useCallback, useEffect, useTransition } from "react";
 import type { save } from "./save";

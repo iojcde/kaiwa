@@ -2,7 +2,7 @@
 // <reference types="@cloudflare/workers-types" />
 
 import { jwtDecrypt } from "jose";
-import { onConnect } from "y-partykit"; 
+import { onConnect } from "y-partykit";
 
 const config = {
   async onConnect(ws, room) {
@@ -13,12 +13,11 @@ const config = {
     //   any shared in-memory state between `onBefore*` and `on*` methods.
     // - Throwing an error in this callback will lead to a rejected connection.
     const token = new URL(req.url).searchParams.get("token");
-    const userID = new URL(req.url).searchParams.get("userid");
 
     const asdf = await fetch("https://nijika.jcde.xyz/api/ws-auth", {
       method: "POST",
       headers: { auth: room.env.WSAUTH_SECRET },
-      body: JSON.stringify({ check: token, userID }),
+      body: JSON.stringify({ check: token }),
     });
 
     if (asdf.ok) {

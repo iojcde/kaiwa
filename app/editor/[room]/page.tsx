@@ -24,7 +24,7 @@ const EditorPage = async ({
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="px-6 w-full max-w-screen-md mx-auto mt-32">
+    <div className="px-6 w-full max-w-screen-md mx-auto mt-16">
       <NoSSREditor save={save} room={room} />
     </div>
   );
