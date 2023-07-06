@@ -14,7 +14,8 @@ const wsAuth = async (req: Request) => {
     where: { wsToken: check },
     select: { id: true },
   });
-
+  console.log(user);
+  
   const post = await db.post.findFirst({
     where: { id: room },
     select: { access: { where: { userId: user.id } } },
