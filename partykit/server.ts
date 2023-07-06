@@ -17,7 +17,7 @@ const config = {
     const asdf = await fetch("https://nijika.jcde.xyz/api/ws-auth", {
       method: "POST",
       headers: { auth: room.env.WSAUTH_SECRET },
-      body: JSON.stringify({ check: token }),
+      body: JSON.stringify({ check: token, room }),
     });
 
     if (asdf.ok) {

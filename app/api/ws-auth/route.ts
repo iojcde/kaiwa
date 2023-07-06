@@ -2,13 +2,11 @@ import { db } from "@/lib/db";
 
 const wsAuth = async (req: Request) => {
   const auth = req.headers.get("auth");
-  const room = new URL(req.url).pathname.replace("/party/", "");
-
   console.log("auth:", auth);
   if (auth !== process.env.WSAUTH_SECRET) {
     return new Response("Unauthorized", { status: 401 });
   }
-  const { check } = await req.json();
+  const { check, room } = await req.json();
 
   const user = await db.user.findFirst({
     where: { wsToken: check },
@@ -21,7 +19,7 @@ const wsAuth = async (req: Request) => {
     select: { access: { where: { userId: user.id } }, authorId: true },
   });
 
-  if (post?.access.length > 0 || post.authorId == user.id) {
+  if (post?.access.length > 0 || post?.authorId == user.id) {
     return new Response("OK", { status: 200 });
   } else {
     return new Response("Unauthorized", { status: 401 });
