@@ -8,7 +8,7 @@ const EditorLayout: React.FC<{
 }> = ({ children, params: { id } }) => {
   return (
     <div className="relative scroll-m-3">
-      <EditorNav save={save} id={id} />
+      <EditorNav />
       {children}
     </div>
   );

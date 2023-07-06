@@ -25,7 +25,7 @@ import YpartykitProvider from "y-partykit/provider";
 import { Doc } from "yjs";
 import { useSession } from "next-auth/react";
 import { EditorNav } from "./editor-nav";
-import { createCollabProvider, useCollabProvider } from "@/state/collab";
+import { CollabProvider, useCollabContext } from "@/lib/collabContext";
 
 const doc = new Doc();
 
@@ -34,12 +34,14 @@ const MilkdownEditor: React.FC<{
   room: string;
 }> = ({ room, save }) => {
   const { status, data: session } = useSession();
-  useEffect(() => {
-    createCollabProvider(room, session.accessToken);
-  });
-  const collabProvider = useCollabProvider();
 
-  status == "authenticated" && partykitProvider.connect();
+  const { provider: partykitProvider, initProvider } = useCollabContext();
+
+  useEffect(() => {
+    initProvider(room, session?.wsToken);
+
+    status == "authenticated" && partykitProvider.connect();
+  }, [room, status, initProvider]);
 
   const { get } = useEditor((root) =>
     Editor.make()
@@ -105,7 +107,6 @@ const MilkdownEditor: React.FC<{
     <div
       className={partykitProvider.wsconnected ? "connected" : "disconnected"}
     >
-      <EditorNav />
       <Milkdown />
     </div>
   );
@@ -116,9 +117,11 @@ const MilkdownEditorWrapper: React.FC<{
   room: string;
 }> = ({ save, room }) => {
   return (
-    <MilkdownProvider>
-      <MilkdownEditor save={save} room={room} />
-    </MilkdownProvider>
+    <CollabProvider>
+      <MilkdownProvider>
+        <MilkdownEditor save={save} room={room} />
+      </MilkdownProvider>
+    </CollabProvider>
   );
 };
 export default MilkdownEditorWrapper;

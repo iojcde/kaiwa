@@ -3,12 +3,15 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useEditorState } from "@/state/collab";
 import { useCallback, useTransition } from "react";
 import { debounce } from "lodash";
 import type { save } from "./save";
+import { useCollabContext, useUsers } from "@/lib/collabContext";
 
 export const EditorNav: React.FC = () => {
+  const { connectionStatus, provider } = useCollabContext();
+  const users = useUsers();
+
   return (
     <nav className="max-w-screen-xl px-6 flex items-center justify-between fixed top-0 inset-x-0 mx-auto w-full py-5">
       <Link href="/dashboard" className="flex gap-2 items-center">
@@ -20,9 +23,7 @@ export const EditorNav: React.FC = () => {
         {connectionStatus === "connected"
           ? `${users.size} user${users.size === 1 ? "" : "s"} online`
           : "offline"}{" "}
-        <span className="hidden md:inline">
-          in room {collaborationProvider.roomname}
-        </span>
+        <span className="hidden md:inline">in room {provider.roomname}</span>
       </span>
     </nav>
   );
