@@ -22,6 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      
       <body className={cn(" overflow-y-scroll", Inter.className)}>
         <Providers>{children}</Providers>
       </body>
