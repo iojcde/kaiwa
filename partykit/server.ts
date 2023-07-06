@@ -10,7 +10,7 @@ const config = {
   },
   async onBeforeConnect(req, room) {
     // - onBeforeConnect runs in a separate worker, so we can't use
-    //   any shared in-memory state between `onBefore*` and `on*` methods.
+    //   any shared in-memory state betweex`n `onBefore*` and `on*` methods.
     // - Throwing an error in this callback will lead to a rejected connection.
     const token = new URL(req.url).searchParams.get("token");
 

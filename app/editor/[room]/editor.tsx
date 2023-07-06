@@ -40,7 +40,9 @@ const MilkdownEditor: React.FC<{
   useEffect(() => {
     initProvider(room, session?.wsToken);
 
-    status == "authenticated" && partykitProvider.connect();
+    status == "authenticated" &&
+      partykitProvider.roomname != "offline-room" &&
+      partykitProvider.connect();
   }, [room, status]);
 
   const { get } = useEditor((root) =>
