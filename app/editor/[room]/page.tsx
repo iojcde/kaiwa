@@ -4,7 +4,6 @@ import { getServerSession } from "next-auth";
 import NextDynamic from "next/dynamic";
 import React from "react";
 import { save } from "./save";
-import { Title } from "./title";
 import { Loader2 } from "lucide-react";
 
 const NoSSREditor = NextDynamic(() => import("@/app/editor/[room]/editor"), {
