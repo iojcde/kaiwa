@@ -63,7 +63,7 @@ export const EditorNav = () => {
           <Button
             onClick={() =>
               navigator.clipboard.writeText(
-                `https://nijika.jcde.xyz/editor/${room}`
+                `https://nijika.jcde.xyz/editor/${partykitProvider.roomname}`
               )
             }
             size="sm"
