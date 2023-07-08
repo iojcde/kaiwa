@@ -55,3 +55,6 @@ export default Dashboard;
 export const metadata = {
   title: "Dashboard",
 };
+
+
+export const revalidate = 0;
