@@ -29,5 +29,10 @@ const EditorPage = async ({
   );
 };
 export default EditorPage;
+export async function generateMetadata({ params }) {
+  return {
+    title: `${params.room} | Codelet`,
+  };
+}
 
 export const dynamic = "force-dynamic";
