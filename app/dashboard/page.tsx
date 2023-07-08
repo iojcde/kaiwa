@@ -24,6 +24,7 @@ const Dashboard = async () => {
         authorId: session?.user.id,
       },
     });
+
     redirect(`/editor/${post.id}`);
   };
 
@@ -37,7 +38,12 @@ const Dashboard = async () => {
           </Button>
         </form>
       </div>
-      <Suspense fallback={<Loader2 className="w-8 h-8 animate-spin" />}>
+
+      <Suspense
+        fallback={
+          <Loader2 className="animate-spin mx-auto mt-8 w-8 h-8 text-gray-9" />
+        }
+      >
         <Posts />
       </Suspense>
     </div>
@@ -46,4 +52,6 @@ const Dashboard = async () => {
 
 export default Dashboard;
 
-export const dynamic = "force-dynamic";
+export const metadata = {
+  title: "Dashboard",
+};

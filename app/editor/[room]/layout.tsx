@@ -1,10 +1,17 @@
 import { ReactNode } from "react";
-
-import { save } from "./save";
+import { EditorNav } from "./editor-nav";
+import { CollabProvider } from "@/context/CollabContext";
 const EditorLayout: React.FC<{
   children: ReactNode;
-  params: { id: string };
-}> = ({ children, params: { id } }) => {
-  return <div className="relative h-screen scroll-m-3">{children}</div>;
+  params: { room: string };
+}> = ({ children, params: { room } }) => {
+  return (
+    <div className="relative h-screen scroll-m-3">
+      <CollabProvider room={room}>
+        <EditorNav />
+        {children}
+      </CollabProvider>
+    </div>
+  );
 };
 export default EditorLayout;

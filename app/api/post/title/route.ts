@@ -1,6 +1,7 @@
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
+import { revalidateTag } from "next/cache";
 
 const Title = async (req: Request) => {
   const session = await getServerSession(authOptions);
@@ -11,7 +12,7 @@ const Title = async (req: Request) => {
   const { title, room } = await req.json();
 
   await db.post.update({ where: { id: room }, data: { title } });
-
+  // revalidateTag("posts");
   return new Response("OK", { status: 200 });
 };
 

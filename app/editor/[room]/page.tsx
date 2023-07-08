@@ -5,6 +5,7 @@ import NextDynamic from "next/dynamic";
 import React from "react";
 import { save } from "./save";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const NoSSREditor = NextDynamic(() => import("@/app/editor/[room]/editor"), {
   ssr: false,
@@ -23,16 +24,17 @@ const EditorPage = async ({
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="px-6 w-full max-w-screen-md mx-auto mt-16">
+    <div className="px-6 w-full max-w-screen-md mx-auto mt-20">
       <NoSSREditor save={save} room={room} />
     </div>
   );
 };
 export default EditorPage;
-export async function generateMetadata({ params }) {
+export async function generateMetadata({ params: { room } }) {
+  const post = await db.post.findUnique({ where: { id: room } });
   return {
-    title: `${params.room} | Codelet`,
+    title: `${post.title} | Codelet`,
   };
 }
 
-export const dynamic = "force-dynamic";
+export const revalidate = 0;
