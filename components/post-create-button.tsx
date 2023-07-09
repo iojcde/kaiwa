@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ButtonProps, buttonVariants } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
-import { Icons } from "@/components/icons";
 import { createPost } from "@/actions/create-post";
 import { Post } from "@prisma/client";
 import { Loader2, Plus } from "lucide-react";
