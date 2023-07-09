@@ -19,16 +19,11 @@ export async function UserNav() {
   const session = await getServerSession(authOptions);
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          className="relative h-8 w-8 flex items-center rounded-full"
-        >
-          <Avatar className="h-9 w-9 select-none">
-            <AvatarImage src={session?.user.image} alt="@iojcde" />
-            <AvatarFallback>IO</AvatarFallback>
-          </Avatar>
-        </Button>
+      <DropdownMenuTrigger className="outline-none">
+        <Avatar className="h-8 w-8 select-none ">
+          <AvatarImage src={session?.user.image} alt="@iojcde" />
+          <AvatarFallback>IO</AvatarFallback>
+        </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">

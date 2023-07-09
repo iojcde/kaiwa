@@ -23,4 +23,3 @@ export const Posts = async () => {
     </div>
   );
 };
-export const revalidate = 0;

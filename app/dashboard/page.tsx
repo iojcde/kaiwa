@@ -8,40 +8,26 @@ import { authOptions } from "@/lib/auth";
 import { Posts } from "./posts";
 import { Suspense } from "react";
 import { randomRoomName } from "@/lib/randomRoomName";
+import { revalidatePath } from "next/cache";
+import { PostCreateButton } from "@/components/post-create-button";
 
 const Dashboard = async () => {
-  const session = await getServerSession(authOptions);
-
-  const newPost = async () => {
-    "use server";
-    if (session?.user.id === undefined) throw new Error("No user id");
-
-    const post = await db.post.create({
-      data: {
-        id: randomRoomName(),
-        title: "Untitled Post",
-        content: "",
-        authorId: session?.user.id,
-      },
-    });
-
-    redirect(`/editor/${post.id}`);
-  };
-
   return (
     <div className="w-full">
       <div className="flex justify-between w-full items-center">
         <h1 className="text-4xl font-bold tracking-tight">Posts</h1>
-        <form action={newPost}>
-          <Button type="submit" className="flex items-center gap-2">
-            <PlusIcon /> New Post
-          </Button>
-        </form>
+        <PostCreateButton />
       </div>
 
       <Suspense
         fallback={
-          <Loader2 className="animate-spin mx-auto mt-8 w-8 h-8 text-gray-9" />
+          <div className="mt-8 divide-border-200 divide-y rounded-md border">
+            <PostCard.Skeleton />
+            <PostCard.Skeleton />
+            <PostCard.Skeleton />
+            <PostCard.Skeleton />
+            <PostCard.Skeleton />
+          </div>
         }
       >
         <Posts />
@@ -55,3 +41,5 @@ export default Dashboard;
 export const metadata = {
   title: "Dashboard",
 };
+
+export const revalidate = 0;

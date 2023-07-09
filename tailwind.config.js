@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1.5rem",
       screens: {
         xl: "1280px",
         "2xl": "1000px",
@@ -29,8 +29,8 @@ module.exports = {
           foreground: toRadixVar("gray", 12),
         },
         destructive: {
-          DEFAULT: toRadixVar("red", 6),
-          foreground: toRadixVar("red", 11),
+          DEFAULT: toRadixVar("red", 11),
+          foreground: toRadixVar("gray", 1),
         },
         muted: {
           DEFAULT: toRadixVar("gray", 3),

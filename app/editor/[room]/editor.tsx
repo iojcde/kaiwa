@@ -1,40 +1,29 @@
 "use client";
-import type { Heading, Root, Text } from "mdast";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { Editor, rootCtx, schema, schemaCtx } from "@milkdown/core";
-import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
-import { gfm } from "@milkdown/preset-gfm";
-import { commonmark } from "@milkdown/preset-commonmark";
-import { theme } from "@/milkdown/theme";
-import { clipboard } from "@milkdown/plugin-clipboard";
-import { history } from "@milkdown/plugin-history";
+import { useToast } from "@/components/ui/use-toast";
+import { useCollabContext, yDoc } from "@/context/CollabContext";
 import {
   placeholder,
   placeholderCtx,
   placeholderEnabledCtx,
 } from "@/milkdown/plugins/placeholder";
-import type { save } from "./save";
+import { theme } from "@/milkdown/theme";
+import { Editor, rootCtx } from "@milkdown/core";
+import { clipboard } from "@milkdown/plugin-clipboard";
 import { collab, collabServiceCtx } from "@milkdown/plugin-collab";
-import YpartykitProvider from "y-partykit/provider";
-import { Doc } from "yjs";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { ChevronLeft } from "lucide-react";
+import { history } from "@milkdown/plugin-history";
 import { listener, listenerCtx } from "@milkdown/plugin-listener";
-import { unified } from "unified";
-import remarkParse from "remark-parse";
+import { commonmark } from "@milkdown/preset-commonmark";
+import { gfm } from "@milkdown/preset-gfm";
+import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
 import { debounce } from "lodash";
+import type { Heading, Root, Text } from "mdast";
+import { useSession } from "next-auth/react";
+import React, { useEffect } from "react";
 import rehypeSanitize from "rehype-sanitize";
+import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
-import { Button } from "@/components/ui/button";
-import { useCollabContext, yDoc } from "@/context/CollabContext";
-import { useToast } from "@/components/ui/use-toast";
+import { unified } from "unified";
+import type { save } from "./save";
 
 const MilkdownEditor: React.FC<{
   save: typeof save;

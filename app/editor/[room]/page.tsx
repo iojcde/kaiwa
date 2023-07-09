@@ -5,7 +5,7 @@ import NextDynamic from "next/dynamic";
 import React from "react";
 import { save } from "./save";
 import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { notFound, useRouter } from "next/navigation";
 
 const NoSSREditor = NextDynamic(() => import("@/app/editor/[room]/editor"), {
   ssr: false,
@@ -23,6 +23,15 @@ const EditorPage = async ({
 }) => {
   const session = await getServerSession(authOptions);
 
+  const post = await db.post.findFirst({
+    where: { id: room },
+    select: { access: { where: { userId: session?.user.id } }, authorId: true },
+  });
+
+  if (!post || (post?.authorId != session?.user.id && !post.access)) {
+    notFound();
+  }
+
   return (
     <div className="px-6 w-full max-w-screen-md mx-auto mt-20">
       <NoSSREditor save={save} room={room} />
@@ -30,10 +39,14 @@ const EditorPage = async ({
   );
 };
 export default EditorPage;
+
 export async function generateMetadata({ params: { room } }) {
   const post = await db.post.findUnique({ where: { id: room } });
+  if (!post) {
+    return;
+  }
   return {
-    title: `${post.title} | Codelet`,
+    title: `${post.title}`,
   };
 }
 
