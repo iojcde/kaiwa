@@ -3,7 +3,6 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import NextDynamic from "next/dynamic";
 import React from "react";
-import { save } from "./save";
 import { Loader2 } from "lucide-react";
 import { notFound, useRouter } from "next/navigation";
 
@@ -23,18 +22,18 @@ const EditorPage = async ({
 }) => {
   const session = await getServerSession(authOptions);
 
-  const post = await db.post.findFirst({
-    where: { id: room },
-    select: { access: { where: { userId: session?.user.id } }, authorId: true },
-  });
+  // const post = await db.post.findFirst({
+  //   where: { id: room },
+  //   select: { access: { where: { userId: session?.user.id } }, authorId: true },
+  // });
 
-  if (!post || (post?.authorId != session?.user.id && !post.access)) {
-    notFound();
-  }
+  // if (!post || (post?.authorId != session?.user.id && !post.access)) {
+  //   notFound();
+  // }
 
   return (
     <div className="px-6 w-full max-w-screen-md mx-auto mt-20">
-      <NoSSREditor save={save} room={room} />
+      <NoSSREditor room={room} />
     </div>
   );
 };

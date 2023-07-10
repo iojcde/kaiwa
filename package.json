@@ -13,6 +13,7 @@
     "@hookform/resolvers": "^3.1.1",
     "@milkdown/core": "^7.2.4",
     "@milkdown/ctx": "^7.2.4",
+    "@milkdown/exception": "^7.2.4",
     "@milkdown/plugin-clipboard": "^7.2.4",
     "@milkdown/plugin-collab": "^7.2.4",
     "@milkdown/plugin-history": "^7.2.4",

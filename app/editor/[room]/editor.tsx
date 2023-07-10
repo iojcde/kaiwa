@@ -1,13 +1,13 @@
 "use client";
 import { useToast } from "@/components/ui/use-toast";
-import { useCollabContext, yDoc } from "@/context/CollabContext";
+import { useCollabContext } from "@/context/CollabContext";
 import {
   placeholder,
   placeholderCtx,
   placeholderEnabledCtx,
 } from "@/milkdown/plugins/placeholder";
 import { theme } from "@/milkdown/theme";
-import { Editor, rootCtx } from "@milkdown/core";
+import { Editor, editorViewCtx, rootCtx } from "@milkdown/core";
 import { clipboard } from "@milkdown/plugin-clipboard";
 import { collab, collabServiceCtx } from "@milkdown/plugin-collab";
 import { history } from "@milkdown/plugin-history";
@@ -23,15 +23,18 @@ import rehypeSanitize from "rehype-sanitize";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
-import type { save } from "./save";
+import { stat } from "fs";
 
 const MilkdownEditor: React.FC<{
-  save: typeof save;
   room: string;
-}> = ({ room, save }) => {
+}> = ({ room }) => {
   const { status, data: session } = useSession();
 
-  const { provider: partykitProvider, initProvider } = useCollabContext();
+  const {
+    provider: partykitProvider,
+    initProvider,
+    doc: yDoc,
+  } = useCollabContext();
 
   const { toast } = useToast();
   useEffect(() => {
@@ -42,12 +45,14 @@ const MilkdownEditor: React.FC<{
 
   useEffect(() => {
     status == "authenticated" && initProvider(room, session?.wsToken);
+
     return () => {
-      console.log("destroying partykit");
-      partykitProvider.destroy();
-      yDoc.destroy();
+      if (partykitProvider.roomname != "offline-room") {
+        console.log("destroying partykit", partykitProvider);
+        partykitProvider.destroy();
+      }
     };
-  }, [status]);
+  }, [status, room]);
 
   const saveTitle = debounce(async (title) => {
     const res = await fetch("/api/post/title", {
@@ -106,32 +111,40 @@ const MilkdownEditor: React.FC<{
     return content.value;
   };
   get()?.action((ctx) => {
-    const collabService = ctx.get(collabServiceCtx);
-    collabService.setOptions({
-      yCursorOpts: {
-        cursorBuilder: (user) => {
-          const cursor = document.createElement("span");
-          cursor.classList.add("ProseMirror-yjs-cursor");
-          cursor.setAttribute("style", `border-color: ${user.color}`);
-          const userDiv = document.createElement("div");
-          userDiv.setAttribute("style", `background-color: ${user.color}`);
-          userDiv.classList.add("p-1", "px-2", "font-normal", "rounded-lg");
-          userDiv.insertBefore(document.createTextNode(user.name), null);
-          cursor.insertBefore(userDiv, null);
-          return cursor;
-        },
-      },
-    });
-    collabService
-      // bind doc and awareness
-      .bindDoc(yDoc)
-      .setAwareness(partykitProvider.awareness)
-      // connect yjs with milkdown
-      .connect();
+    if (partykitProvider.roomname != "offline-room") {
+      const collabService = ctx.get(collabServiceCtx);
 
-    partykitProvider.once("synced", async (isSynced: boolean) => {
-      ctx.set(placeholderEnabledCtx, true);
-    });
+      collabService.setOptions({
+        yCursorOpts: {
+          cursorBuilder: (user) => {
+            const cursor = document.createElement("span");
+            cursor.classList.add("ProseMirror-yjs-cursor");
+            cursor.setAttribute("style", `border-color: ${user.color}`);
+            const userDiv = document.createElement("div");
+            userDiv.setAttribute("style", `background-color: ${user.color}`);
+            userDiv.classList.add("p-1", "px-2", "font-normal", "rounded-lg");
+            userDiv.insertBefore(document.createTextNode(user.name), null);
+            cursor.insertBefore(userDiv, null);
+            return cursor;
+          },
+        },
+      });
+
+      collabService
+        // bind doc and awareness
+        .bindDoc(yDoc)
+        .setAwareness(partykitProvider.awareness)
+        // connect yjs with milkdown
+        .connect();
+
+      partykitProvider.once("synced", async (isSynced: boolean) => {
+        console.log("placeholder enabled");
+        ctx.set(placeholderEnabledCtx, true);
+
+        const view = ctx.get(editorViewCtx);
+        view.focus();
+      });
+    }
   });
 
   return (
@@ -144,12 +157,11 @@ const MilkdownEditor: React.FC<{
 };
 
 const MilkdownEditorWrapper: React.FC<{
-  save: typeof save;
   room: string;
-}> = ({ save, room }) => {
+}> = ({ room }) => {
   return (
     <MilkdownProvider>
-      <MilkdownEditor save={save} room={room} />
+      <MilkdownEditor room={room} />
     </MilkdownProvider>
   );
 };
