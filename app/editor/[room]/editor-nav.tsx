@@ -89,8 +89,10 @@ export const EditorNav = () => {
                   <Avatar
                     key={n}
                     className={`${
-                      n != 0 && "-mr-4 group-hover:mr-0 transition-all"
-                    } ring-offset-2 ring-2 w-8 h-8`}
+                      n != 0
+                        ? "-mr-4 group-hover:mr-0 transition-all w-8 h-8"
+                        : "w-9 h-9"
+                    } ring-offset-2 ring-2`}
                     style={
                       {
                         "--tw-ring-color": user?.color,
@@ -98,7 +100,11 @@ export const EditorNav = () => {
                       } as React.CSSProperties
                     }
                   >
-                    <AvatarImage src={user?.photo} alt={user?.name} />
+                    <AvatarImage
+                      className={n == 0 && "w-9 h-9"}
+                      src={user?.photo}
+                      alt={user?.name}
+                    />
                   </Avatar>
                 );
               }
@@ -107,7 +113,7 @@ export const EditorNav = () => {
             <span className="pr-2 text-gray-11">+{usersArray.length - 4}</span>
           )}
         </div>
-        <div>
+        <div className="sm:inline hidden">
           <Button
             onClick={() =>
               navigator.clipboard.writeText(
