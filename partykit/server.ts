@@ -1,11 +1,22 @@
 //  <reference no-default-lib="true"/>
 // <reference types="@cloudflare/workers-types" />
 
-import { jwtDecrypt } from "jose";
 import { onConnect } from "y-partykit";
 
 const config = {
-  async onConnect(ws, room) {
+  async onConnect(
+    ws: WebSocket,
+    room: string,
+    unstable_initial: { level: string }
+  ) {
+    let tmp = ws.addEventListener;
+    ws.addEventListener = (type: string, callback) => {
+      if (type == "message" && unstable_initial.level == "VIEWER") {
+        return;
+      } else {
+        return tmp(type, callback);
+      }
+    };
     return onConnect(ws, room, { persist: true });
   },
   async onBeforeConnect(req, room) {
@@ -19,9 +30,10 @@ const config = {
       headers: { auth: room.env.WSAUTH_SECRET },
       body: JSON.stringify({ check: token, room: room.id }),
     });
+    const { level } = await asdf.json();
 
     if (asdf.ok) {
-      return;
+      return { level };
     } else {
       throw new Error("Unauthorized");
     }

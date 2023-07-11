@@ -3,7 +3,7 @@ import { db } from "@/lib/db";
 import { getServerSession } from "next-auth";
 import { revalidatePath, revalidateTag } from "next/cache";
 
-const Title = async (req: Request) => {
+const getTitle = async (req: Request) => {
   const session = await getServerSession(authOptions);
   if (session == null) {
     return new Response("Unauthorized", { status: 401 });
@@ -12,8 +12,9 @@ const Title = async (req: Request) => {
   const { title, room } = await req.json();
 
   await db.post.update({ where: { id: room }, data: { title } });
+
   revalidatePath("/dashboard");
   return new Response("OK", { status: 200 });
 };
 
-export { Title as POST };
+export { getTitle as POST };

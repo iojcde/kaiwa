@@ -21,7 +21,12 @@ const wsAuth = async (req: Request) => {
   });
 
   if (post?.access.length > 0 || post?.authorId == user.id) {
-    return new Response("OK", { status: 200 });
+    return new Response(
+      JSON.stringify({
+        level: post.authorId == user.id ? "OWNER" : post.access[0].level,
+      }),
+      { status: 200 }
+    );
   } else {
     return new Response("Unauthorized", { status: 401 });
   }

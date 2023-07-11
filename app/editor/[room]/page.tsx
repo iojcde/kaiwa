@@ -5,15 +5,16 @@ import NextDynamic from "next/dynamic";
 import React from "react";
 import { Loader2 } from "lucide-react";
 import { notFound, useRouter } from "next/navigation";
+import MilkdownEditorWrapper from "./editor";
 
-const NoSSREditor = NextDynamic(() => import("@/app/editor/[room]/editor"), {
-  ssr: false,
-  loading: () => (
-    <div className="flex items-center justify-center mt-48">
-      <Loader2 className="animate-spin w-8 h-8 text-gray-9" />
-    </div>
-  ),
-});
+// const NoSSREditor = NextDynamic(() => import("@/app/editor/[room]/editor"), {
+//   ssr: false,
+//   loading: () => (
+//     <div className="flex items-center justify-center mt-48">
+//       <Loader2 className="animate-spin w-8 h-8 text-gray-9" />
+//     </div>
+//   ),
+// });
 
 const EditorPage = async ({
   params: { room },
@@ -22,18 +23,27 @@ const EditorPage = async ({
 }) => {
   const session = await getServerSession(authOptions);
 
-  // const post = await db.post.findFirst({
-  //   where: { id: room },
-  //   select: { access: { where: { userId: session?.user.id } }, authorId: true },
-  // });
-
-  // if (!post || (post?.authorId != session?.user.id && !post.access)) {
-  //   notFound();
-  // }
+  const post = await db.post.findFirst({
+    where: { id: room },
+    select: {
+      access: { where: { userId: session?.user.id } },
+      authorId: true,
+      published: true,
+    },
+  }); 
+  
+  if (
+    !post ||
+    (post?.authorId != session?.user.id &&
+      post.access.length == 0 &&
+      !post.published)
+  ) {
+    notFound();
+  }
 
   return (
     <div className="px-6 w-full max-w-screen-md mx-auto mt-20">
-      <NoSSREditor room={room} />
+      <MilkdownEditorWrapper room={room} />
     </div>
   );
 };

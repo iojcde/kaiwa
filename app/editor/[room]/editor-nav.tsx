@@ -4,12 +4,11 @@ import { useCollabContext } from "@/context/CollabContext";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
 type ConnectionStatus = "connected" | "connecting" | "disconnected";
 
-export const EditorNav = () => {
+export const EditorNav = ({ shareButton }) => {
   const { provider: partykitProvider } = useCollabContext();
   const computedStatus = partykitProvider.wsconnected
     ? "connected"
@@ -61,7 +60,7 @@ export const EditorNav = () => {
         }
         data-status={connectionStatus}
       >
-        <span className="overflow-ellipsis whitespace-nowrap group">
+        <span className="overflow-ellipsis whitespace-nowrap group text-sm sm:text-base">
           {connectionStatus != "connecting" ? (
             <>
               {connectionStatus === "connected"
@@ -81,6 +80,8 @@ export const EditorNav = () => {
             </>
           )}
         </span>
+        {shareButton}
+
         <div className="flex flex-row-reverse items-center group">
           {usersArray.length > 0 &&
             usersArray.map((user, n) => {
@@ -112,19 +113,6 @@ export const EditorNav = () => {
           {usersArray.length > 4 && (
             <span className="pr-2 text-gray-11">+{usersArray.length - 4}</span>
           )}
-        </div>
-        <div className="sm:inline hidden">
-          <Button
-            onClick={() =>
-              navigator.clipboard.writeText(
-                `https://nijika.jcde.xyz/editor/${partykitProvider.roomname}`
-              )
-            }
-            size="sm"
-            variant="outline"
-          >
-            Share
-          </Button>
         </div>
       </div>
     </nav>

@@ -13,7 +13,7 @@ export const PostCard = ({ post }: { post: Post }) => (
         {post.title != "" ? post.title : "Untitled Post"}
       </Link>
       <span className="text-sm text-gray-10">
-        {post.updatedAt.toLocaleDateString("en-US", {
+        {new Date(post.updatedAt).toLocaleDateString("en-US", {
           month: "long",
           day: "numeric",
           year: "numeric",

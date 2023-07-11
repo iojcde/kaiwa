@@ -16,21 +16,7 @@ generator client {
 }
 
 
-enum Status {
-  BACKLOG
-  TODO
-  IN_PROGRESS 
-  DONE
-  CANCELED
-}
-
-enum Priority {
-  LOW
-  MEDIUM
-  HIGH
-  URGENT
-}
-
+ 
 model Account {
   id                 String  @id @default(cuid())
   userId             String
@@ -95,8 +81,9 @@ model Post {
 }
 
 enum AccessLevel {
-  Viewer
-  Editor
+  OWNER
+  VIEWER
+  EDITOR
 }
 
 model Access {
