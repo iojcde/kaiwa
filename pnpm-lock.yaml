@@ -263,8 +263,8 @@ devDependencies:
     specifier: 10.4.14
     version: 10.4.14(postcss@8.4.24)
   partykit:
-    specifier: 0.0.0-e7aa4cd
-    version: 0.0.0-e7aa4cd(@types/react@18.2.9)
+    specifier: 0.0.0-46d871d
+    version: 0.0.0-46d871d(@types/react@18.2.9)
   postcss:
     specifier: 8.4.24
     version: 8.4.24
@@ -5470,8 +5470,8 @@ packages:
       callsites: 3.1.0
     dev: false
 
-  /partykit@0.0.0-e7aa4cd(@types/react@18.2.9):
-    resolution: {integrity: sha512-ErJsUwNqE5VQ/Q9MKovoDWPo5tbwTGBKiUe1pe+iKheVovGX3y9+WqZcQM37ju8VTXVGEGU75nz2IjA9M+ZrVw==}
+  /partykit@0.0.0-46d871d(@types/react@18.2.9):
+    resolution: {integrity: sha512-hiIqzmRCBlm5vsl53kpcKNTZ862WqlGqYrEgO9rrcV5b7aWpBQz/KzYt1z3sFr2nRscur5t7ddqPxC/nrl2WNQ==}
     hasBin: true
     dependencies:
       chalk: 5.3.0

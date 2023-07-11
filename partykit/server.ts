@@ -25,13 +25,21 @@ const config = {
     // - Throwing an error in this callback will lead to a rejected connection.
     const token = new URL(req.url).searchParams.get("token");
 
-    const asdf = await fetch("https://nijika.jcde.xyz/api/ws-auth", {
-      method: "POST",
-      headers: { auth: room.env.WSAUTH_SECRET },
-      body: JSON.stringify({ check: token, room: room.id }),
-    });
-    const { level } = await asdf.json();
+    const asdf = await fetch(
+      "nijika.jcde.xyz/api/ws-auth",
+      // "http://localhost:3000/api/ws-auth",
 
+      {
+        method: "POST",
+        headers: {
+          auth: "2dJgubVWpb4R8X8d2bFo9hSXoqDhS38gTJ36vBghQPiTVBXQyB3uKcCLHmDe9iEtj4C2aR7kYWiLxaieziL2XQdLx8GQrTGjnjYXDDBp8NLirGyuhDa8xwS6XHXdoEn9",
+          // room.env.WSAUTH_SECRET
+        },
+        body: JSON.stringify({ check: token, room: room.id }),
+      }
+    );
+    const { level } = await asdf.json();
+    console.log(asdf);
     if (asdf.ok) {
       return { level };
     } else {

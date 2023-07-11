@@ -81,7 +81,9 @@ export const CollabProvider = ({
 
     provider.destroy();
     const p = new yPartykitProvider(
-      `nijika.iojcde.partykit.dev`,
+      process.env.NODE_ENV == "development"
+        ? "localhost:1999"
+        : `nijika.iojcde.partykit.dev`,
       room,
       newdoc,
       {
@@ -91,9 +93,10 @@ export const CollabProvider = ({
     setProvider(p);
 
     const url = new URL(p.url);
+    url.protocol = "ws";
     url.searchParams.set("token", session?.wsToken);
     p.url = url.toString();
-    console.log(p.roomname);
+
     p.connect();
 
     p.awareness.setLocalStateField("user", {
