@@ -33,7 +33,8 @@ const wsAuth = async (req: Request) => {
       where: { id: room },
       select: { published: true },
     });
-    post.published
+    
+    return post.published
       ? new Response(JSON.stringify({ level: "VIEWER" }))
       : new Response("Unauthorized", { status: 401 });
   }

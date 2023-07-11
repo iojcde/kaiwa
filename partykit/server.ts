@@ -42,10 +42,12 @@ const config = {
         body: JSON.stringify({ check: token, room: room.id }),
       }
     );
-    const { level } = await asdf.json();
+
+    const res = await asdf.json();
+    console.log(res);
 
     if (asdf.ok) {
-      return { level };
+      return { level: res.level };
     } else {
       // throw new Error("Unauthorized");
     }

@@ -93,15 +93,15 @@ export const CollabProvider = ({
     setProvider(p);
 
     const url = new URL(p.url);
-    url.searchParams.set("token", session?.wsToken);
+    url.searchParams.set("token", token);
     p.url = url.toString();
 
     p.connect();
 
     p.awareness.setLocalStateField("user", {
       color: getRandomColor(),
-      name: session.user.name,
-      photo: session.user.image,
+      name: session?.user.name,
+      photo: session?.user.image,
     });
   };
 
