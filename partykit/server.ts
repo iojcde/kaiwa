@@ -1,22 +1,27 @@
-//  <reference no-default-lib="true"/>
-// <reference types="@cloudflare/workers-types" />
-
 import { onConnect } from "y-partykit";
 
+export type PartyKitConnection = WebSocket & {
+  id: string;
+  /**
+   * @deprecated
+   */
+  socket: WebSocket;
+  unstable_initial: { level: string };
+};
+
 const config = {
-  async onConnect(
-    ws: WebSocket,
-    room: string,
-    unstable_initial: { level: string }
-  ) {
-    let tmp = ws.addEventListener;
+  async onConnect(ws: PartyKitConnection, room: string) {
+    const { unstable_initial } = ws;
+
+    let tmp = ws.addEventListener.bind(ws);
+
     ws.addEventListener = (type: string, callback) => {
       if (type == "message" && unstable_initial.level == "VIEWER") {
-        return;
       } else {
-        return tmp(type, callback);
+        tmp(type, callback);
       }
     };
+
     return onConnect(ws, room, { persist: true });
   },
   async onBeforeConnect(req, room) {
@@ -38,11 +43,11 @@ const config = {
       }
     );
     const { level } = await asdf.json();
-    console.log(asdf);
+
     if (asdf.ok) {
       return { level };
     } else {
-      throw new Error("Unauthorized");
+      // throw new Error("Unauthorized");
     }
   },
 };

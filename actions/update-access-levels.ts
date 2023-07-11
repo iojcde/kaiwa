@@ -5,8 +5,7 @@ import { AccessLevel } from "@prisma/client";
 
 export const updateAccessLevels = async (
   updateList: Record<string, AccessLevel>
-) => {
-  console.log(updateList);
+) => { 
 
   Object.keys(updateList).forEach(async (id) => {
     await db.access.update({

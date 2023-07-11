@@ -8,7 +8,7 @@ const EditorLayout: React.FC<{
   params: { room: string };
 }> = ({ children, params: { room } }) => {
   return (
-    <div className="relative h-screen scroll-m-3 overflow-scroll">
+    <div className="relative h-screen scroll-m-3 overflow-y-scroll">
       <CollabProvider room={room}>
         <EditorNav shareButton={<ShareButton room={room} />} />
         {children}

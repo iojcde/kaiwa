@@ -46,9 +46,11 @@ const MilkdownEditor: React.FC<{
   useEffect(() => {
     status == "authenticated" && initProvider(room, session?.wsToken);
 
+    status == "unauthenticated" && initProvider(room, "www");
+
     return () => {
       if (partykitProvider.roomname != "offline-room") {
-        console.log("destroying partykit", partykitProvider);
+        // console.log("destroying partykit", partykitProvider);
         partykitProvider.destroy();
       }
     };
@@ -60,7 +62,7 @@ const MilkdownEditor: React.FC<{
       body: JSON.stringify({ title, room }),
     });
     if (!res.ok) {
-      console.log(res);
+      // console.log(res);
     } else {
       toast({ title: "hi", description: "saved title" });
     }
@@ -138,7 +140,6 @@ const MilkdownEditor: React.FC<{
         .connect();
 
       partykitProvider.once("synced", async (isSynced: boolean) => {
-        console.log("placeholder enabled");
         ctx.set(placeholderEnabledCtx, true);
 
         const view = ctx.get(editorViewCtx);
