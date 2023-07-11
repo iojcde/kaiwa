@@ -26,14 +26,13 @@ const config = {
     const token = new URL(req.url).searchParams.get("token");
 
     const asdf = await fetch(
-      "nijika.jcde.xyz/api/ws-auth",
+      "https://nijika.jcde.xyz/api/ws-auth",
       // "http://localhost:3000/api/ws-auth",
 
       {
         method: "POST",
         headers: {
-          auth: "2dJgubVWpb4R8X8d2bFo9hSXoqDhS38gTJ36vBghQPiTVBXQyB3uKcCLHmDe9iEtj4C2aR7kYWiLxaieziL2XQdLx8GQrTGjnjYXDDBp8NLirGyuhDa8xwS6XHXdoEn9",
-          // room.env.WSAUTH_SECRET
+          auth: room.env.WSAUTH_SECRET,
         },
         body: JSON.stringify({ check: token, room: room.id }),
       }
