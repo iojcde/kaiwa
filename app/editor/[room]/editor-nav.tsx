@@ -48,7 +48,7 @@ export const EditorNav = ({ shareButton }) => {
         //   yDoc.destroy();
         // }}
         href="/dashboard"
-        className="flex gap-2 items-center select-none"
+        className="flex gap-1 items-center select-none"
       >
         <ChevronLeft size={16} />
         Back

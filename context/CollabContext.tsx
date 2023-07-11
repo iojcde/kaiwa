@@ -93,7 +93,6 @@ export const CollabProvider = ({
     setProvider(p);
 
     const url = new URL(p.url);
-    url.protocol = "ws";
     url.searchParams.set("token", session?.wsToken);
     p.url = url.toString();
 
