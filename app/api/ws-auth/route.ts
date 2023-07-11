@@ -19,7 +19,7 @@ const wsAuth = async (req: Request) => {
     where: { id: room },
     select: { access: { where: { userId: user.id } }, authorId: true },
   });
-
+  console.log(post.authorId, user.id);
   if (post?.access.length > 0 || post?.authorId == user.id) {
     return new Response(
       JSON.stringify({
