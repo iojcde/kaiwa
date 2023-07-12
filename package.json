@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
+    "@iojcde/y-partykit": "^0.0.2",
     "@milkdown/core": "^7.2.4",
     "@milkdown/ctx": "^7.2.4",
     "@milkdown/exception": "^7.2.4",

@@ -1,4 +1,4 @@
-import { onConnect } from "y-partykit";
+import { onConnect } from "@iojcde/y-partykit";
 
 export type PartyKitConnection = WebSocket & {
   id: string;
@@ -13,16 +13,10 @@ const config = {
   async onConnect(ws: PartyKitConnection, room: string) {
     const { unstable_initial } = ws;
 
-    let tmp = ws.addEventListener.bind(ws);
-
-    ws.addEventListener = (type: string, callback) => {
-      if (type == "message" && unstable_initial.level == "VIEWER") {
-      } else {
-        tmp(type, callback);
-      }
-    };
-
-    return onConnect(ws, room, { persist: true });
+    return onConnect(ws, room, {
+      persist: true,
+      readOnly: unstable_initial.level == "VIEWER",
+    });
   },
   async onBeforeConnect(req, room) {
     // - onBeforeConnect runs in a separate worker, so we can't use
