@@ -25,7 +25,7 @@ const config = {
     const token = new URL(req.url).searchParams.get("token");
 
     const asdf = await fetch(
-      "https://nijika.jcde.xyz/api/ws-auth",
+      "https://kaiwa.jcde.xyz/api/ws-auth",
       // "http://localhost:3000/api/ws-auth",
 
       {

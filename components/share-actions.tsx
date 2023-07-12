@@ -1,5 +1,19 @@
 "use client";
 
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
 import { Access, AccessLevel } from "@prisma/client";
 import { Button } from "./ui/button";
 import {
@@ -24,13 +38,28 @@ import {
 import { Dispatch, SetStateAction, cache, useState } from "react";
 import { updatePublished } from "@/actions/update-published";
 import { updateAccessLevels } from "@/actions/update-access-levels";
-import { Globe, Loader2, Lock } from "lucide-react";
+import { Check, ChevronsUpDown, Globe, Loader2, Lock } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { FancyMultiSelect } from "./ui/fancy-multi-select";
+
+const users = [
+  {
+    value: "kaguya",
+    label: "Kaguya",
+  },
+  {
+    value: "chika",
+    label: "Chika",
+  },
+];
 
 export const ShareActions = ({ room, title, session, access, published }) => {
+  const [userSelectOpen, setUserSelectOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [generalAccess, setGeneralAccess] = useState(
     published ? "link" : "restricted"
   );
+  const [value, setValue] = useState("");
   const [accessUpdateQue, setAccessUpdateQue] = useState({});
   const [isLoading, setIsLoading] = useState(false);
 
@@ -48,7 +77,9 @@ export const ShareActions = ({ room, title, session, access, published }) => {
             &apos;
           </DialogTitle>
         </DialogHeader>
-        <div>
+
+        <FancyMultiSelect />
+        <div className="mt-8">
           <h2>People with Access</h2>
           <User accessId="0" user={session?.user} level="OWNER" />
           {access?.map((a: Access & { user: User }, i) => (
@@ -87,6 +118,7 @@ export const ShareActions = ({ room, title, session, access, published }) => {
             </div>
           </Select>
         </div>
+
         <DialogFooter>
           <Button
             onClick={async () => {

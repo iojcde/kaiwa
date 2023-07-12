@@ -3,10 +3,12 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useCollabContext } from "@/context/CollabContext";
 import { ChevronLeft } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Animal from "react-animals";
 import { useUsers } from "y-presence";
+
+const Animal = dynamic(() => import("react-animals"), { ssr: false });
 
 type ConnectionStatus = "connected" | "connecting" | "disconnected";
 export const EditorNav = ({ shareButton }) => {

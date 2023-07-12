@@ -1,7 +1,9 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { db } from "./db";
-import GithubProvider from "next-auth/providers/github";
 import { NextAuthOptions, getServerSession } from "next-auth";
+import EmailProvider from "next-auth/providers/email";
+import GithubProvider from "next-auth/providers/github";
+import { db } from "./db";
+import { sendVerificationRequest } from "@/emails/sendVerificationEmail";
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -15,6 +17,12 @@ export const authOptions: NextAuthOptions = {
     GithubProvider({
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+    }),
+    EmailProvider({
+      name: "email",
+      server: "",
+      from: "YOUR EMAIL FROM (eg: team@resend.com)",
+      sendVerificationRequest,
     }),
   ],
   callbacks: {

@@ -27,7 +27,7 @@ export interface collabContext {
 const yDoc = new Doc();
 
 const offlineProvider = new yPartykitProvider(
-  `nijika.iojcde.partykit.dev`,
+  `kaiwa.iojcde.partykit.dev`,
   "offline-room",
   yDoc,
   {
@@ -81,14 +81,9 @@ export const CollabProvider = ({
     setDoc(newdoc);
 
     provider.destroy();
-    const p = new yPartykitProvider(
-      `nijika.iojcde.partykit.dev`,
-      room,
-      newdoc,
-      {
-        connect: false,
-      }
-    );
+    const p = new yPartykitProvider(`kaiwa.iojcde.partykit.dev`, room, newdoc, {
+      connect: false,
+    });
     setProvider(p);
 
     const url = new URL(p.url);
