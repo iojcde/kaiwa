@@ -1,13 +1,14 @@
 "use client";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useCollabContext } from "@/context/CollabContext";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { useEffect, useState } from "react";
+import Animal from "react-animals";
+import { useUsers } from "y-presence";
 
 type ConnectionStatus = "connected" | "connecting" | "disconnected";
-
 export const EditorNav = ({ shareButton }) => {
   const { provider: partykitProvider } = useCollabContext();
   const computedStatus = partykitProvider.wsconnected
@@ -18,26 +19,21 @@ export const EditorNav = ({ shareButton }) => {
 
   const [connectionStatus, setConnectionStatus] =
     useState<ConnectionStatus>(computedStatus);
+
   if (connectionStatus !== computedStatus) {
     setConnectionStatus(computedStatus);
   }
 
-  const users = partykitProvider.awareness.getStates();
-
   useEffect(() => {
     partykitProvider.on("status", (event: { status: ConnectionStatus }) => {
       setConnectionStatus(event.status);
-      // console.log(event);
+      console.log(event);
     });
   }, [partykitProvider]);
 
-  const usersArray = [];
-
-  for (let [key, value] of users.entries()) {
-    const k = value?.user;
-    if (k) k.id = key;
-    usersArray.push(k);
-  }
+  const users = useUsers(partykitProvider.awareness, (state) =>
+    Array.from(state.values(), (v) => v.user)
+  );
 
   return (
     <nav className="max-w-screen-xl px-6 flex items-center justify-between fixed top-0 inset-x-0 mx-auto w-full py-5">
@@ -64,7 +60,7 @@ export const EditorNav = ({ shareButton }) => {
           {connectionStatus != "connecting" ? (
             <>
               {connectionStatus === "connected"
-                ? `${users.size} user${users.size === 1 ? "" : "s"} online`
+                ? `${users.length} user${users.length === 1 ? "" : "s"} online`
                 : "offline"}
               {` `}
               <span className="hidden select-none sm:group-hover:inline">
@@ -83,35 +79,46 @@ export const EditorNav = ({ shareButton }) => {
         {shareButton}
 
         <div className="flex flex-row-reverse items-center group">
-          {usersArray.length > 0 &&
-            usersArray.map((user, n) => {
-              if (n < 4) {
-                return (
-                  <Avatar
-                    key={n}
-                    className={`${
-                      n != 0
-                        ? "-mr-4 group-hover:mr-0 transition-all w-8 h-8"
-                        : "w-9 h-9"
-                    } ring-offset-2 ring-2`}
-                    style={
-                      {
-                        "--tw-ring-color": user?.color,
-                        zIndex: usersArray.length - n,
-                      } as React.CSSProperties
-                    }
-                  >
-                    <AvatarImage
-                      className={n == 0 && "w-9 h-9"}
-                      src={user?.photo}
-                      alt={user?.name}
-                    />
-                  </Avatar>
-                );
+          {users.length > 0 &&
+            users.map(
+              (user: { name: string; photo: string; color: string }, n) => {
+                console.log(user);
+                if (n < 4) {
+                  return (
+                    <Avatar
+                      key={n}
+                      className={`${
+                        n != 0
+                          ? "-mr-4 group-hover:mr-0 transition-all w-8 h-8"
+                          : "w-9 h-9"
+                      } ring-offset-2 ring-2`}
+                      style={
+                        {
+                          "--tw-ring-color": user?.color,
+                          zIndex: users?.length - n,
+                        } as React.CSSProperties
+                      }
+                    >
+                      <AvatarImage
+                        className={n == 0 && "w-9 h-9"}
+                        src={user?.photo}
+                        alt={user?.name}
+                      />
+                      <AvatarFallback>
+                        {user && (
+                          <Animal
+                            color={user.color}
+                            name={user.name.split("-")[1]}
+                          />
+                        )}
+                      </AvatarFallback>
+                    </Avatar>
+                  );
+                }
               }
-            })}
-          {usersArray.length > 4 && (
-            <span className="pr-2 text-gray-11">+{usersArray.length - 4}</span>
+            )}
+          {users.length > 4 && (
+            <span className="pr-2 text-gray-11">+{users.length - 4}</span>
           )}
         </div>
       </div>

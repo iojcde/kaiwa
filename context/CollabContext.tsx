@@ -15,6 +15,7 @@ import { Doc } from "yjs";
 import type { Awareness } from "y-protocols/awareness";
 import { useSession } from "next-auth/react";
 import { getRandomColor } from "@/lib/randomColor";
+import { randomUsername } from "@/lib/randomUsername";
 
 export interface collabContext {
   provider: yPartykitProvider;
@@ -81,9 +82,7 @@ export const CollabProvider = ({
 
     provider.destroy();
     const p = new yPartykitProvider(
-      process.env.NODE_ENV == "development"
-        ? "localhost:1999"
-        : `nijika.iojcde.partykit.dev`,
+      `nijika.iojcde.partykit.dev`,
       room,
       newdoc,
       {
@@ -100,7 +99,7 @@ export const CollabProvider = ({
 
     p.awareness.setLocalStateField("user", {
       color: getRandomColor(),
-      name: session?.user.name,
+      name: session?.user.name ?? randomUsername(),
       photo: session?.user.image,
     });
   };

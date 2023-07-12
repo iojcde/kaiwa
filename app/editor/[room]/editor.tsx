@@ -23,11 +23,12 @@ import rehypeSanitize from "rehype-sanitize";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
-import { stat } from "fs";
+import { AccessLevel } from "@prisma/client";
 
 const MilkdownEditor: React.FC<{
   room: string;
-}> = ({ room }) => {
+  accessLevel: AccessLevel;
+}> = ({ room, accessLevel }) => {
   const { status, data: session } = useSession();
 
   const {
@@ -144,6 +145,9 @@ const MilkdownEditor: React.FC<{
 
         const view = ctx.get(editorViewCtx);
         view.focus();
+        view.setProps({
+          editable: () => accessLevel != "VIEWER",
+        });
       });
     }
   });
@@ -157,14 +161,14 @@ const MilkdownEditor: React.FC<{
   );
 };
 
-const MilkdownEditorWrapper: React.FC<{
+export const MilkdownEditorWrapper: React.FC<{
   room: string;
-}> = ({ room }) => {
+  accessLevel: AccessLevel;
+}> = ({ room, accessLevel }) => {
   return (
     <MilkdownProvider>
-      <MilkdownEditor room={room} />
+      <MilkdownEditor room={room} accessLevel={accessLevel} />
     </MilkdownProvider>
   );
 };
-
 export default MilkdownEditorWrapper;

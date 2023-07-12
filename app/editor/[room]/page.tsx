@@ -5,7 +5,7 @@ import NextDynamic from "next/dynamic";
 import React from "react";
 import { Loader2 } from "lucide-react";
 import { notFound, useRouter } from "next/navigation";
-import MilkdownEditorWrapper from "./editor";
+import MilkdownEditor from "./editor";
 
 // const NoSSREditor = NextDynamic(() => import("@/app/editor/[room]/editor"), {
 //   ssr: false,
@@ -30,20 +30,24 @@ const EditorPage = async ({
       authorId: true,
       published: true,
     },
-  }); 
-  
+  });
+
   if (
     !post ||
     (post?.authorId != session?.user.id &&
-      post.access.length == 0 &&
+      post.access.filter((a) => a.userId == session?.user.id).length == 0 &&
       !post.published)
   ) {
     notFound();
   }
 
+  let accessLevel =
+    post.access.find((a) => a.userId == session?.user.id)?.level ||
+    (post.authorId == session?.user.id ? "OWNER" : "VIEWER");
+
   return (
     <div className="px-6 w-full max-w-screen-md mx-auto mt-20">
-      <MilkdownEditorWrapper room={room} />
+      <MilkdownEditor room={room} accessLevel={accessLevel} />
     </div>
   );
 };
