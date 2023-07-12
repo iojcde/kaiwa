@@ -27,7 +27,6 @@ export const EditorNav = ({ shareButton }) => {
   useEffect(() => {
     partykitProvider.on("status", (event: { status: ConnectionStatus }) => {
       setConnectionStatus(event.status);
-      console.log(event);
     });
   }, [partykitProvider]);
 
@@ -82,7 +81,6 @@ export const EditorNav = ({ shareButton }) => {
           {users.length > 0 &&
             users.map(
               (user: { name: string; photo: string; color: string }, n) => {
-                console.log(user);
                 if (n < 4) {
                   return (
                     <Avatar

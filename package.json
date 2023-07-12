@@ -28,7 +28,7 @@
     "@next-auth/prisma-adapter": "^1.0.7",
     "@next/swc-win32-x64-msvc": "13.4.10-canary.3",
     "@panva/hkdf": "^1.1.1",
-    "@prisma/client": "4.16.2",
+    "@prisma/client": "5.0.0",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.4",
     "@radix-ui/react-aspect-ratio": "^1.0.3",

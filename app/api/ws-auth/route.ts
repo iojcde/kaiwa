@@ -16,7 +16,6 @@ const wsAuth = async (req: Request) => {
   });
 
   if (user) {
-    console.log(user);
     const post = await db.post.findFirst({
       where: { id: room },
       select: { access: { where: { userId: user.id } }, authorId: true },
@@ -34,7 +33,7 @@ const wsAuth = async (req: Request) => {
         status: 401,
       });
     }
-  } else { 
+  } else {
     const post = await db.post.findFirst({
       where: { id: room },
       select: { published: true },

@@ -38,7 +38,6 @@ const config = {
     );
 
     const res = await asdf.json();
-    console.log(res);
 
     if (asdf.ok) {
       return { level: res.level };
