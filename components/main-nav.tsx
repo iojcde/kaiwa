@@ -6,7 +6,7 @@ export const MainNav = () => {
     <nav className="container flex items-center py-4 justify-between">
       <div className="flex items-center gap-12">
         <Link href="/" className="text-xl font-medium">
-          KW
+          Kaiwa
         </Link>
         <div className="flex items-center text-sm">
           <Link href="/about"> About</Link>
