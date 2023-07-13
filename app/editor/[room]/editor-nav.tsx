@@ -8,7 +8,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useUsers } from "y-presence";
 
-const Animal = dynamic(() => import("react-animals"), { ssr: false });
+const Animal = dynamic<{ color: string; name: string }>(
+  () => import("react-animals"),
+  { ssr: false }
+);
 
 type ConnectionStatus = "connected" | "connecting" | "disconnected";
 export const EditorNav = ({ shareButton }) => {

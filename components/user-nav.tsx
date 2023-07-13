@@ -17,6 +17,7 @@ import { authOptions } from "@/lib/auth";
 
 export async function UserNav() {
   const session = await getServerSession(authOptions);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="outline-none">
@@ -32,7 +33,7 @@ export async function UserNav() {
               {session?.user.name}
             </p>
             <p className="text-xs leading-none text-muted-foreground">
-              {session.user.email}
+              {session?.user.email}
             </p>
           </div>
         </DropdownMenuLabel>

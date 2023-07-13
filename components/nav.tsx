@@ -20,7 +20,7 @@ export const Nav = () => {
           >
             <circle cx="12" cy="12" r="10"></circle>
           </svg>
-          Indent
+          Kaiwa
         </Link>
         <div>
           <UserNav />

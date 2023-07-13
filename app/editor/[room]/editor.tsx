@@ -15,6 +15,7 @@ import { listener, listenerCtx } from "@milkdown/plugin-listener";
 import { commonmark } from "@milkdown/preset-commonmark";
 import { gfm } from "@milkdown/preset-gfm";
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react";
+import { AccessLevel } from "@prisma/client";
 import { debounce } from "lodash";
 import type { Heading, Root, Text } from "mdast";
 import { useSession } from "next-auth/react";
@@ -23,7 +24,6 @@ import rehypeSanitize from "rehype-sanitize";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import { unified } from "unified";
-import { AccessLevel } from "@prisma/client";
 
 const MilkdownEditor: React.FC<{
   room: string;
