@@ -9,6 +9,15 @@ import { Command as CommandPrimitive } from "cmdk";
 
 type Framework = Record<"value" | "label", string>;
 
+const FRAMEWORKS = [
+  { value: "react", label: "React" },
+  { value: "vue", label: "Vue" },
+  { value: "svelte", label: "Svelte" },
+  { value: "angular", label: "Angular" },
+  { value: "ember", label: "Ember" },
+  { value: "preact", label: "Preact" },
+];
+
 export function FancyMultiSelect() {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
