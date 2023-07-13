@@ -8,6 +8,7 @@ const wsAuth = async (req: Request) => {
       status: 401,
     });
   }
+  console.log(req);
   const { check, room } = await req.json();
 
   const user = await db.user.findFirst({
