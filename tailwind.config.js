@@ -15,7 +15,7 @@ module.exports = {
     },
     extend: {
       colors: {
-        border: toRadixVar("gray", 5),
+        border: toRadixVar("gray", 6),
         input: toRadixVar("gray", 6),
         ring: toRadixVar("gray", 7),
         background: toRadixVar("gray", 1),

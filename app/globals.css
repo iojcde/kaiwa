@@ -12,6 +12,24 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-white text-foreground overflow-x-clip;
   }
+  
+  .font-display { 
+    font-variation-settings:"opsz" 32;
+  }
+}
+
+.gradient {
+  z-index: -1;
+  width: 100vw;
+  min-width: 1500px;
+  left: 50%;
+  transform: translateX(-50%);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background-repeat: no-repeat;
+  background-image: radial-gradient(circle 800px at 700px 200px,hsl(var(--purple2)),var(--transparent)),radial-gradient(circle 600px at calc(100% - 300px) 300px,hsl(var(--mint4)),var(--transparent)),radial-gradient(circle 800px at right center,hsl(var(--sky3)),var(--transparent)),radial-gradient(circle 800px at right bottom,hsl(var(--sky1)),var(--transparent)),radial-gradient(circle 800px at calc(50% - 600px) calc(100% - 100px),hsl(var(--pink3)),hsl(var(--pink1)),var(--transparent));
+  --transparent: #fdfcfd00;
 }

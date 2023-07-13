@@ -30,20 +30,22 @@ const MilkdownEditor = () => {
       .use(history)
   );
 
-  get()?.config((ctx) => {
+  get()?.action((ctx) => {
     const view = ctx.get(editorViewCtx);
-
     view.setProps({
-      attributes: () => {
-        return {
+      attributes: Object.assign(
+        typeof view.props.attributes == "function"
+          ? view.props.attributes(view.props.state)
+          : view.props.attributes,
+        {
           spellcheck: "false",
-        };
-      },
+        }
+      ),
     });
   });
 
   return (
-    <div className="px-6 py-2 prose prose-sm  ">
+    <div className="p-6">
       <Milkdown />
     </div>
   );

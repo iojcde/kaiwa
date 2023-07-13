@@ -84,6 +84,7 @@
     "react-dom": "18.2.0",
     "react-email": "1.9.4",
     "react-hook-form": "^7.45.1",
+    "react-wrap-balancer": "^1.0.0",
     "rehype-sanitize": "^5.0.1",
     "remark-parse": "^10.0.2",
     "remark-rehype": "^10.1.0",
