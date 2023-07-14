@@ -15,7 +15,7 @@ export function randomUsername() {
     "quirky",
     "vibrant",
     "jolly",
-  ];
+  ]
   const nouns = [
     "alligator",
     "anteater",
@@ -87,11 +87,11 @@ export function randomUsername() {
     "wolf",
     "wolverine",
     "wombat",
-  ];
+  ]
 
   const randomAdjective =
-    adjectives[Math.floor(Math.random() * adjectives.length)];
-  const randomNoun = nouns[Math.floor(Math.random() * nouns.length)];
+    adjectives[Math.floor(Math.random() * adjectives.length)]
+  const randomNoun = nouns[Math.floor(Math.random() * nouns.length)]
 
-  return randomAdjective + "-" + randomNoun;
+  return randomAdjective + "-" + randomNoun
 }

@@ -1,12 +1,15 @@
-import Link from "next/link";
-import { Button } from "./ui/button";
-import Image from "next/image";
+import Link from "next/link"
+import { Button } from "./ui/button"
+import Image from "next/image"
 
 export const MainNav = () => {
   return (
-    <nav className="container flex items-center py-4 justify-between">
+    <nav className="container absolute inset-x-0 top-0 flex items-center justify-between py-4">
       <div className="flex items-center gap-12">
-        <Link href="/" className="text-xl font-medium flex items-center gap-2">
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-xl font-semibold"
+        >
           {/* <Image src="/images/logo.png" alt="" width={20} height={20} /> */}
           Kaiwa
         </Link>
@@ -19,5 +22,5 @@ export const MainNav = () => {
         <Link href="/login">Login</Link>
       </Button>
     </nav>
-  );
-};
+  )
+}

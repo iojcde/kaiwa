@@ -5,5 +5,5 @@ export const Footer = () => {
         ©{new Date().getFullYear()} <a href="https://jcde.xyz">Jeeho Ahn</a>.
       </p>
     </footer>
-  );
-};
+  )
+}

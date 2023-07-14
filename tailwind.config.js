@@ -1,9 +1,13 @@
 /** @type {import('tailwindcss').Config} */
-const { toRadixVar, toRadixVars } = require("windy-radix-palette/vars");
+const { toRadixVar, toRadixVars } = require("windy-radix-palette/vars")
 
 module.exports = {
   darkMode: ["class"],
-  content: ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}", "milkdown/**/*.{ts,tsx}"],
+  content: [
+    "app/**/*.{ts,tsx}",
+    "components/**/*.{ts,tsx}",
+    "milkdown/**/*.{ts,tsx}",
+  ],
   theme: {
     container: {
       center: true,
@@ -79,4 +83,4 @@ module.exports = {
     require("@tailwindcss/typography"),
     require("windy-radix-typography"),
   ],
-};
+}

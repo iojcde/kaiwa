@@ -1,13 +1,13 @@
-import { UserNav } from "@/components/user-nav";
-import Link from "next/link";
+import { UserNav } from "@/components/user-nav"
+import Link from "next/link"
 
 export const Nav = () => {
   return (
     <nav className="border-b py-3">
-      <div className="max-w-screen-xl mx-auto w-full flex items-center px-6 justify-between">
+      <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between px-6">
         <Link
           href="/dashboard"
-          className="font-medium text-xl font-display flex gap-2 items-center"
+          className="font-display flex items-center gap-2 text-xl font-medium"
         >
           <svg
             viewBox="0 0 24 24"
@@ -27,5 +27,5 @@ export const Nav = () => {
         </div>
       </div>
     </nav>
-  );
-};
+  )
+}

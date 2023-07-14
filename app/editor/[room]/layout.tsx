@@ -1,11 +1,11 @@
-import { ReactNode } from "react";
-import { EditorNav } from "./editor-nav";
-import { CollabProvider } from "@/context/CollabContext";
-import { ShareButton } from "@/components/share-button";
+import { ReactNode } from "react"
+import { EditorNav } from "./editor-nav"
+import { CollabProvider } from "@/context/CollabContext"
+import { ShareButton } from "@/components/share-button"
 
 const EditorLayout: React.FC<{
-  children: ReactNode;
-  params: { room: string };
+  children: ReactNode
+  params: { room: string }
 }> = ({ children, params: { room } }) => {
   return (
     <div className="relative h-screen scroll-m-3 overflow-y-scroll">
@@ -14,6 +14,6 @@ const EditorLayout: React.FC<{
         {children}
       </CollabProvider>
     </div>
-  );
-};
-export default EditorLayout;
+  )
+}
+export default EditorLayout

@@ -1,14 +1,14 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import { useRouter } from "next/navigation";
+import * as React from "react"
+import { useRouter } from "next/navigation"
 
-import { cn } from "@/lib/utils";
-import { ButtonProps, buttonVariants } from "@/components/ui/button";
-import { toast } from "@/components/ui/use-toast";
-import { createPost } from "@/actions/create-post";
-import { Post } from "@prisma/client";
-import { Loader2, Plus } from "lucide-react";
+import { cn } from "@/lib/utils"
+import { ButtonProps, buttonVariants } from "@/components/ui/button"
+import { toast } from "@/components/ui/use-toast"
+import { createPost } from "@/actions/create-post"
+import { Post } from "@prisma/client"
+import { Loader2, Plus } from "lucide-react"
 
 interface PostCreateButtonProps extends ButtonProps {}
 
@@ -17,27 +17,27 @@ export function PostCreateButton({
   variant,
   ...props
 }: PostCreateButtonProps) {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const router = useRouter()
+  const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
   async function onClick() {
-    setIsLoading(true);
-    let post: Post;
+    setIsLoading(true)
+    let post: Post
     try {
-      post = await createPost();
+      post = await createPost()
     } catch {
       return toast({
         title: "Something went wrong.",
         description: "Your post was not created. Please try again.",
         variant: "destructive",
-      });
+      })
     }
-    setIsLoading(false);
+    setIsLoading(false)
 
     // This forces a cache invalidation.
-    router.refresh();
+    router.refresh()
 
-    router.push(`/editor/${post.id}`);
+    router.push(`/editor/${post.id}`)
   }
 
   return (
@@ -60,5 +60,5 @@ export function PostCreateButton({
       )}
       New post
     </button>
-  );
+  )
 }

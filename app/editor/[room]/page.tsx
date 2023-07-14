@@ -1,11 +1,11 @@
-import { authOptions } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { getServerSession } from "next-auth";
-import NextDynamic from "next/dynamic";
-import React from "react";
-import { Loader2 } from "lucide-react";
-import { notFound, useRouter } from "next/navigation";
-import MilkdownEditor from "./editor";
+import { authOptions } from "@/lib/auth"
+import { db } from "@/lib/db"
+import { getServerSession } from "next-auth"
+import NextDynamic from "next/dynamic"
+import React from "react"
+import { Loader2 } from "lucide-react"
+import { notFound, useRouter } from "next/navigation"
+import MilkdownEditor from "./editor"
 
 // const NoSSREditor = NextDynamic(() => import("@/app/editor/[room]/editor"), {
 //   ssr: false,
@@ -19,9 +19,9 @@ import MilkdownEditor from "./editor";
 const EditorPage = async ({
   params: { room },
 }: {
-  params: { room: string };
+  params: { room: string }
 }) => {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions)
 
   const post = await db.post.findFirst({
     where: { id: room },
@@ -30,7 +30,7 @@ const EditorPage = async ({
       authorId: true,
       published: true,
     },
-  });
+  })
 
   if (
     !post ||
@@ -38,29 +38,29 @@ const EditorPage = async ({
       post.access.filter((a) => a.userId == session?.user.id).length == 0 &&
       !post.published)
   ) {
-    notFound();
+    notFound()
   }
 
   let accessLevel =
     post.access.find((a) => a.userId == session?.user.id)?.level ||
-    (post.authorId == session?.user.id ? "OWNER" : "VIEWER");
+    (post.authorId == session?.user.id ? "OWNER" : "VIEWER")
 
   return (
-    <div className="px-6 w-full max-w-screen-md mx-auto mt-20">
+    <div className="mx-auto mt-20 w-full max-w-screen-md px-6">
       <MilkdownEditor room={room} accessLevel={accessLevel} />
     </div>
-  );
-};
-export default EditorPage;
+  )
+}
+export default EditorPage
 
 export async function generateMetadata({ params: { room } }) {
-  const post = await db.post.findUnique({ where: { id: room } });
+  const post = await db.post.findUnique({ where: { id: room } })
   if (!post) {
-    return;
+    return
   }
   return {
     title: `${post.title}`,
-  };
+  }
 }
 
-export const revalidate = 0;
+export const revalidate = 0

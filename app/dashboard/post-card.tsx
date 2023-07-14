@@ -1,11 +1,11 @@
-import { Post } from "@prisma/client";
-import Link from "next/link";
-import { PostOperations } from "./post-operations";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Post } from "@prisma/client"
+import Link from "next/link"
+import { PostOperations } from "./post-operations"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export const PostCard = ({ post }: { post: Post }) => (
-  <div className="w-full p-4 flex justify-between items-center">
-    <div className="flex-col flex">
+  <div className="flex w-full items-center justify-between p-4">
+    <div className="flex flex-col">
       <Link
         href={`/editor/${post.id}`}
         className="font-3xl font-semibold tracking-tight hover:underline"
@@ -22,7 +22,7 @@ export const PostCard = ({ post }: { post: Post }) => (
     </div>
     <PostOperations post={post} />
   </div>
-);
+)
 
 PostCard.Skeleton = function PostItemSkeleton() {
   return (
@@ -32,5 +32,5 @@ PostCard.Skeleton = function PostItemSkeleton() {
         <Skeleton className="h-4 w-4/5" />
       </div>
     </div>
-  );
-};
+  )
+}

@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   Command,
@@ -6,26 +6,26 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command";
+} from "@/components/ui/command"
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/components/ui/popover"
 
-import { Access, AccessLevel } from "@prisma/client";
-import { Button } from "./ui/button";
+import { Access, AccessLevel } from "@prisma/client"
+import { Button } from "./ui/button"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
+} from "./ui/select"
 
-import { User } from "@prisma/client";
-import { Avatar, AvatarImage } from "./ui/avatar";
+import { User } from "@prisma/client"
+import { Avatar, AvatarImage } from "./ui/avatar"
 import {
   Dialog,
   DialogContent,
@@ -33,14 +33,14 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
+} from "./ui/dialog"
 
-import { Dispatch, SetStateAction, cache, useState } from "react";
-import { updatePublished } from "@/actions/update-published";
-import { updateAccessLevels } from "@/actions/update-access-levels";
-import { Check, ChevronsUpDown, Globe, Loader2, Lock } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { FancyMultiSelect } from "./ui/fancy-multi-select";
+import { Dispatch, SetStateAction, cache, useState } from "react"
+import { updatePublished } from "@/actions/update-published"
+import { updateAccessLevels } from "@/actions/update-access-levels"
+import { Check, ChevronsUpDown, Globe, Loader2, Lock } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { FancyMultiSelect } from "./ui/fancy-multi-select"
 
 const users = [
   {
@@ -51,17 +51,17 @@ const users = [
     value: "chika",
     label: "Chika",
   },
-];
+]
 
 export const ShareActions = ({ room, title, session, access, published }) => {
-  const [userSelectOpen, setUserSelectOpen] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [userSelectOpen, setUserSelectOpen] = useState(false)
+  const [open, setOpen] = useState(false)
   const [generalAccess, setGeneralAccess] = useState(
     published ? "link" : "restricted"
-  );
-  const [value, setValue] = useState("");
-  const [accessUpdateQue, setAccessUpdateQue] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
+  )
+  const [value, setValue] = useState("")
+  const [accessUpdateQue, setAccessUpdateQue] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -100,9 +100,9 @@ export const ShareActions = ({ room, title, session, access, published }) => {
             value={generalAccess}
             onValueChange={setGeneralAccess}
           >
-            <div className="flex items-center gap-3 mt-2">
+            <div className="mt-2 flex items-center gap-3">
               <div
-                className={`p-2 rounded-full ${
+                className={`rounded-full p-2 ${
                   generalAccess == "link" ? "bg-green-5" : "bg-red-5"
                 }`}
               >
@@ -122,20 +122,20 @@ export const ShareActions = ({ room, title, session, access, published }) => {
         <DialogFooter>
           <Button
             onClick={async () => {
-              setIsLoading(true);
+              setIsLoading(true)
               await cache(
                 async (room, generalAccess) =>
                   await updatePublished({
                     room,
                     published: generalAccess == "link",
                   })
-              )(room, generalAccess);
+              )(room, generalAccess)
 
               await cache(async (accessUpdateQue) => {
-                await updateAccessLevels(accessUpdateQue);
-              })(accessUpdateQue);
-              setIsLoading(false);
-              setOpen(!open);
+                await updateAccessLevels(accessUpdateQue)
+              })(accessUpdateQue)
+              setIsLoading(false)
+              setOpen(!open)
             }}
           >
             {isLoading ? (
@@ -150,8 +150,8 @@ export const ShareActions = ({ room, title, session, access, published }) => {
         </DialogFooter>
       </DialogContent>{" "}
     </Dialog>
-  );
-};
+  )
+}
 
 const User = ({
   user,
@@ -160,23 +160,23 @@ const User = ({
   setAccessUpdateQue,
   accessUpdateQue,
 }: {
-  user: User;
-  level: AccessLevel;
-  accessId: string;
-  setAccessUpdateQue?: Dispatch<SetStateAction<Record<string, AccessLevel>>>;
+  user: User
+  level: AccessLevel
+  accessId: string
+  setAccessUpdateQue?: Dispatch<SetStateAction<Record<string, AccessLevel>>>
 
-  accessUpdateQue?: Record<string, AccessLevel>;
+  accessUpdateQue?: Record<string, AccessLevel>
 }) => (
-  <div className="flex gap-2 justify-between py-2 items-center">
+  <div className="flex items-center justify-between gap-2 py-2">
     <div className="flex items-center gap-3">
-      <Avatar className="w-8 h-8">
+      <Avatar className="h-8 w-8">
         <AvatarImage src={user?.image} />
       </Avatar>
       <div className="flex flex-col text-sm">
         <span className="">
           {user?.name} {level == "OWNER" ? " (you)" : ""}
         </span>
-        <span className="text-gray-11 text-xs">{user?.email}</span>
+        <span className="text-xs text-gray-11">{user?.email}</span>
       </div>
     </div>
     <div className="">
@@ -186,9 +186,9 @@ const User = ({
         <Select
           defaultValue={level}
           onValueChange={(v) => {
-            let tmp = accessUpdateQue;
-            tmp[accessId] = v as AccessLevel;
-            setAccessUpdateQue(tmp);
+            let tmp = accessUpdateQue
+            tmp[accessId] = v as AccessLevel
+            setAccessUpdateQue(tmp)
           }}
         >
           <SelectTrigger className="w-[100px]">
@@ -202,4 +202,4 @@ const User = ({
       )}
     </div>
   </div>
-);
+)

@@ -1,9 +1,9 @@
 .milkdown-theme-iojcde blockquote {
-  @apply not-italic font-serif border-l-4 border-border pl-4;
+  @apply border-l-4 border-border pl-4 font-serif not-italic;
 }
 
 .milkdown-theme-iojcde code {
-  @apply text-gray-12 font-mono font-normal;
+  @apply font-mono font-normal text-gray-12;
 }
 
 .milkdown-theme-iojcde pre code {
@@ -11,39 +11,50 @@
 }
 
 .milkdown-theme-iojcde img {
-  @apply max-w-full !my-0 inline-block;
+  @apply !my-0 inline-block max-w-full;
 }
 
-.milkdown-theme-iojcde.prose :where(blockquote):not(:where([class~="not-prose"] *)) {
+.milkdown-theme-iojcde.prose
+  :where(blockquote):not(:where([class~="not-prose"] *)) {
   @apply font-normal;
 }
 
-.milkdown-theme-iojcde.prose :where(ol > li):not(:where([class~="not-prose"] *))::marker,
-.milkdown-theme-iojcde.prose :where(ul > li):not(:where([class~="not-prose"] *))::marker {
+.milkdown-theme-iojcde.prose
+  :where(ol > li):not(:where([class~="not-prose"] *))::marker,
+.milkdown-theme-iojcde.prose
+  :where(ul > li):not(:where([class~="not-prose"] *))::marker {
   @apply text-gray-12;
 }
 
-
-.milkdown-theme-iojcde.prose :where(blockquote p:first-of-type):not(:where([class~="not-prose"] *))::before,
-.milkdown-theme-iojcde.prose :where(blockquote p:first-of-type):not(:where([class~="not-prose"] *))::after {
-  content: '';
+.milkdown-theme-iojcde.prose
+  :where(blockquote p:first-of-type):not(
+    :where([class~="not-prose"] *)
+  )::before,
+.milkdown-theme-iojcde.prose
+  :where(blockquote p:first-of-type):not(
+    :where([class~="not-prose"] *)
+  )::after {
+  content: "";
 }
 
-.milkdown-theme-iojcde.prose :where(code):not(:where([class~="not-prose"] *))::before,
-.milkdown-theme-iojcde.prose :where(code):not(:where([class~="not-prose"] *))::after {
-  content: '';
+.milkdown-theme-iojcde.prose
+  :where(code):not(:where([class~="not-prose"] *))::before,
+.milkdown-theme-iojcde.prose
+  :where(code):not(:where([class~="not-prose"] *))::after {
+  content: "";
 }
 
 .milkdown-theme-iojcde.prose .tableWrapper {
-  @apply mb-2 overflow-x-auto relative;
+  @apply relative mb-2 overflow-x-auto;
 }
 
 .milkdown-theme-iojcde.prose table {
-  @apply text-sm shadow-md sm:rounded-lg !overflow-visible !m-4;
+  @apply !m-4 !overflow-visible text-sm shadow-md sm:rounded-lg;
 }
 
-.milkdown-theme-iojcde.prose td, th {
-  @apply !py-3 !px-6;
+.milkdown-theme-iojcde.prose td,
+th {
+  @apply !px-6 !py-3;
 }
 
 .milkdown-theme-iojcde.prose tr {
@@ -65,18 +76,17 @@
 /* A little workaround to turn the element into a space */
 .milkdown-theme-iojcde.prose br[data-is-inline="true"],
 .milkdown-theme-iojcde.prose br[data-is-inline="true"]::after {
-  content: ' '
+  content: " ";
 }
 
-[data-milkdown-root]{
+[data-milkdown-root] {
   @apply h-full;
 }
 
-.milkdown{
+.milkdown {
   @apply h-full;
 }
 
- 
 .ProseMirror[data-placeholder]::before {
   color: #a9a9a9;
   position: absolute;
@@ -91,8 +101,14 @@
 .ProseMirror > .ProseMirror-yjs-cursor:first-child {
   margin-top: 16px;
 }
-.ProseMirror p:first-child, .ProseMirror h1:first-child, .ProseMirror h2:first-child, .ProseMirror h3:first-child, .ProseMirror h4:first-child, .ProseMirror h5:first-child, .ProseMirror h6:first-child {
-  margin-top: 16px
+.ProseMirror p:first-child,
+.ProseMirror h1:first-child,
+.ProseMirror h2:first-child,
+.ProseMirror h3:first-child,
+.ProseMirror h4:first-child,
+.ProseMirror h5:first-child,
+.ProseMirror h6:first-child {
+  margin-top: 16px;
 }
 /* This gives the remote user caret. The colors are automatically overwritten*/
 .ProseMirror-yjs-cursor {

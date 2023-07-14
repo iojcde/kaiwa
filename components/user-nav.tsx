@@ -1,7 +1,7 @@
-import { CreditCard, LogOut, PlusCircle, Settings, User } from "lucide-react";
+import { CreditCard, LogOut, PlusCircle, Settings, User } from "lucide-react"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,12 +11,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+} from "@/components/ui/dropdown-menu"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/auth"
 
 export async function UserNav() {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions)
 
   return (
     <DropdownMenu>
@@ -67,5 +67,5 @@ export async function UserNav() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }

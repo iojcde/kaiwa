@@ -14,30 +14,30 @@ import {
   Section,
   Tailwind,
   Text,
-} from "@react-email/components";
-import * as React from "react";
+} from "@react-email/components"
+import * as React from "react"
 
 export const VerificationEmail = ({ url }) => {
-  const previewText = `Verify your email for Kaiwa`;
+  const previewText = `Verify your email for Kaiwa`
 
   return (
     <Html>
       <Head />
       <Preview>{previewText}</Preview>
       <Tailwind>
-        <Body className="bg-white my-auto mx-auto font-sans">
-          <Container className="border border-solid border-[#eaeaea] rounded-xl my-[40px] mx-auto p-[20px] w-[465px]">
-            <Text className="text-black font-medium text-[14px] leading-[24px]">
+        <Body className="mx-auto my-auto bg-white font-sans">
+          <Container className="mx-auto my-[40px] w-[465px] rounded-xl border border-solid border-[#eaeaea] p-[20px]">
+            <Text className="text-[14px] font-medium leading-[24px] text-black">
               Hello,
             </Text>
             <Text>Here&apos;s your link to verify your email on Kaiwa.</Text>
             <Text>Thanks for checking us out!</Text>
 
-            <Section className=" mt-[32px] mb-[32px]">
+            <Section className=" mb-[32px] mt-[32px]">
               <Button
                 pX={20}
                 pY={12}
-                className="bg-[#000000] rounded-lg text-white font-semibold no-underline"
+                className="rounded-lg bg-[#000000] font-semibold text-white no-underline"
                 href={url}
               >
                 Verify my Email
@@ -47,5 +47,5 @@ export const VerificationEmail = ({ url }) => {
         </Body>
       </Tailwind>
     </Html>
-  );
-};
+  )
+}

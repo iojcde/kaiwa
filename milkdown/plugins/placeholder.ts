@@ -1,40 +1,37 @@
-import type { MilkdownPlugin, TimerType } from "@milkdown/ctx";
-import type { EditorView } from "@milkdown/prose/view";
-import { createSlice, createTimer } from "@milkdown/ctx";
-import { InitReady, prosePluginsCtx } from "@milkdown/core";
-import { Plugin, PluginKey } from "@milkdown/prose/state";
+import type { MilkdownPlugin, TimerType } from "@milkdown/ctx"
+import type { EditorView } from "@milkdown/prose/view"
+import { createSlice, createTimer } from "@milkdown/ctx"
+import { InitReady, prosePluginsCtx } from "@milkdown/core"
+import { Plugin, PluginKey } from "@milkdown/prose/state"
 
-export const placeholderCtx = createSlice(
-  "Please input here...",
-  "placeholder"
-);
+export const placeholderCtx = createSlice("Please input here...", "placeholder")
 
-export const placeholderEnabledCtx = createSlice(false, "placeholderEnabled");
+export const placeholderEnabledCtx = createSlice(false, "placeholderEnabled")
 
 export const placeholderTimerCtx = createSlice(
   [] as TimerType[],
   "editorStateTimer"
-);
+)
 
-export const PlaceholderReady = createTimer("PlaceholderReady");
+export const PlaceholderReady = createTimer("PlaceholderReady")
 
-const key = new PluginKey("MILKDOWN_PLACEHOLDER");
+const key = new PluginKey("MILKDOWN_PLACEHOLDER")
 
 export const placeholder: MilkdownPlugin = (ctx) => {
   ctx
     .inject(placeholderCtx)
     .inject(placeholderEnabledCtx)
     .inject(placeholderTimerCtx, [InitReady])
-    .record(PlaceholderReady);
+    .record(PlaceholderReady)
 
   return async () => {
-    await ctx.waitTimers(placeholderTimerCtx);
+    await ctx.waitTimers(placeholderTimerCtx)
 
-    const prosePlugins = ctx.get(prosePluginsCtx);
+    const prosePlugins = ctx.get(prosePluginsCtx)
 
     const update = (view: EditorView) => {
-      const placeholder = ctx.get(placeholderCtx);
-      const doc = view.state.doc;
+      const placeholder = ctx.get(placeholderCtx)
+      const doc = view.state.doc
       if (
         view.editable &&
         doc.childCount === 1 &&
@@ -43,11 +40,11 @@ export const placeholder: MilkdownPlugin = (ctx) => {
         doc.firstChild?.type.name === "paragraph" &&
         ctx.get(placeholderEnabledCtx)
       ) {
-        view.dom.setAttribute("data-placeholder", placeholder);
+        view.dom.setAttribute("data-placeholder", placeholder)
       } else {
-        view.dom.removeAttribute("data-placeholder");
+        view.dom.removeAttribute("data-placeholder")
       }
-    };
+    }
 
     const plugins = [
       ...prosePlugins,
@@ -75,15 +72,15 @@ export const placeholder: MilkdownPlugin = (ctx) => {
         //   },
         // },
         view(view) {
-          update(view);
+          update(view)
 
-          return { update };
+          return { update }
         },
       }),
-    ];
+    ]
 
-    ctx.set(prosePluginsCtx, plugins);
+    ctx.set(prosePluginsCtx, plugins)
 
-    ctx.done(PlaceholderReady);
-  };
-};
+    ctx.done(PlaceholderReady)
+  }
+}

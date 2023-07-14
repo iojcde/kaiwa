@@ -1,9 +1,9 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { NextAuthOptions, getServerSession } from "next-auth";
-import EmailProvider from "next-auth/providers/email";
-import GithubProvider from "next-auth/providers/github";
-import { db } from "./db";
-import { sendVerificationRequest } from "@/emails/sendVerificationEmail";
+import { PrismaAdapter } from "@next-auth/prisma-adapter"
+import { NextAuthOptions, getServerSession } from "next-auth"
+import EmailProvider from "next-auth/providers/email"
+import GithubProvider from "next-auth/providers/github"
+import { db } from "./db"
+import { sendVerificationRequest } from "@/emails/sendVerificationEmail"
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -31,7 +31,7 @@ export const authOptions: NextAuthOptions = {
         where: {
           email: token.email,
         },
-      });
+      })
 
       if (dbUser.wsToken == null) {
         dbUser = await db.user.update({
@@ -39,7 +39,7 @@ export const authOptions: NextAuthOptions = {
           data: {
             wsToken: require("crypto").randomBytes(256).toString("base64"),
           },
-        });
+        })
       }
 
       // if (!dbUser) {
@@ -56,30 +56,30 @@ export const authOptions: NextAuthOptions = {
         email: dbUser.email,
         picture: dbUser.image,
         wsToken: dbUser.wsToken,
-      };
+      }
     },
     async session({ token, session }) {
       if (token) {
-        session.user.id = token.id;
-        session.user.name = token.name;
-        session.user.email = token.email;
-        session.user.image = token.picture;
-        session.wsToken = token.wsToken;
+        session.user.id = token.id
+        session.user.name = token.name
+        session.user.email = token.email
+        session.user.image = token.picture
+        session.wsToken = token.wsToken
       }
 
-      return session;
+      return session
     },
   },
-};
+}
 
 export async function verifyCurrentUserHasAccessToPost(postId: string) {
-  const session = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions)
   const count = await db.post.count({
     where: {
       id: postId,
       authorId: session?.user.id,
     },
-  });
+  })
 
-  return count > 0;
+  return count > 0
 }

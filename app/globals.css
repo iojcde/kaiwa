@@ -1,22 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
- 
+
 @layer base {
-  :root{
-     
+  :root {
     --radius: 0.75rem;
+    
   }
   * {
     @apply border-border;
   }
   body {
-    @apply bg-white text-foreground overflow-x-clip;
+    @apply overflow-x-clip bg-white text-foreground selection:bg-violet-400/30;
   }
-  
-  .font-display { 
-    font-variation-settings:"opsz" 32;
+
+  .font-display {
+    font-variation-settings: "opsz" 28;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
   }
 }
 
@@ -30,6 +38,31 @@
   top: 0;
   bottom: 0;
   background-repeat: no-repeat;
-  background-image: radial-gradient(circle 800px at 700px 200px,hsl(var(--purple2)),var(--transparent)),radial-gradient(circle 600px at calc(100% - 300px) 300px,hsl(var(--mint4)),var(--transparent)),radial-gradient(circle 800px at right center,hsl(var(--sky3)),var(--transparent)),radial-gradient(circle 800px at right bottom,hsl(var(--sky1)),var(--transparent)),radial-gradient(circle 800px at calc(50% - 600px) calc(100% - 100px),hsl(var(--pink3)),hsl(var(--pink1)),var(--transparent));
+  background-image: radial-gradient(
+      circle 800px at 700px 200px,
+      hsl(var(--purple2)),
+      var(--transparent)
+    ),
+    radial-gradient(
+      circle 600px at calc(100% - 300px) 300px,
+      hsl(var(--mint2)),
+      var(--transparent)
+    ),
+    radial-gradient(
+      circle 800px at right center,
+      hsl(var(--sky3)),
+      var(--transparent)
+    ),
+    radial-gradient(
+      circle 800px at right bottom,
+      hsl(var(--sky1)),
+      var(--transparent)
+    ),
+    radial-gradient(
+      circle 800px at calc(50% - 600px) calc(100% - 100px),
+      hsl(var(--violet3)),
+      hsl(var(--violet1)),
+      var(--transparent)
+    );
   --transparent: #fdfcfd00;
 }

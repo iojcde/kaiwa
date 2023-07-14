@@ -1,17 +1,17 @@
-import { Metadata } from "next";
-import Link from "next/link";
+import { Metadata } from "next"
+import Link from "next/link"
 
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import { ChevronLeft } from "lucide-react";
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
+import { ChevronLeft } from "lucide-react"
 
-import { getProviders, signIn } from "next-auth/react";
-import { LoginOptions } from "./login-options";
+import { getProviders, signIn } from "next-auth/react"
+import { LoginOptions } from "./login-options"
 
 export const metadata: Metadata = {
   title: "Login",
   description: "Login to your account",
-};
+}
 
 export default async function LoginPage() {
   return (
@@ -48,5 +48,5 @@ export default async function LoginPage() {
         </p> */}
       </div>
     </div>
-  );
+  )
 }

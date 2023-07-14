@@ -3,4 +3,4 @@ export const Priority = {
   medium: "MEDIUM",
   high: "HIGH",
   urgent: "URGENT",
-} as const;
+} as const

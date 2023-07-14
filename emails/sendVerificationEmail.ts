@@ -1,6 +1,6 @@
-import { SendVerificationRequestParams } from "next-auth/providers";
-import { resend } from "./resend";
-import { VerificationEmail } from "./verificationEmail";
+import { SendVerificationRequestParams } from "next-auth/providers"
+import { resend } from "./resend"
+import { VerificationEmail } from "./verificationEmail"
 export const sendVerificationRequest = async (
   params: SendVerificationRequestParams
 ) => {
@@ -10,8 +10,8 @@ export const sendVerificationRequest = async (
       to: params.identifier,
       subject: "Verify your email",
       react: VerificationEmail({ url: params.url }),
-    });
+    })
   } catch (error) {
-    console.log({ error });
+    console.log({ error })
   }
-};
+}

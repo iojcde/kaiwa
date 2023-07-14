@@ -1,8 +1,8 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
-import { Github } from "lucide-react";
-import { signIn } from "next-auth/react";
+import { Button } from "@/components/ui/button"
+import { Github } from "lucide-react"
+import { signIn } from "next-auth/react"
 
 export const LoginOptions = async () => {
   return (
@@ -10,7 +10,7 @@ export const LoginOptions = async () => {
       <div>
         <div className="text-center">
           <Button
-            className="flex items-center gap-2 w-full"
+            className="flex w-full items-center gap-2"
             onClick={() => signIn("github")}
           >
             <svg
@@ -29,5 +29,5 @@ export const LoginOptions = async () => {
         </div>
       </div>
     </>
-  );
-};
+  )
+}
