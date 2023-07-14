@@ -167,7 +167,7 @@ export default async function Home() {
 
           <div className="overflow-clip rounded-xl border bg-white ">
             <div className="flex items-center justify-center py-16">
-              <CircleSlash2 className="text-sky-300" size={64} />
+              <CircleSlash2 className="text-violet-400" size={64} />
             </div>
             <div className="p-6 ">
               <h3 className="font-display text-xl font-semibold">
