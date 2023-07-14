@@ -8,7 +8,7 @@ export const MainNav = () => {
       <div className="flex items-center gap-12">
         <Link
           href="/"
-          className="flex items-center gap-2 text-xl font-semibold"
+          className="font-display flex items-center gap-2 text-xl font-semibold"
         >
           {/* <Image src="/images/logo.png" alt="" width={20} height={20} /> */}
           Kaiwa
