@@ -37,6 +37,7 @@ export default async function LoginPage() {
             Enter your email to sign in to your account
           </p>
         </div>
+        
         <LoginOptions />
         {/* <p className="px-8 text-center text-sm text-muted-foreground">
           <Link

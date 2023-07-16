@@ -25,27 +25,39 @@ export const VerificationEmail = ({ url }) => {
       <Head />
       <Preview>{previewText}</Preview>
       <Tailwind>
-        <Body className="mx-auto my-auto bg-white font-sans">
-          <Container className="mx-auto my-[40px] w-[465px] rounded-xl border border-solid border-[#eaeaea] p-[20px]">
-            <Text className="text-[14px] font-medium leading-[24px] text-black">
-              Hello,
-            </Text>
-            <Text>Here&apos;s your link to verify your email on Kaiwa.</Text>
-            <Text>Thanks for checking us out!</Text>
+        <Body className="mx-auto bg-white font-sans">
+          <Container className="mx-auto my-[40px] max-w-2xl p-[20px]">
+            <Text className="text-lg font-medium">Kaiwa</Text>
 
-            <Section className=" mb-[32px] mt-[32px]">
-              <Button
-                pX={20}
-                pY={12}
-                className="rounded-lg bg-[#000000] font-semibold text-white no-underline"
-                href={url}
-              >
-                Verify my Email
-              </Button>
-            </Section>
+            <Heading as="h1" className="text-3xl">
+              Your magic link
+            </Heading>
+            <Text className="text-base leading-[16px]"> Hello,</Text>
+            <Text className="text-base">
+              Here&apos;s your magic link to sign in to Kaiwa.
+            </Text>
+
+            <Button
+              pX={20}
+              pY={12}
+              className="rounded-lg bg-[#000000] font-semibold text-white no-underline"
+              href={url}
+            >
+              Login to Kaiwa
+            </Button>
+
+            <Text className="mt-8">
+              Best,
+              <br /> Kaiwa Team
+            </Text>
+            <Text className="mt-8 text-gray-500">
+              If you didn&apos;t try to login, you can safely ignore this email.
+            </Text>
           </Container>
+          <Hr />
         </Body>
       </Tailwind>
     </Html>
   )
 }
+export default VerificationEmail

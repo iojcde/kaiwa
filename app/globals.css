@@ -8,10 +8,10 @@
     
   }
   * {
-    @apply border-border;
+    @apply border-border dark:border-gray-7;
   }
   body {
-    @apply overflow-x-clip bg-white text-foreground selection:bg-violet-400/30;
+    @apply overflow-x-clip bg-background dark:bg-black text-foreground selection:bg-violet-400/30;
   }
 
   .font-display {
@@ -65,4 +65,14 @@
       var(--transparent)
     );
   --transparent: #fdfcfd00;
+}
+ 
+
+p > a{
+  @apply text-violet-500  decoration-violet-500/0;
+
+  &:hover{     
+  transition: text-decoration-color 150ms;
+    @apply text-violet-600 underline decoration-inherit;
+  }  
 }

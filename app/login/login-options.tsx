@@ -1,22 +1,73 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Github } from "lucide-react"
+import { Label } from "@/components/ui/label"
+import { Github, Loader2 } from "lucide-react"
 import { signIn } from "next-auth/react"
+import { Input } from "@/components/ui/input"
+import { FormEvent, useState } from "react"
 
-export const LoginOptions = async () => {
+export const LoginOptions = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [email, setEmail] = useState("")
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setIsLoading(true)
+
+    await signIn("email", { email })
+    setIsLoading(false)
+  }
+
   return (
     <>
-      <div>
+      <div className="grid gap-6">
+        <form onSubmit={onSubmit}>
+          <div className="grid gap-2">
+            <div className="grid gap-1">
+              <Label className="sr-only" htmlFor="email">
+                Email
+              </Label>
+              <Input
+                id="email"
+                placeholder="name@example.com"
+                type="email"
+                autoCapitalize="none"
+                autoComplete="email"
+                autoCorrect="off"
+                disabled={isLoading}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <Button disabled={isLoading}>
+              {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Sign In with Email
+            </Button>
+          </div>
+        </form>
+
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-background px-2 text-muted-foreground">
+              Or continue with
+            </span>
+          </div>
+        </div>
+
         <div className="text-center">
           <Button
+            variant="outline"
             className="flex w-full items-center gap-2"
             onClick={() => signIn("github")}
           >
             <svg
               stroke="currentColor"
               fill="currentColor"
-              stroke-width="0"
+              strokeWidth="0"
               viewBox="0 0 1024 1024"
               height="24"
               width="24"

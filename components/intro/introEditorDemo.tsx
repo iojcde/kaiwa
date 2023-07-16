@@ -47,7 +47,7 @@ const MilkdownEditor = () => {
   )
 }
 
-export const MainEditorDemo = () => (
+export const IntroEditorDemo = () => (
   <MilkdownProvider>
     <MilkdownEditor />
   </MilkdownProvider>

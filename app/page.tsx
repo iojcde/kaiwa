@@ -1,5 +1,5 @@
-import { MainNav } from "@/components/main-nav"
-import { MainEditorDemo } from "@/components/mainEditorDemo"
+import { IntroNav } from "@/components/intro/intro-nav"
+import { IntroEditorDemo } from "@/components/intro/introEditorDemo"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import Image from "next/image"
@@ -9,6 +9,7 @@ import { Footer } from "./footer"
 import { Avatar } from "@/components/ui/avatar"
 import { CircleSlash2, Github, Hash } from "lucide-react"
 import { Balancer } from "react-wrap-balancer"
+import { CmdkDemo } from "@/components/intro/cmdk-demo"
 
 const users = [
   {
@@ -26,8 +27,8 @@ const users = [
 export default async function Home() {
   return (
     <>
-      <div className="relative flex h-screen items-center">
-        <MainNav />
+      <div className="relative overflow-x-hidden pb-16">
+        <IntroNav />
         <main className="container grid grid-cols-1 items-center justify-between pb-24 md:h-auto md:grid-cols-[1fr_0.8fr]">
           <div>
             <div className="py-16 md:px-6 md:py-20">
@@ -49,23 +50,23 @@ export default async function Home() {
               </p>
               <Link
                 href="/login"
-                className="mt-8 inline-block select-none rounded-full bg-gradient-to-br from-violet-600 via-violet-500 to-violet-400 p-2 px-8 text-gray-1 transition hover:bg-gray-12/90 hover:opacity-95 hover:shadow"
+                className="mt-8 inline-block select-none rounded-full bg-gradient-to-br from-violet-600 via-violet-500 to-violet-400 p-2 px-8 text-white  transition  hover:opacity-95 hover:shadow"
               >
                 Get started
               </Link>
             </div>
           </div>
 
-          <div className="mt-16 hidden w-full rounded-[16px] border bg-white p-1 shadow-xl sm:block">
+          <div className="mt-12 hidden w-full rounded-[16px] border border-gray-7 bg-white p-1 shadow-xl dark:bg-background md:block">
             <div className="w-full overflow-clip rounded-xl border">
-              <ScrollArea className="h-[32rem] bg-white">
-                <MainEditorDemo />
+              <ScrollArea className="h-[32rem] bg-white dark:bg-background ">
+                <IntroEditorDemo />
               </ScrollArea>
             </div>
           </div>
         </main>
         <div className="gradient"></div>
-        <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-white to-transparent"></div>
+        <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white to-transparent dark:from-black" />
       </div>
 
       <div className=" relative w-full  py-20">
@@ -78,11 +79,8 @@ export default async function Home() {
           </h2>
           <p className="mx-auto mt-2 max-w-prose">
             <Balancer>
-              Enjoy
-              <span className="font-semibold"> real-time collaboration </span>
-              with your team, friends, or family.
-              <br />
-              <span className="font-semibold">No sign-up required.</span>
+              Kaiwa helps you get your work done faster by providing a
+              distraction-free environment.
             </Balancer>
           </p>
 
@@ -91,121 +89,144 @@ export default async function Home() {
           </Button>
         </div>
 
-        <div className="container mt-12 grid gap-4 sm:grid-cols-[1fr_0.2fr_1fr]">
-          <div className="overflow-clip rounded-xl border bg-white sm:col-span-2">
-            <div className="flex items-center justify-center p-6 py-16">
-              <div
-                className={
-                  "before:content-[' '] flex items-center gap-6 text-xs text-gray-11 before:block before:h-2 before:w-2 before:rounded-full before:bg-stone-300 data-[status='connected']:before:bg-emerald-500 sm:text-base"
-                }
-                data-status={"connected"}
-              >
-                <span className="group overflow-ellipsis whitespace-nowrap text-xl">
-                  2 users in room
-                </span>
-
-                <Button
-                  className="h-12 select-none text-xl"
-                  variant="outline"
-                  size="lg"
+        <div className="container mt-12 grid grid-cols-1 gap-4 md:grid-cols-[1fr_0.3fr_1fr]">
+          <div className="overflow-clip rounded-xl border bg-white dark:bg-background md:col-span-2">
+            <div className="relative flex h-52 items-center justify-center overflow-clip lg:h-64">
+              <div className="absolute -bottom-1 left-0 right-8 top-9 rounded-tr-sm border-r border-t border-gray-5 pr-8 pt-8 shadow-xl lg:pr-16 lg:pt-12">
+                <div
+                  className={
+                    "before:content-[' '] mx-auto flex items-center justify-end gap-4 text-xs text-gray-11 before:block before:h-2 before:w-2 before:rounded-full before:bg-stone-300 data-[status='connected']:before:bg-emerald-500 sm:text-base lg:gap-6"
+                  }
+                  data-status={"connected"}
                 >
-                  Share
-                </Button>
+                  <span className="group overflow-ellipsis whitespace-nowrap lg:text-xl">
+                    2 users in room
+                  </span>
 
-                <div className="group flex flex-row-reverse items-center">
-                  {users.length > 0 &&
-                    users.map(
-                      (
-                        user: { name: string; photo: string; color: string },
-                        n
-                      ) => {
-                        if (n < 4) {
-                          return (
-                            <Avatar
-                              key={n}
-                              className={`${
-                                n != 0
-                                  ? "-mr-4 h-16 w-16 transition-all group-hover:mr-0"
-                                  : "h-[4.5rem] w-[4.5rem]"
-                              } ring-4 ring-offset-[3px]`}
-                              style={
-                                {
-                                  "--tw-ring-color": user?.color,
-                                  zIndex: users?.length - n,
-                                } as React.CSSProperties
-                              }
-                            >
-                              <Image
-                                width={256}
-                                height={256}
-                                quality={100}
-                                className={`object-cover ${
-                                  n == 0 && "h-20 w-20"
-                                }`}
-                                src={user?.photo}
-                                alt={"bocchi"}
-                              />
-                            </Avatar>
-                          )
+                  {/* <Button
+                    className="inline-block select-none text-xs sm:text-sm lg:hidden "
+                    variant="outline"
+                    size="sm"
+                  >
+                    Share
+                  </Button>
+                  <Button
+                    className="hidden h-12 select-none text-lg lg:inline-block"
+                    variant="outline"
+                    size="lg"
+                  >
+                    Share
+                  </Button> */}
+
+                  <div className="group flex flex-row-reverse items-center">
+                    {users.length > 0 &&
+                      users.map(
+                        (
+                          user: { name: string; photo: string; color: string },
+                          n
+                        ) => {
+                          if (n < 4) {
+                            return (
+                              <Avatar
+                                key={n}
+                                className={`${
+                                  n != 0
+                                    ? "-mr-4 h-8 w-8 transition-all group-hover:mr-0 lg:h-14 lg:w-14"
+                                    : "h-9 w-9 lg:h-16 lg:w-16"
+                                } ring-2 ring-offset-1 lg:ring-[3px] lg:ring-offset-[3px]`}
+                                style={
+                                  {
+                                    "--tw-ring-color": user?.color,
+                                    zIndex: users?.length - n,
+                                  } as React.CSSProperties
+                                }
+                              >
+                                <Image
+                                  width={256}
+                                  height={256}
+                                  quality={100}
+                                  className={`object-cover ${
+                                    n == 0
+                                      ? "h-9 w-9 lg:h-[4.5rem] lg:w-[4.5rem]"
+                                      : " h-8 w-8  lg:h-16 lg:w-16"
+                                  }`}
+                                  src={user?.photo}
+                                  alt={"bocchi"}
+                                />
+                              </Avatar>
+                            )
+                          }
                         }
-                      }
-                    )}
+                      )}
+                  </div>
                 </div>
               </div>
+              <div className="dark:bgf-black absolute inset-x-0 bottom-0 z-10 h-12 bg-gradient-to-t from-white to-transparent dark:from-background" />
             </div>
-            <div className="p-6 ">
+            <div className="p-6 lg:p-8 lg:pt-0  ">
               <h3 className="font-display text-xl font-semibold">
                 Collaborative by default
               </h3>
-              <p className="mt-2 text-gray-11">
+              <p className="mt-2 text-sm text-gray-11 sm:text-base">
                 Kaiwa uses <a href="https://yjs.dev">Y.js</a> and{" "}
                 <a href="https://partykit.io">PartyKit</a> to provide real-time
-                collaboration capabilities.
+                collaboration capabilities. Enjoy real-time collaboration with
+                your team, friends, or family.
               </p>
             </div>
           </div>
 
-          <div className="overflow-clip rounded-xl border bg-white ">
-            <div className="flex items-center justify-center py-16">
-              <CircleSlash2 className="text-violet-400" size={64} />
+          <div className="overflow-clip rounded-xl border bg-white dark:bg-background">
+            <div className="relative flex h-52 items-center justify-center lg:h-64">
+              <Image
+                src="/images/minimal.png"
+                alt=""
+                layout="fill"
+                className="select-none object-cover object-top p-6"
+              />
             </div>
-            <div className="p-6 ">
+            <div className="p-6 lg:p-8 lg:pt-0">
               <h3 className="font-display text-xl font-semibold">
                 Keep distractions away
               </h3>
-              <p className="mt-2 text-gray-11">
+              <p className="mt-2 text-sm text-gray-11 sm:text-base">
                 We built Kaiwa to be a distraction-free environment. Only
                 essential notifications, no distractions.
               </p>
             </div>
           </div>
 
-          <div className="overflow-clip rounded-xl border bg-white ">
-            <div className="flex items-center justify-center py-12  ">
-              <Hash className="text-gray-12" size={80} />
+          <div className="overflow-clip rounded-xl border bg-white dark:bg-background">
+            <div className="relative flex h-52 select-none items-center lg:h-64">
+              <Image
+                src="/images/markdown-support2.png"
+                quality={100}
+                layout="fill"
+                className=" object-contain p-6"
+                alt=""
+              />
+              <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white to-transparent dark:from-background" />
             </div>
-            <div className="p-6 ">
+            <div className="p-6 lg:p-8 lg:pt-0  ">
               <h3 className="font-display text-xl font-semibold">
                 Markdown Support
               </h3>
-              <p className="mt-2 text-gray-11">
+              <p className="mt-2 text-sm text-gray-11 sm:text-base">
                 Kaiwa suppports Github Flavored Markdown, so you can add rich
                 content to your documents.
               </p>
             </div>
           </div>
 
-          <div className="col-span-2 overflow-clip rounded-xl border bg-white ">
-            <div className="flex items-center justify-center py-12  ">
-              <Github className="text-gray-12" size={80} />
-            </div>
-            <div className="p-6 ">
+          <div className="overflow-clip rounded-xl border bg-white dark:bg-background md:col-span-2 ">
+            <CmdkDemo />
+            <div className="p-6 lg:p-8 lg:pt-0  ">
               <h3 className="font-display text-xl font-semibold">
-                Proudly Open Source
+                A powerful command palette
               </h3>
-              <p className="mt-2 text-gray-11">
-                Kaiwa is open source. You can find the source code on{" "}
-                <a href="https://github.com/iojcde/kaiwa">GitHub</a>.
+              <p className="mt-2 text-sm  text-gray-11 sm:text-base">
+                Kaiwa has a powerful command palette that allows you to do
+                anything from changing the theme to creating a new document.
               </p>
             </div>
           </div>

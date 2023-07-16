@@ -21,7 +21,7 @@ export const authOptions: NextAuthOptions = {
     EmailProvider({
       name: "email",
       server: "",
-      from: "YOUR EMAIL FROM (eg: team@resend.com)",
+      from: "auth@kaiwa.jcde.xyz",
       sendVerificationRequest,
     }),
   ],

@@ -1,10 +1,10 @@
 import Link from "next/link"
-import { Button } from "./ui/button"
+import { Button } from "../ui/button"
 import Image from "next/image"
 
-export const MainNav = () => {
+export const IntroNav = () => {
   return (
-    <nav className="container absolute inset-x-0 top-0 flex items-center justify-between py-4">
+    <nav className="container flex items-center justify-between py-4">
       <div className="flex items-center gap-12">
         <Link
           href="/"

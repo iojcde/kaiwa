@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 const { toRadixVar, toRadixVars } = require("windy-radix-palette/vars")
 
-module.exports = {
+module.exports = { 
   darkMode: ["class"],
   content: [
     "app/**/*.{ts,tsx}",
