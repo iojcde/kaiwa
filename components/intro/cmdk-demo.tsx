@@ -16,40 +16,62 @@ export const CmdkDemo = () => {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const down = (e) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        setOpen((open) => !open)
+    const click = (e: MouseEvent) => {
+      if (
+        e.target instanceof Node &&
+        !document.getElementById("cmdk-demo").contains(e.target)
+      ) {
+        setOpen(false)
       }
     }
 
-    document.addEventListener("keydown", down)
-    return () => document.removeEventListener("keydown", down)
+    const esc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false)
+      }
+    }
+
+    document.addEventListener("keydown", esc)
+
+    document.addEventListener("click", click)
+    return () => {
+      document.removeEventListener("click", click)
+      document.removeEventListener("keydown", esc)
+    }
   }, [])
 
   return (
-    <div className="relative flex h-52 items-center justify-center overflow-clip p-8 lg:h-64">
-      <Command
-        onClick={() => alert("wow")}
-        className="absolute top-8 max-w-xl rounded-xl border shadow-md"
+    <>
+      <div
+        className={`relative z-10 overflow-hidden dark:bg-black transition-all ${
+          open ? "h-52 lg:h-96 " : "h-52 lg:h-64"
+        }`}
       >
-        <CommandInput placeholder="Type a command or search..." />
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Suggestions">
-            <CommandItem>Calendar</CommandItem>
-            <CommandItem>Search Emoji</CommandItem>
-            <CommandItem>Calculator</CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Settings">
-            <CommandItem>Profile</CommandItem>
-            <CommandItem>Billing</CommandItem>
-            <CommandItem>Settings</CommandItem>
-          </CommandGroup>
-        </CommandList>
-      </Command>
-      <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white dark:from-background to-transparent" />
-    </div>
+        <Command
+          id="cmdk-demo"
+          onClick={() => setOpen(true)}
+          className={`absolute top-8 h-[320px] inset-x-0 max-w-xl ml-8 lg:mx-auto rounded-xl border transition duration-150 ${
+            open ? "z-50 shadow-xl" : "shadow-md"
+          }`}
+        >
+          <CommandInput placeholder="Type a command or search..." />
+          <CommandList>
+            <CommandEmpty>No results found.</CommandEmpty>
+            <CommandGroup heading="Suggestions">
+              <CommandItem>Calendar</CommandItem>
+              <CommandItem>Search Emoji</CommandItem>
+              <CommandItem>Calculator</CommandItem>
+            </CommandGroup>
+            <CommandSeparator />
+            <CommandGroup heading="Settings">
+              <CommandItem>Profile</CommandItem>
+              <CommandItem>Billing</CommandItem>
+              <CommandItem>Settings</CommandItem>
+            </CommandGroup>
+          </CommandList>
+        </Command>
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 h-12 bg-gradient-to-t from-white to-transparent dark:from-background" />
+      </div>
+    </>
   )
 }

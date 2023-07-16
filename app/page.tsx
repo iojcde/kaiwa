@@ -5,31 +5,17 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import Image from "next/image"
 import Link from "next/link"
 import { Footer } from "./footer"
-
-import { Avatar } from "@/components/ui/avatar"
-import { CircleSlash2, Github, Hash } from "lucide-react"
 import { Balancer } from "react-wrap-balancer"
 import { CmdkDemo } from "@/components/intro/cmdk-demo"
-
-const users = [
-  {
-    name: "Gotoh Hitori",
-    photo: "/images/bocchi.jpg",
-    color: "#F3A0BE",
-  },
-  {
-    name: "Kita Ikuyo",
-    photo: "/images/kita.jpg",
-    color: "#C64D52",
-  },
-]
+import { CollabDemo } from "@/components/intro/collab-demo"
+import { MarkdownSupport } from "@/components/intro/markdown-support"
 
 export default async function Home() {
   return (
     <>
       <div className="relative overflow-x-hidden pb-16">
         <IntroNav />
-        <main className="container grid grid-cols-1 items-center justify-between pb-24 md:h-auto md:grid-cols-[1fr_0.8fr]">
+        <main className="container grid h-screen grid-cols-1 items-center justify-between pb-24 md:h-auto md:grid-cols-[1fr_0.8fr]">
           <div>
             <div className="py-16 md:px-6 md:py-20">
               {/* <div className="border select-none mb-2 border-orange-5 bg-orange-4 max-w-min whitespace-nowrap rounded-full px-2 py-1 text-xs">
@@ -66,10 +52,10 @@ export default async function Home() {
           </div>
         </main>
         <div className="gradient"></div>
-        <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white to-transparent dark:from-black" />
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent blur dark:from-black" />
       </div>
 
-      <div className=" relative w-full  py-20">
+      <div className="  w-full  py-20">
         <div className="container relative text-center">
           <div className="font-display inline-block rounded-full bg-violet-500 px-4 py-1 text-white">
             Features
@@ -92,76 +78,10 @@ export default async function Home() {
         <div className="container mt-12 grid grid-cols-1 gap-4 md:grid-cols-[1fr_0.3fr_1fr]">
           <div className="overflow-clip rounded-xl border bg-white dark:bg-background md:col-span-2">
             <div className="relative flex h-52 items-center justify-center overflow-clip lg:h-64">
-              <div className="absolute -bottom-1 left-0 right-8 top-9 rounded-tr-sm border-r border-t border-gray-5 pr-8 pt-8 shadow-xl lg:pr-16 lg:pt-12">
-                <div
-                  className={
-                    "before:content-[' '] mx-auto flex items-center justify-end gap-4 text-xs text-gray-11 before:block before:h-2 before:w-2 before:rounded-full before:bg-stone-300 data-[status='connected']:before:bg-emerald-500 sm:text-base lg:gap-6"
-                  }
-                  data-status={"connected"}
-                >
-                  <span className="group overflow-ellipsis whitespace-nowrap lg:text-xl">
-                    2 users in room
-                  </span>
-
-                  {/* <Button
-                    className="inline-block select-none text-xs sm:text-sm lg:hidden "
-                    variant="outline"
-                    size="sm"
-                  >
-                    Share
-                  </Button>
-                  <Button
-                    className="hidden h-12 select-none text-lg lg:inline-block"
-                    variant="outline"
-                    size="lg"
-                  >
-                    Share
-                  </Button> */}
-
-                  <div className="group flex flex-row-reverse items-center">
-                    {users.length > 0 &&
-                      users.map(
-                        (
-                          user: { name: string; photo: string; color: string },
-                          n
-                        ) => {
-                          if (n < 4) {
-                            return (
-                              <Avatar
-                                key={n}
-                                className={`${
-                                  n != 0
-                                    ? "-mr-4 h-8 w-8 transition-all group-hover:mr-0 lg:h-14 lg:w-14"
-                                    : "h-9 w-9 lg:h-16 lg:w-16"
-                                } ring-2 ring-offset-1 lg:ring-[3px] lg:ring-offset-[3px]`}
-                                style={
-                                  {
-                                    "--tw-ring-color": user?.color,
-                                    zIndex: users?.length - n,
-                                  } as React.CSSProperties
-                                }
-                              >
-                                <Image
-                                  width={256}
-                                  height={256}
-                                  quality={100}
-                                  className={`object-cover ${
-                                    n == 0
-                                      ? "h-9 w-9 lg:h-[4.5rem] lg:w-[4.5rem]"
-                                      : " h-8 w-8  lg:h-16 lg:w-16"
-                                  }`}
-                                  src={user?.photo}
-                                  alt={"bocchi"}
-                                />
-                              </Avatar>
-                            )
-                          }
-                        }
-                      )}
-                  </div>
-                </div>
+              <div className="absolute -bottom-1 left-0 right-8 top-9 rounded-tr-sm border-r border-t border-gray-5 pr-8 pt-8 shadow-xl dark:bg-black lg:pr-16 lg:pt-12">
+                <CollabDemo />
               </div>
-              <div className="dark:bgf-black absolute inset-x-0 bottom-0 z-10 h-12 bg-gradient-to-t from-white to-transparent dark:from-background" />
+              <div className="absolute inset-x-0 bottom-0 z-10 h-12 bg-gradient-to-t from-white to-transparent dark:from-background" />
             </div>
             <div className="p-6 lg:p-8 lg:pt-0  ">
               <h3 className="font-display text-xl font-semibold">
@@ -196,18 +116,13 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="overflow-clip rounded-xl border bg-white dark:bg-background">
-            <div className="relative flex h-52 select-none items-center lg:h-64">
-              <Image
-                src="/images/markdown-support2.png"
-                quality={100}
-                layout="fill"
-                className=" object-contain p-6"
-                alt=""
-              />
+          <div className="grid justify-between overflow-clip rounded-xl border bg-white dark:bg-background">
+            <div className="relative my-auto flex h-52 select-none items-center lg:h-64">
+              <MarkdownSupport />
               <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white to-transparent dark:from-background" />
             </div>
-            <div className="p-6 lg:p-8 lg:pt-0  ">
+
+            <div className="mt-auto p-6 lg:p-8 lg:pt-0">
               <h3 className="font-display text-xl font-semibold">
                 Markdown Support
               </h3>
@@ -220,7 +135,7 @@ export default async function Home() {
 
           <div className="overflow-clip rounded-xl border bg-white dark:bg-background md:col-span-2 ">
             <CmdkDemo />
-            <div className="p-6 lg:p-8 lg:pt-0  ">
+            <div className="relative z-20 px-8 py-6 lg:pb-8 lg:pt-0 ">
               <h3 className="font-display text-xl font-semibold">
                 A powerful command palette
               </h3>
