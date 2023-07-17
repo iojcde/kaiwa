@@ -9,7 +9,7 @@ export const Providers: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <BalancerProvider>
       <ThemeProvider attribute='class'>
-        <SessionProvider> {children}</SessionProvider>
+        <SessionProvider>{children}</SessionProvider>
       </ThemeProvider>
     </BalancerProvider>
   )

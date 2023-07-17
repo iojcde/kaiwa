@@ -264,8 +264,8 @@ dependencies:
     specifier: ^0.6.1
     version: 0.6.1(@radix-ui/colors@1.0.0)(tailwindcss@3.3.2)
   y-partykit:
-    specifier: 0.0.0-a16ecec
-    version: 0.0.0-a16ecec
+    specifier: 0.0.0-5ff28f5
+    version: 0.0.0-5ff28f5
   y-presence:
     specifier: ^0.2.3
     version: 0.2.3(react@18.2.0)
@@ -8613,8 +8613,8 @@ packages:
     dev: false
     optional: true
 
-  /y-partykit@0.0.0-a16ecec:
-    resolution: {integrity: sha512-sIl5cbLvvZiZJm1txQtbiW5d3hNcdCrQbXkJerAF0GfLiZuicJHPimXgE5oCEVXkXDUb9Q5amvp8z/6OAFLVQg==}
+  /y-partykit@0.0.0-5ff28f5:
+    resolution: {integrity: sha512-IQfXZIYtoKGx+LxxmUTLlpxUgLUNcQ3wp6YG9kx7S5pRQg8yVSOibL+/G1hpFl2gqwzg8mAtG4T+4r1InBs6BA==}
     dependencies:
       lib0: 0.2.78
       lodash.debounce: 4.0.8

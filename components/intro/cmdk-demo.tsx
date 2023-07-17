@@ -43,15 +43,15 @@ export const CmdkDemo = () => {
   return (
     <>
       <div
-        className={`relative z-10 overflow-hidden dark:bg-black transition-all ${
-          open ? "h-52 lg:h-96 " : "h-52 lg:h-64"
+        className={` p relative z-10 h-52 overflow-hidden transition-all dark:bg-black lg:pointer-events-auto ${
+          open ? "open lg:h-96" : "lg:h-64"
         }`}
       >
         <Command
           id="cmdk-demo"
           onClick={() => setOpen(true)}
-          className={`absolute top-8 h-[320px] inset-x-0 max-w-xl ml-8 lg:mx-auto rounded-xl border transition duration-150 ${
-            open ? "z-50 shadow-xl" : "shadow-md"
+          className={`absolute inset-x-0 top-8 ml-8 h-[320px] max-w-xl rounded-xl border transition duration-150 lg:mx-auto ${
+            open ? "lg:z-50 shadow-xl" : "shadow-md"
           }`}
         >
           <CommandInput placeholder="Type a command or search..." />

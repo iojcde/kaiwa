@@ -1,4 +1,4 @@
-import { onConnect } from "@iojcde/y-partykit"
+import { onConnect } from "y-partykit"
 
 export type PartyKitConnection = WebSocket & {
   id: string

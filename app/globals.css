@@ -76,3 +76,7 @@ p > a{
     @apply text-violet-600 underline decoration-inherit;
   }  
 }
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none;
+}

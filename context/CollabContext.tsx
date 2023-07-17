@@ -11,6 +11,7 @@ import {
   useSyncExternalStore,
 } from "react"
 import yPartykitProvider from "y-partykit/provider"
+import { IndexeddbPersistence } from "y-indexeddb"
 import { Doc } from "yjs"
 import type { Awareness } from "y-protocols/awareness"
 import { useSession } from "next-auth/react"
@@ -76,9 +77,16 @@ export const CollabProvider = ({
   }
 
   const initProvider = (room: string, token: string) => {
+
+
     console.log("initprovider", { room, token })
     const newdoc = new Doc()
     setDoc(newdoc)
+
+    const indexeddbPersistence =
+      typeof window !== "undefined"
+        ? new IndexeddbPersistence(room, newdoc)
+        : undefined
 
     provider.destroy()
     const p = new yPartykitProvider(`kaiwa.iojcde.partykit.dev`, room, newdoc, {
@@ -97,6 +105,16 @@ export const CollabProvider = ({
       name: session?.user.name ?? randomUsername(),
       photo: session?.user.image,
     })
+
+    indexeddbPersistence.on("synced", (persistence: IndexeddbPersistence) => {
+      if (persistence.synced) {
+        console.log(
+          `%c[Collaboration]%c IndexedDB synced.`,
+          "color: rgb(120, 120, 120)",
+          "color: inherit"
+        )
+      }
+    }) 
   }
 
   const value = {
