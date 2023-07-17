@@ -68,14 +68,15 @@
 }
  
 
-p > a{
-  @apply text-violet-500  decoration-violet-500/0;
+p > a, a.link{
+  @apply text-violet-500 dark:text-violet-400  dark:decoration-violet-400/20;
 
   &:hover{     
   transition: text-decoration-color 150ms;
-    @apply text-violet-600 underline decoration-inherit;
+    @apply text-violet-400 underline decoration-inherit;
   }  
 }
+ 
 
 .hide-scrollbar::-webkit-scrollbar {
     display: none;

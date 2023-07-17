@@ -76,8 +76,8 @@ export default async function Home() {
 
         <div className="hide-scrollbar container mt-12  flex  w-full snap-x snap-mandatory items-stretch gap-4 overflow-auto md:grid md:grid-cols-[1fr_0.3fr_1fr] md:overflow-auto">
           <div className="min-w-full snap-center overflow-clip rounded-2xl border bg-white dark:bg-background md:col-span-2">
-            <div className="relative flex h-56 items-center justify-center overflow-clip lg:h-64">
-              <div className="absolute -bottom-1 left-0 right-8 top-9 rounded-tr-md border-r border-t border-gray-5 pr-8 pt-8 shadow-xl dark:bg-black lg:pr-16 lg:pt-12">
+            <div className="relative flex h-56 items-center justify-center overflow-clip dark:bg-black lg:h-64">
+              <div className="absolute -bottom-1 left-0 right-8 top-9 rounded-tr-md border-r border-t border-gray-5 pr-8 pt-8 shadow-xl dark:bg-background lg:pr-16 lg:pt-12">
                 <CollabDemo />
               </div>
               <div className="absolute inset-x-0 bottom-0 z-10 h-12 bg-gradient-to-t from-white to-transparent dark:from-background" />
@@ -115,8 +115,8 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="grid min-w-full snap-center justify-between overflow-clip rounded-2xl border bg-white dark:bg-background">
-            <div className="relative my-auto flex h-56 select-none items-center lg:h-64">
+          <div className="grid min-w-full snap-center justify-between overflow-clip rounded-2xl border bg-white dark:bg-black">
+            <div className="relative flex h-56 select-none items-center dark:bg-black lg:my-auto lg:h-64">
               <Image
                 src="/images/markdown-support.png"
                 alt=""
@@ -134,7 +134,7 @@ export default async function Home() {
               <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white to-transparent dark:from-background" />
             </div>
 
-            <div className="mt-auto p-6 lg:p-8 lg:pt-0">
+            <div className="mt-auto p-6 dark:bg-background lg:p-8 lg:pt-0">
               <h3 className="font-display text-xl font-semibold">
                 Markdown Support
               </h3>
@@ -148,8 +148,11 @@ export default async function Home() {
           <div className="min-w-full snap-center overflow-clip rounded-2xl border bg-white dark:bg-background md:col-span-2 ">
             <CmdkDemo />
             <div className="relative z-20 px-8 py-6 lg:pb-8 lg:pt-0 ">
-              <h3 className="font-display text-xl font-semibold">
-                A powerful command palette
+              <h3 className="font-display flex items-center gap-2 text-xl font-semibold">
+                A powerful command palette{" "}
+                <span className="inline-block rounded-full bg-pink-500 px-4 py-0.5 text-xs font-medium text-white">
+                  Coming soon
+                </span>
               </h3>
               <p className="mt-2 text-sm  text-gray-11 sm:text-base">
                 Kaiwa has a powerful command palette that allows you to do
@@ -160,6 +163,20 @@ export default async function Home() {
         </div>
       </div>
 
+      <div className="relative w-full border-t bg-white py-24 dark:bg-black">
+        <div className="container">
+          <h1 className="text-4xl font-semibold">Open Source</h1>
+          <p className="mt-4 max-w-prose text-gray-11 sm:text-base">
+            Kaiwa is open source and available on GitHub. We believe in the
+            power of collaboration and welcome contributions from the community.
+            You can find the source code and contribute to the project at our
+            GitHub repository.
+          </p>
+          <a href="https://github.com/iojcde/kaiwa" className="link mt-8 inline-block">
+            Visit our GitHub repository
+          </a>
+        </div>
+      </div>
       <Footer />
     </>
   )
