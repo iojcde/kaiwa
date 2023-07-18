@@ -1,13 +1,16 @@
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
+
 const VerifyRequestPage = () => {
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       <h1 className="mb-4 text-3xl font-bold">Verify Request</h1>
       <p className="mb-8 text-lg">
-        Please check your email for a verification link.
+        Please check your email for a magic login link.
       </p>
-      <button className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700">
-        Verify
-      </button>
+      <Button asChild variant="outline">
+        <Link href="/">Go back to home</Link>
+      </Button>
     </div>
   )
 }

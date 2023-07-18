@@ -12,6 +12,7 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: "/login",
+    verifyRequest: "/auth/verify-request",
   },
   providers: [
     GithubProvider({
