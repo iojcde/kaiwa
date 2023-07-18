@@ -3,8 +3,12 @@ const nextConfig = {
   experimental: {
     serverActions: true,
   },
-  image:{
-    formats: ['image/avif', 'image/webp'],
+  images:{
+    formats: ['image/avif', 'image/webp'],remotePatterns:[{
+      protocol: 'https',
+      hostname: 'images.unsplash.com',
+    },]
+
   }
 }
 

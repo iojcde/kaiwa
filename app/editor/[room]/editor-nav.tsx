@@ -94,7 +94,7 @@ export const EditorNav = ({ shareButton }) => {
                         n != 0
                           ? "-mr-4 h-8 w-8 transition-all group-hover:mr-0"
                           : "h-9 w-9"
-                      } ring-2 ring-offset-2`}
+                      } ring-2 dark:ring-offset-black ring-offset-2`}
                       style={
                         {
                           "--tw-ring-color": user?.color,

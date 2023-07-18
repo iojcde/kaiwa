@@ -4,7 +4,7 @@ import { PostOperations } from "./post-operations"
 import { Skeleton } from "@/components/ui/skeleton"
 
 export const PostCard = ({ post }: { post: Post }) => (
-  <div className="flex w-full items-center justify-between p-4">
+  <div className="flex w-full items-center justify-between bg-background p-4">
     <div className="flex flex-col">
       <Link
         href={`/editor/${post.id}`}

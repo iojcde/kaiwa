@@ -1,8 +1,10 @@
 import Link from "next/link"
 import { Button } from "../ui/button"
 import Image from "next/image"
+import { getServerSession } from "next-auth"
 
-export const IntroNav = () => {
+export const IntroNav = async () => {
+  const session = await getServerSession()
   return (
     <nav className="container flex items-center justify-between py-4">
       <div className="flex items-center gap-12">
@@ -19,7 +21,11 @@ export const IntroNav = () => {
       </div>
 
       <Button asChild variant="outline">
-        <Link href="/login">Login</Link>
+        {session?.user ? (
+          <Link href="/dashboard">Dashboard</Link>
+        ) : (
+          <Link href="/login">Login</Link>
+        )}
       </Button>
     </nav>
   )

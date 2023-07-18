@@ -22,7 +22,7 @@ export async function UserNav() {
     <DropdownMenu>
       <DropdownMenuTrigger className="outline-none">
         <Avatar className="h-8 w-8 select-none ">
-          <AvatarImage src={session?.user.image} alt="@iojcde" />
+          <AvatarImage src={session?.user.image} alt={session.user.name} />
           <AvatarFallback>IO</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>

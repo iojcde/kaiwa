@@ -100,7 +100,7 @@ export default async function Home() {
               <Image
                 src="/images/minimal.png"
                 alt=""
-                layout="fill"
+                fill
                 className="select-none object-cover object-top p-6"
               />
             </div>
@@ -115,21 +115,21 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="grid min-w-full snap-center justify-between overflow-clip rounded-2xl border bg-white dark:bg-black">
-            <div className="relative flex h-56 select-none items-center dark:bg-black lg:my-auto lg:h-64">
+          <div className="flex min-w-full snap-center flex-col justify-between overflow-clip rounded-2xl border bg-white dark:bg-black">
+            <div className="relative flex flex-1 dark:bg-black">
               <Image
                 src="/images/markdown-support.png"
                 alt=""
                 width={656.6}
                 height={335.3}
-                className="hidden object-contain p-8 dark:block"
+                className="my-auto hidden object-contain p-8 dark:block"
               />
               <Image
                 src="/images/markdown-support-light.png"
                 width={656.6}
                 height={335.3}
                 alt=""
-                className="block  object-contain p-8 dark:hidden"
+                className="my-auto block  object-contain p-8 dark:hidden"
               />
               <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white to-transparent dark:from-background" />
             </div>
@@ -172,7 +172,10 @@ export default async function Home() {
             You can find the source code and contribute to the project at our
             GitHub repository.
           </p>
-          <a href="https://github.com/iojcde/kaiwa" className="link mt-8 inline-block">
+          <a
+            href="https://github.com/iojcde/kaiwa"
+            className="link mt-8 inline-block"
+          >
             Visit our GitHub repository
           </a>
         </div>
