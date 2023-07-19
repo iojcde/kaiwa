@@ -8,6 +8,10 @@ const wsCallback = async (req: Request) => {
       status: 401,
     })
   }
-  console.log(req)
+  const body = await req.json()
+
+  const { room, data } = body
+
+  console.log(room, data)
 }
 export { wsCallback as POST }
