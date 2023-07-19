@@ -9,7 +9,6 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "baseUrl": ".",
     "lib": ["dom", "dom.iterable", "esnext"],
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
@@ -29,8 +28,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "lib/**/*.ts",
-    "lib/collatsx"
+    "lib/**/*.ts", 
   ],
   "exclude": ["node_modules"]
 }

@@ -1,21 +1,21 @@
-import { onConnect } from "y-partykit"
+import { YPartyKitOptions, onConnect } from "@iojcde/y-partykit"
 
-export type PartyKitConnection = WebSocket & {
-  id: string
-  /**
-   * @deprecated
-   */
-  socket: WebSocket
-  unstable_initial: { level: string }
-}
+import type { PartyKitServer } from "partykit/server"
+import { AccessLevel } from "@prisma/client"
 
 const config = {
-  async onConnect(ws: PartyKitConnection, room: string) {
+  async onConnect(ws, room) {
     const { unstable_initial } = ws
+    const headers = new Headers()
+    headers.append("auth", room.env.WSAUTH_SECRET as string)
 
     return onConnect(ws, room, {
       persist: true,
-      readOnly: unstable_initial.level == "VIEWER",
+      readOnly: (unstable_initial as { level: AccessLevel }).level == "VIEWER",
+      callback: {
+        url: "https://kaiwa.jcde.xyz/api/ws-callback",
+        headers,
+      },
     })
   },
   async onBeforeConnect(req, room) {
@@ -31,7 +31,7 @@ const config = {
       {
         method: "POST",
         headers: {
-          auth: room.env.WSAUTH_SECRET,
+          auth: room.env.WSAUTH_SECRET as string,
         },
         body: JSON.stringify({ check: token, room: room.id }),
       }
@@ -45,5 +45,5 @@ const config = {
       // throw new Error("Unauthorized");
     }
   },
-}
+} satisfies PartyKitServer
 export default config

@@ -24,8 +24,10 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body className={cn(Inter.className)}>
-        <Providers>{children}</Providers>
-        <Toaster />
+        <div className="fixed bottom-0 top-0 w-full overflow-x-auto">
+          <Providers>{children}</Providers>
+          <Toaster />
+        </div>
       </body>
     </html>
   )

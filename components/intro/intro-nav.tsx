@@ -2,11 +2,12 @@ import Link from "next/link"
 import { Button } from "../ui/button"
 import Image from "next/image"
 import { getServerSession } from "next-auth"
+import { UserNav } from "../user-nav"
 
 export const IntroNav = async () => {
   const session = await getServerSession()
   return (
-    <nav className="container flex items-center justify-between py-4">
+    <nav className="container flex items-center w-full overflow-x-auto justify-between py-4">
       <div className="flex items-center gap-12">
         <Link
           href="/"
@@ -20,13 +21,13 @@ export const IntroNav = async () => {
         </div>
       </div>
 
-      <Button asChild variant="outline">
-        {session?.user ? (
-          <Link href="/dashboard">Dashboard</Link>
-        ) : (
+      {session?.user ? (
+        <UserNav />
+      ) : (
+        <Button asChild variant="outline">
           <Link href="/login">Login</Link>
-        )}
-      </Button>
+        </Button>
+      )}
     </nav>
   )
 }

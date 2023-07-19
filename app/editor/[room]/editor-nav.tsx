@@ -40,7 +40,7 @@ export const EditorNav = ({ shareButton }) => {
   )
 
   return (
-    <nav className="fixed inset-x-0 top-0 mx-auto flex w-full max-w-screen-xl items-center justify-between px-6 py-5">
+    <nav className="fixed z-20 inset-x-0 top-0 mx-auto flex w-full max-w-screen-xl items-center justify-between px-6 py-5">
       <Link
         // onClick={() => {
         //   console.log("destroying");

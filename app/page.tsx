@@ -14,7 +14,7 @@ export default async function Home() {
     <>
       <div className="relative overflow-x-hidden pb-16">
         <IntroNav />
-        <main className="container grid h-[calc(100vh-72px)] grid-cols-1 justify-between pb-24 md:h-auto md:grid-cols-[1fr_0.8fr] md:items-center">
+        <main className="container grid min-h-[calc(100vh-72px)] grid-cols-1 justify-between pb-24 md:h-auto md:grid-cols-[1fr_0.8fr] md:items-center">
           <div>
             <div className="py-20 md:px-6">
               {/* <div className="border select-none mb-2 border-orange-5 bg-orange-4 max-w-min whitespace-nowrap rounded-full px-2 py-1 text-xs">
