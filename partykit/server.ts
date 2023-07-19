@@ -15,6 +15,7 @@ const config = {
       callback: {
         url: "https://kaiwa.jcde.xyz/api/ws-callback",
         headers,
+        objects: { prosemirror: "XmlFragment" },
       },
     })
   },
