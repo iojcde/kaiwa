@@ -10,8 +10,8 @@ const wsCallback = async (req: Request) => {
   }
   const body = await req.json()
 
-  const { room, data } = body
+  console.log(body)
 
-  console.log(room, data)
+  return new Response("OK")
 }
 export { wsCallback as POST }
