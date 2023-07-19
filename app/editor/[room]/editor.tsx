@@ -90,7 +90,7 @@ const MilkdownEditor: React.FC<{
           if (markdown !== prevMarkdown && markdown !== "") {
             if ((await getTitle(markdown)) != (await getTitle(prevMarkdown))) {
               const title = await getTitle(markdown)
-              document.title = title
+              document.title = `${title} | Kaiwa`
               saveTitle(title)
             }
           }

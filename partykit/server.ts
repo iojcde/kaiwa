@@ -2,6 +2,7 @@ import { YPartyKitOptions, onConnect } from "@iojcde/y-partykit"
 
 import type { PartyKitServer } from "partykit/server"
 import { AccessLevel } from "@prisma/client"
+import { yXmlFragmentToProsemirrorJSON } from "y-prosemirror"
 
 const config = {
   async onConnect(ws, room) {
@@ -13,9 +14,21 @@ const config = {
       persist: true,
       readOnly: (unstable_initial as { level: AccessLevel }).level == "VIEWER",
       callback: {
-        url: "https://kaiwa.jcde.xyz/api/ws-callback",
-        headers,
-        objects: { prosemirror: "XmlFragment" },
+        handler: async (doc) => {
+          const data = doc.getXmlFragment("prosemirror")
+          fetch("https://kaiwa.jcde.xyz/api/ws-callback", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              auth: room.env.WSAUTH_SECRET as string,
+             
+            },
+            body: JSON.stringify({
+              data: yXmlFragmentToProsemirrorJSON(data),
+              room: room.id,
+            }),
+          })
+        },
       },
     })
   },

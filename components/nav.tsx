@@ -3,7 +3,7 @@ import Link from "next/link"
 
 export const Nav = () => {
   return (
-    <nav className="border-b py-3">
+    <nav className="flex border-b py-3">
       <div className="mx-auto flex w-full max-w-screen-xl items-center justify-between px-6">
         <Link
           href="/dashboard"
@@ -22,9 +22,7 @@ export const Nav = () => {
           </svg>
           Kaiwa
         </Link>
-        <div>
-          <UserNav />
-        </div>
+        <UserNav />
       </div>
     </nav>
   )

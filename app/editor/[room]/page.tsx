@@ -59,7 +59,7 @@ export async function generateMetadata({ params: { room } }) {
     return
   }
   return {
-    title: `${post.title}`,
+    title: `${post.title} | Kaiwa`,
   }
 }
 
