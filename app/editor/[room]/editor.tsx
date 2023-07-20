@@ -7,7 +7,7 @@ import {
   placeholderEnabledCtx,
 } from "@/milkdown/plugins/placeholder"
 import { theme } from "@/milkdown/theme"
-import { Editor, editorViewCtx, rootCtx } from "@milkdown/core"
+import { Editor, defaultValueCtx, editorViewCtx, rootCtx } from "@milkdown/core"
 import { clipboard } from "@milkdown/plugin-clipboard"
 import { collab, collabServiceCtx } from "@milkdown/plugin-collab"
 import { history } from "@milkdown/plugin-history"
@@ -27,8 +27,9 @@ import { unified } from "unified"
 
 const MilkdownEditor: React.FC<{
   room: string
+  defaultContent: string
   accessLevel: AccessLevel
-}> = ({ room, accessLevel }) => {
+}> = ({ room, accessLevel, defaultContent }) => {
   const { status, data: session } = useSession()
 
   const {
@@ -63,9 +64,7 @@ const MilkdownEditor: React.FC<{
       body: JSON.stringify({ title, room }),
     })
     if (!res.ok) {
-      // console.log(res);
-    } else {
-      toast({ title: "hi", description: "saved title" })
+      toast({ title: "Error", description: "error while saving title" })
     }
   }, 2000)
 
@@ -75,6 +74,14 @@ const MilkdownEditor: React.FC<{
       .config((ctx) => {
         ctx.set(rootCtx, root as Node)
         ctx.set(placeholderCtx, "Type here to write your post...")
+        try {
+          ctx.set(defaultValueCtx, {
+            type: "json",
+            value: JSON.parse(defaultContent),
+          })
+        } catch (e) {
+          console.log(e)
+        }
       })
       .use(commonmark)
       .use(gfm)
@@ -163,11 +170,16 @@ const MilkdownEditor: React.FC<{
 
 export const MilkdownEditorWrapper: React.FC<{
   room: string
+  defaultContent: string | undefined
   accessLevel: AccessLevel
-}> = ({ room, accessLevel }) => {
+}> = ({ room, accessLevel, defaultContent }) => {
   return (
     <MilkdownProvider>
-      <MilkdownEditor room={room} accessLevel={accessLevel} />
+      <MilkdownEditor
+        defaultContent={defaultContent}
+        room={room}
+        accessLevel={accessLevel}
+      />
     </MilkdownProvider>
   )
 }

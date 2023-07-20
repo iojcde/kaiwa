@@ -29,6 +29,7 @@ const EditorPage = async ({
       access: { where: { userId: session?.user.id } },
       authorId: true,
       published: true,
+      content: true,
     },
   })
 
@@ -47,7 +48,11 @@ const EditorPage = async ({
 
   return (
     <div className="mx-auto mt-20 w-full max-w-screen-md px-6">
-      <MilkdownEditor room={room} accessLevel={accessLevel} />
+      <MilkdownEditor
+        room={room}
+        defaultContent={post.content}
+        accessLevel={accessLevel}
+      />
     </div>
   )
 }
@@ -59,7 +64,7 @@ export async function generateMetadata({ params: { room } }) {
     return
   }
   return {
-    title: `${post.title} | Kaiwa`,
+    title: `${post.title} -  Kaiwa`,
   }
 }
 

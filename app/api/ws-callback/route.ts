@@ -18,10 +18,11 @@ const wsCallback = async (req: Request) => {
         id: room,
       },
       data: {
-        content: data,
+        content: JSON.stringify(data),
       },
     })
   } catch (e) {
+    console.error(e)
     return new Response(JSON.stringify({ error: e.message }), { status: 500 })
   }
   return new Response("OK")
