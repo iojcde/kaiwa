@@ -1,25 +1,12 @@
 "use client"
 
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command"
-
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-
 import { Access, AccessLevel } from "@prisma/client"
 import { Button } from "./ui/button"
 import {
   Select,
   SelectContent,
   SelectItem,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "./ui/select"
@@ -41,114 +28,192 @@ import { updateAccessLevels } from "@/actions/update-access-levels"
 import { Check, ChevronsUpDown, Globe, Loader2, Lock } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { FancyMultiSelect } from "./ui/fancy-multi-select"
+import { inviteUsers } from "@/actions/invite-users"
+import { useRouter } from "next/navigation"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "./ui/alert-dialog"
 
-const users = [
-  {
-    value: "kaguya",
-    label: "Kaguya",
-  },
-  {
-    value: "chika",
-    label: "Chika",
-  },
-]
+export type knownUser = Record<"id" | "photo" | "name" | "email", string>
 
-export const ShareActions = ({ room, title, session, access, published }) => {
-  const [userSelectOpen, setUserSelectOpen] = useState(false)
+export const ShareActions = ({
+  room,
+  title,
+  session,
+  access,
+  published,
+  knownUsers,
+}) => {
+  const [users, setUsers] = useState<knownUser[]>(knownUsers)
   const [open, setOpen] = useState(false)
+  const [alertOpen, setAlertOpen] = useState(false)
   const [generalAccess, setGeneralAccess] = useState(
     published ? "link" : "restricted"
   )
-  const [value, setValue] = useState("")
-  const [accessUpdateQue, setAccessUpdateQue] = useState({})
+  const [accessList, setAccessList] = useState<Access[]>(access)
+
+  const [accessUpdateQue, setAccessUpdateQue] = useState<
+    Record<string, AccessLevel | "DELETE">
+  >({})
   const [isLoading, setIsLoading] = useState(false)
 
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline">Share</Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle className="text-xl">
-            Share {` `}
-            &apos;
-            {title}
-            &apos;
-          </DialogTitle>
-        </DialogHeader>
+  const [invited, setInvited] = useState<knownUser[]>([])
+  const [inviteLevel, setInviteLevel] = useState<AccessLevel>("VIEWER")
 
-        <FancyMultiSelect />
-        <div className="mt-8">
-          <h2>People with Access</h2>
-          <User accessId="0" user={session?.user} level="OWNER" />
-          {access?.map((a: Access & { user: User }, i) => (
-            <User
-              accessId={a.id}
-              user={a.user}
-              key={i}
-              level={a.level}
-              accessUpdateQue={accessUpdateQue}
-              setAccessUpdateQue={setAccessUpdateQue}
+  const router = useRouter()
+
+  const pendingChanges =
+    invited.length > 0 ||
+    Object.keys(accessUpdateQue).length > 0 ||
+    generalAccess != (published ? "link" : "restricted")
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={(o) => {
+        console.log(
+          invited.length,
+          Object.keys(accessUpdateQue).length,
+          generalAccess,
+          published ? "link" : "restricted",
+          open
+        )
+        if (open && pendingChanges) {
+          setAlertOpen(true)
+        } else {
+          console.log("wooo")
+          setOpen(o)
+        }
+      }}
+    >
+      <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Discard unsaved changes?</AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction>Discard</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+        <DialogTrigger asChild>
+          <Button variant="outline">Share</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-xl">
+              Share {` `}
+              &apos;
+              {title}
+              &apos;
+            </DialogTitle>
+          </DialogHeader>
+          <div className="flex gap-2">
+            <FancyMultiSelect
+              selected={invited}
+              setSelected={setInvited}
+              users={users}
+              setUsers={setUsers}
             />
-          ))}
-        </div>
-        <div>
-          <h2>General Access</h2>
-          <Select
-            defaultValue="restricted"
-            value={generalAccess}
-            onValueChange={setGeneralAccess}
-          >
-            <div className="mt-2 flex items-center gap-3">
-              <div
-                className={`rounded-full p-2 ${
-                  generalAccess == "link" ? "bg-green-5" : "bg-red-5"
-                }`}
-              >
-                {generalAccess == "link" ? <Globe /> : <Lock />}
-              </div>
-              <SelectTrigger className="w-[200px]">
+            <Select
+              defaultValue={inviteLevel}
+              onValueChange={(v) => setInviteLevel(v as AccessLevel)}
+            >
+              <SelectTrigger className="w-[100px]">
                 <SelectValue placeholder="Access" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="restricted">Restricted</SelectItem>
-                <SelectItem value="link">Anyone with the link</SelectItem>
+              <SelectContent className="text-sm">
+                <SelectItem value="VIEWER">Viewer</SelectItem>
+                <SelectItem value="EDITOR">Editor</SelectItem>
               </SelectContent>
-            </div>
-          </Select>
-        </div>
+            </Select>
+          </div>
+          <div className="mt-8">
+            <h2>People with Access</h2>
+            <User accessId="0" user={session?.user} level="OWNER" />
+            {accessList?.map((a: Access & { user: User }, i) => (
+              <User
+                accessId={a.id}
+                user={a.user}
+                key={i}
+                level={a.level}
+                setAccessList={setAccessList}
+                setAccessUpdateQue={setAccessUpdateQue}
+              />
+            ))}
+          </div>
+          <div>
+            <h2>General Access</h2>
+            <Select
+              defaultValue="restricted"
+              value={generalAccess}
+              onValueChange={setGeneralAccess}
+            >
+              <div className="mt-2 flex items-center gap-3">
+                <div
+                  className={`rounded-full p-2 ${
+                    generalAccess == "link" ? "bg-green-5" : "bg-red-5"
+                  }`}
+                >
+                  {generalAccess == "link" ? <Globe /> : <Lock />}
+                </div>
+                <SelectTrigger className="w-[200px]">
+                  <SelectValue placeholder="Access" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="restricted">Restricted</SelectItem>
+                  <SelectItem value="link">Anyone with the link</SelectItem>
+                </SelectContent>
+              </div>
+            </Select>
+          </div>
 
-        <DialogFooter>
-          <Button
-            onClick={async () => {
-              setIsLoading(true)
-              await cache(
-                async (room, generalAccess) =>
-                  await updatePublished({
-                    room,
-                    published: generalAccess == "link",
-                  })
-              )(room, generalAccess)
-
-              await cache(async (accessUpdateQue) => {
-                await updateAccessLevels(accessUpdateQue)
-              })(accessUpdateQue)
-              setIsLoading(false)
-              setOpen(!open)
-            }}
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
-              </>
-            ) : (
-              "Save"
+          <DialogFooter className="flex items-center gap-2">
+            {pendingChanges && (
+              <div className="text-sm text-gray-11">Pending Changes</div>
             )}
-          </Button>
-        </DialogFooter>
-      </DialogContent>{" "}
+            <Button
+              onClick={async () => {
+                setIsLoading(true)
+
+                await updatePublished({
+                  room,
+                  published: generalAccess == "link",
+                })
+
+                await updateAccessLevels(room, accessUpdateQue)
+
+                await inviteUsers({
+                  invitedUsers: invited,
+                  room,
+                  level: inviteLevel,
+                })
+                setAccessUpdateQue({})
+                setInvited([])
+                setIsLoading(false)
+                setOpen(!open)
+
+                router.refresh()
+              }}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                "Save"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </AlertDialog>
     </Dialog>
   )
 }
@@ -158,14 +223,16 @@ const User = ({
   level,
   accessId,
   setAccessUpdateQue,
-  accessUpdateQue,
+  setAccessList,
 }: {
   user: User
   level: AccessLevel
   accessId: string
-  setAccessUpdateQue?: Dispatch<SetStateAction<Record<string, AccessLevel>>>
-
-  accessUpdateQue?: Record<string, AccessLevel>
+  accessList?: Access[]
+  setAccessList?: Dispatch<SetStateAction<Access[]>>
+  setAccessUpdateQue?: Dispatch<
+    SetStateAction<Record<string, AccessLevel | "DELETE">>
+  >
 }) => (
   <div className="flex items-center justify-between gap-2 py-2">
     <div className="flex items-center gap-3">
@@ -186,9 +253,14 @@ const User = ({
         <Select
           defaultValue={level}
           onValueChange={(v) => {
-            let tmp = accessUpdateQue
-            tmp[accessId] = v as AccessLevel
-            setAccessUpdateQue(tmp)
+            setAccessUpdateQue((q) => ({
+              ...q,
+              [accessId]: v as AccessLevel | "DELETE",
+            }))
+
+            if (v == "DELETE") {
+              setAccessList((prev) => prev.filter((a) => a.id != accessId))
+            }
           }}
         >
           <SelectTrigger className="w-[100px]">
@@ -197,6 +269,8 @@ const User = ({
           <SelectContent className="text-sm">
             <SelectItem value="VIEWER">Viewer</SelectItem>
             <SelectItem value="EDITOR">Editor</SelectItem>
+            <SelectSeparator />
+            <SelectItem value="DELETE">Remove Access</SelectItem>
           </SelectContent>
         </Select>
       )}

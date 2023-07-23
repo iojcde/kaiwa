@@ -26,8 +26,10 @@ export const theme = (ctx: Ctx): void => {
           ...attrs,
           class: clsx(
             `prose ${
-              ctx.get(proseSizeCtx) == "sm" ? "prose-base" : `lg:prose-lg`
-            } prose-gray -mx-2 h-full px-2 pb-80 outline-none dark:prose-invert`,
+              ctx.get(proseSizeCtx) == "sm"
+                ? "prose-base"
+                : `pb-80 lg:prose-lg`
+            } prose-gray -mx-2 h-full px-2 outline-none dark:prose-invert`,
             attrs?.class || "",
             "milkdown-theme-iojcde"
           ),

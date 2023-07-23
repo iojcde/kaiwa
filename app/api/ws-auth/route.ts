@@ -7,8 +7,8 @@ const wsAuth = async (req: Request) => {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
     })
-  }
-  console.log(req)
+  } 
+  
   const { check, room } = await req.json()
 
   const user = await db.user.findFirst({

@@ -18,7 +18,7 @@ import {
 import * as React from "react"
 
 export const VerificationEmail = ({ url }) => {
-  const previewText = `Verify your email for Kaiwa`
+  const previewText = `Hello, Here's your magic link to sign in to Kaiwa.`
 
   return (
     <Html>
@@ -26,7 +26,7 @@ export const VerificationEmail = ({ url }) => {
       <Preview>{previewText}</Preview>
       <Tailwind>
         <Body className="mx-auto bg-white font-sans">
-          <Container className="mx-auto my-[40px] max-w-2xl p-[20px]">
+          <Container className="mx-auto mb-[40px] max-w-2xl p-[20px]">
             <Text className="text-lg font-medium">Kaiwa</Text>
 
             <Heading as="h1" className="text-3xl">

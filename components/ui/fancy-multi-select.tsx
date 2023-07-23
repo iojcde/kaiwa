@@ -1,31 +1,30 @@
-"use client"
-
 import * as React from "react"
-import { X } from "lucide-react"
+import { AlertTriangle, X } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Command, CommandGroup, CommandItem } from "@/components/ui/command"
 import { Command as CommandPrimitive } from "cmdk"
+import { knownUser } from "../share-actions"
+import { cn } from "@/lib/utils"
 
-type Framework = Record<"value" | "label", string>
-
-const FRAMEWORKS = [
-  { value: "react", label: "React" },
-  { value: "vue", label: "Vue" },
-  { value: "svelte", label: "Svelte" },
-  { value: "angular", label: "Angular" },
-  { value: "ember", label: "Ember" },
-  { value: "preact", label: "Preact" },
-]
-
-export function FancyMultiSelect() {
+export function FancyMultiSelect({
+  users,
+  setUsers,
+  selected,
+  setSelected,
+}: {
+  users: knownUser[]
+  setUsers: React.Dispatch<React.SetStateAction<knownUser[]>>
+  selected: knownUser[]
+  setSelected: React.Dispatch<React.SetStateAction<knownUser[]>>
+}) {
   const inputRef = React.useRef<HTMLInputElement>(null)
   const [open, setOpen] = React.useState(false)
-  const [selected, setSelected] = React.useState<Framework[]>([FRAMEWORKS[4]])
+
   const [inputValue, setInputValue] = React.useState("")
 
-  const handleUnselect = React.useCallback((framework: Framework) => {
-    setSelected((prev) => prev.filter((s) => s.value !== framework.value))
+  const handleUnselect = React.useCallback((users: knownUser) => {
+    setSelected((prev) => prev.filter((s) => s.id !== users.id))
   }, [])
 
   const handleKeyDown = React.useCallback(
@@ -45,38 +44,59 @@ export function FancyMultiSelect() {
         if (e.key === "Escape") {
           input.blur()
         }
+        if (
+          e.key === "Enter" &&
+          selectables.length === 0 &&
+          input.value != ""
+        ) {
+          const newUser: knownUser = {
+            id: "",
+            photo: "",
+            email: input.value,
+            name: input.value,
+          }
+          !users.find((u) => u.email == input.value) &&
+            setSelected((prev) => [...prev, newUser])
+
+          setInputValue("")
+        }
       }
     },
     []
   )
 
-  const selectables = FRAMEWORKS.filter(
-    (framework) => !selected.includes(framework)
-  )
+  const selectables = users.filter((user) => !selected.includes(user))
 
   return (
     <Command
       onKeyDown={handleKeyDown}
-      className="overflow-visible bg-transparent"
+      className="overflow-visible bg-transparent flex-1"
     >
-      <div className="group rounded-md border border-input px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+      <div className="group self-stretch rounded-md border  border-input px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
         <div className="flex flex-wrap gap-1">
-          {selected.map((framework) => {
+          {selected.map((user) => {
             return (
-              <Badge key={framework.value} variant="secondary">
-                {framework.label}
+              <Badge
+                key={user.id}
+                variant="secondary"
+                className="flex items-center gap-2"
+              >
+                {(!user.email.includes("@") || !user.email.includes(".")) && (
+                  <AlertTriangle size={16} className="text-yellow-10" />
+                )}
+                {user.name}
                 <button
-                  className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  className="rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      handleUnselect(framework)
+                      handleUnselect(user)
                     }
                   }}
                   onMouseDown={(e) => {
                     e.preventDefault()
                     e.stopPropagation()
                   }}
-                  onClick={() => handleUnselect(framework)}
+                  onClick={() => handleUnselect(user)}
                 >
                   <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
                 </button>
@@ -90,7 +110,7 @@ export function FancyMultiSelect() {
             onValueChange={setInputValue}
             onBlur={() => setOpen(false)}
             onFocus={() => setOpen(true)}
-            placeholder="Select frameworks..."
+            placeholder="Add users..."
             className="ml-2 flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
           />
         </div>
@@ -99,21 +119,23 @@ export function FancyMultiSelect() {
         {open && selectables.length > 0 ? (
           <div className="absolute top-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in">
             <CommandGroup className="h-full overflow-auto">
-              {selectables.map((framework) => {
+              {selectables.map((user) => {
                 return (
                   <CommandItem
-                    key={framework.value}
+                    key={user.id}
+                    keywords={[user.name, user.email]}
                     onMouseDown={(e) => {
                       e.preventDefault()
                       e.stopPropagation()
                     }}
                     onSelect={(value) => {
                       setInputValue("")
-                      setSelected((prev) => [...prev, framework])
+                      setSelected((prev) => [...prev, user])
                     }}
-                    className={"cursor-pointer"}
+                    className={"grid cursor-pointer "}
                   >
-                    {framework.label}
+                    {user.name}
+                    <div className="text-xs text-gray-11 ">{user.email}</div>
                   </CommandItem>
                 )
               })}
@@ -122,5 +144,36 @@ export function FancyMultiSelect() {
         ) : null}
       </div>
     </Command>
+  )
+}
+
+const CommandItemCreate = ({
+  inputValue,
+  users,
+  onSelect,
+}: {
+  inputValue: string
+  users: knownUser[]
+  onSelect: () => void
+}) => {
+  const hasNoFramework = !users
+    .map(({ email }) => email)
+    .includes(`${inputValue.toLowerCase()}`)
+
+  const render = inputValue !== "" && hasNoFramework
+
+  if (!render) return null
+
+  // BUG: whenever a space is appended, the Create-Button will not be shown.
+  return (
+    <CommandItem
+      key={`${inputValue}`}
+      value={`${inputValue}`}
+      className="text-xs text-muted-foreground"
+      onSelect={onSelect}
+    >
+      <div className={cn("mr-2 h-4 w-4")} />
+      Create new label &quot;{inputValue}&quot;
+    </CommandItem>
   )
 }

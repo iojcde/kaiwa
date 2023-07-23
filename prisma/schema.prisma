@@ -1,12 +1,10 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
- 
-
 // prisma/schema.prisma
 datasource db {
   provider = "postgresql"
-  url  	= env("DATABASE_URL")
+  url      = env("DATABASE_URL")
   // directUrl = env("DIRECT_URL")
   // shadowDatabaseUrl = env("SHADOW_DATABASE_URL") 
 }
@@ -15,21 +13,19 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
- 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -50,13 +46,16 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  wsToken      String?  @unique  
+  wsToken       String?   @unique
   accounts      Account[]
   sessions      Session[]
 
   posts Post[]
 
+  knownUserIds String[] @db.Text
+
   access Access[]
+  Invite Invite[]
 }
 
 model VerificationToken {
@@ -74,10 +73,11 @@ model Post {
   published Boolean  @default(false)
   title     String
   content   String?
-  author    User?    @relation(fields: [authorId], references: [id])
- 
-  authorId  String
-  access Access[]
+  author    User?    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  authorId String
+  access   Access[]
+  Invite   Invite[]
 }
 
 enum AccessLevel {
@@ -87,12 +87,21 @@ enum AccessLevel {
 }
 
 model Access {
-  id String @id @default(cuid())
-  level AccessLevel
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id     String      @id @default(cuid())
+  level  AccessLevel
+  user   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
 
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String
+}
 
+model Invite {
+  id          String      @id @default(cuid())
+  email       String      @unique
+  post        Post        @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId      String
+  invitedBy   User        @relation(fields: [invitedById], references: [id], onDelete: Cascade)
+  invitedById String
+  level       AccessLevel
 }

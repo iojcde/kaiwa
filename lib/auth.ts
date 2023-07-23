@@ -43,6 +43,24 @@ export const authOptions: NextAuthOptions = {
         })
       }
 
+      if (trigger == "signUp") {
+        const invites = await db.invite.findMany({
+          where: { email: token.email },
+        })
+
+        if (invites.length > 0) {
+          await db.access.createMany({
+            data: invites.map((invite) => {
+              return {
+                level: invite.level,
+                postId: invite.postId,
+                userId: dbUser.id,
+              }
+            }),
+          })
+        }
+      }
+
       // if (!dbUser) {
       //   if (user) {
       //     token.id = user?.id;

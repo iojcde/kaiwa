@@ -9,8 +9,8 @@ import { redirect } from "next/navigation"
 export const createPost = async () => {
   const session = await getServerSession(authOptions)
 
-  if (session?.user.id === undefined) throw new Error("No user id")
-
+  if (!session) throw new Error("Unauthorized")
+  
   const post = await db.post.create({
     data: {
       id: randomRoomName(),

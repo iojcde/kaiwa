@@ -6,7 +6,6 @@ import React from "react"
 import { Loader2 } from "lucide-react"
 import { notFound, useRouter } from "next/navigation"
 import MilkdownEditor from "./editor"
-
 // const NoSSREditor = NextDynamic(() => import("@/app/editor/[room]/editor"), {
 //   ssr: false,
 //   loading: () => (
@@ -47,7 +46,7 @@ const EditorPage = async ({
     (post.authorId == session?.user.id ? "OWNER" : "VIEWER")
 
   return (
-    <div className="mx-auto mt-20 w-full max-w-screen-md px-6">
+    <div className="mx-auto w-full max-w-screen-md px-6">
       <MilkdownEditor
         room={room}
         defaultContent={post.content}

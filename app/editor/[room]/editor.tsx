@@ -1,4 +1,6 @@
 "use client"
+
+import { useSlash } from "@/components/editor/slash"
 import { useToast } from "@/components/ui/use-toast"
 import { useCollabContext } from "@/context/CollabContext"
 import {
@@ -7,15 +9,18 @@ import {
   placeholderEnabledCtx,
 } from "@/milkdown/plugins/placeholder"
 import { theme } from "@/milkdown/theme"
+import { uploader } from "@/milkdown/upload"
 import { Editor, defaultValueCtx, editorViewCtx, rootCtx } from "@milkdown/core"
 import { clipboard } from "@milkdown/plugin-clipboard"
 import { collab, collabServiceCtx } from "@milkdown/plugin-collab"
 import { history } from "@milkdown/plugin-history"
 import { listener, listenerCtx } from "@milkdown/plugin-listener"
+import { upload, uploadConfig } from "@milkdown/plugin-upload"
 import { commonmark } from "@milkdown/preset-commonmark"
 import { gfm } from "@milkdown/preset-gfm"
 import { Milkdown, MilkdownProvider, useEditor } from "@milkdown/react"
 import { AccessLevel } from "@prisma/client"
+import { ProsemirrorAdapterProvider } from "@prosemirror-adapter/react"
 import { debounce } from "lodash"
 import type { Heading, Root, Text } from "mdast"
 import { useSession } from "next-auth/react"
@@ -24,6 +29,7 @@ import rehypeSanitize from "rehype-sanitize"
 import remarkParse from "remark-parse"
 import remarkRehype from "remark-rehype"
 import { unified } from "unified"
+
 
 const MilkdownEditor: React.FC<{
   room: string
@@ -68,6 +74,8 @@ const MilkdownEditor: React.FC<{
     }
   }, 2000)
 
+  const slash = useSlash()
+
   const { get } = useEditor((root) =>
     Editor.make()
       .config(theme)
@@ -79,14 +87,21 @@ const MilkdownEditor: React.FC<{
             type: "json",
             value: JSON.parse(defaultContent),
           })
-        } catch (e) {
-          console.log(e)
-        }
+        } catch (e) {}
+
+        slash.config(ctx)
+
+        ctx.update(uploadConfig.key, (prev) => ({
+          ...prev,
+          uploader,
+        }));
       })
       .use(commonmark)
+      .use(slash.plugins)
       .use(gfm)
       .use(clipboard)
       .use(placeholder)
+      .use(upload)
       .use(history)
       .use(collab)
       .use(listener)
@@ -152,9 +167,11 @@ const MilkdownEditor: React.FC<{
 
         const view = ctx.get(editorViewCtx)
         view.focus()
-        view.setProps({
-          editable: () => accessLevel != "VIEWER",
-        })
+        queueMicrotask(() =>
+          view.setProps({
+            editable: () => accessLevel != "VIEWER",
+          })
+        )
       })
     }
   })
@@ -162,7 +179,7 @@ const MilkdownEditor: React.FC<{
   return (
     <div
       className={partykitProvider.wsconnected ? "connected" : "disconnected"}
-    >
+    > 
       <Milkdown />
     </div>
   )
@@ -175,11 +192,13 @@ export const MilkdownEditorWrapper: React.FC<{
 }> = ({ room, accessLevel, defaultContent }) => {
   return (
     <MilkdownProvider>
-      <MilkdownEditor
-        defaultContent={defaultContent}
-        room={room}
-        accessLevel={accessLevel}
-      />
+      <ProsemirrorAdapterProvider>
+        <MilkdownEditor
+          defaultContent={defaultContent}
+          room={room}
+          accessLevel={accessLevel}
+        />
+      </ProsemirrorAdapterProvider>
     </MilkdownProvider>
   )
 }

@@ -11,12 +11,17 @@ import { gfm } from "@milkdown/preset-gfm"
 
 import { placeholder } from "@/milkdown/plugins/placeholder"
 import { introContent } from "./intro-content"
+import { useSlash } from "../editor/slash"
+import { ProsemirrorAdapterProvider } from "@prosemirror-adapter/react"
 
 const MilkdownEditor = () => {
+  const slash = useSlash()
+
   const { get } = useEditor((root) =>
     Editor.make()
       .config((ctx) => ctx.set(rootCtx, root as Node))
       .config((ctx) => ctx.set(defaultValueCtx, introContent))
+      .config((ctx) => slash.config(ctx))
       .config(theme)
       .config((ctx) => ctx.set(proseSizeCtx, "sm"))
       .use(commonmark)
@@ -24,20 +29,23 @@ const MilkdownEditor = () => {
       .use(clipboard)
       .use(placeholder)
       .use(history)
+      .use(slash.plugins)
   )
 
   get()?.action((ctx) => {
     const view = ctx.get(editorViewCtx)
-    view.setProps({
-      attributes: Object.assign(
-        typeof view.props.attributes == "function"
-          ? view.props.attributes(view.props.state)
-          : view.props.attributes,
-        {
-          spellcheck: "false",
-        }
-      ),
-    })
+    queueMicrotask(() =>
+      view.setProps({
+        attributes: Object.assign(
+          typeof view.props.attributes == "function"
+            ? view.props.attributes(view.props.state)
+            : view.props.attributes,
+          {
+            spellcheck: "false",
+          }
+        ),
+      })
+    )
   })
 
   return (
@@ -49,6 +57,8 @@ const MilkdownEditor = () => {
 
 export const IntroEditorDemo = () => (
   <MilkdownProvider>
-    <MilkdownEditor />
+    <ProsemirrorAdapterProvider>
+      <MilkdownEditor />
+    </ProsemirrorAdapterProvider>
   </MilkdownProvider>
 )
