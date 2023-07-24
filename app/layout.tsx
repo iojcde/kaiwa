@@ -4,6 +4,7 @@ import localFont from "next/font/local"
 import { Providers } from "./providers"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster"
+import { CommandMenu } from "@/components/command-menu"
 
 const Inter = localFont({
   src: "../fonts/InterVariable.woff2",
@@ -25,7 +26,10 @@ export default function RootLayout({
     <html suppressHydrationWarning>
       <body className={cn(Inter.className)}>
         <div className="fixed bottom-0 top-0 w-full overflow-x-auto">
-          <Providers>{children}</Providers>
+          <Providers>
+            {children}
+            <CommandMenu />
+          </Providers>
           <Toaster />
         </div>
       </body>

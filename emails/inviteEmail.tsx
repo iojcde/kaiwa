@@ -43,7 +43,7 @@ export const InviteEmail = ({
             Edit {postName} on Kaiwa
           </Heading>
           <Text className="text-base leading-[16px]">
-            Hello ${name ?? email},
+            Hello {name ?? email},
           </Text>
           <Text className="text-base">
             {invitedBy} ({invitedByEmail}) has invited you to edit the document{" "}
