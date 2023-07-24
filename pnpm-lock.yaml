@@ -60,7 +60,7 @@ dependencies:
     specifier: ^1.0.7
     version: 1.0.7(@prisma/client@5.0.0)(next-auth@4.22.1)
   '@next/swc-win32-x64-msvc':
-    specifier: 13.4.12
+    specifier: ^13.4.12
     version: 13.4.12
   '@panva/hkdf':
     specifier: ^1.1.1
