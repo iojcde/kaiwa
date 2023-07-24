@@ -20,6 +20,8 @@ export const inviteUsers = async ({
 
   if (!session) throw new Error("Unauthorized")
 
+  console.log(invitedUsers)
+
   const post = await db.post.findFirst({
     where: { id: room },
     select: {
@@ -81,4 +83,6 @@ export const inviteUsers = async ({
     })
     console.log("sent email")
   })
+
+  return true
 }

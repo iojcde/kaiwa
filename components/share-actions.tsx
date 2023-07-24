@@ -211,6 +211,7 @@ export const ShareActions = ({
                 setAlertOpen(false)
                 setOpen(false)
                 setAccessUpdateQue({})
+                setAccessList(access)
                 setInvited([])
                 setGeneralAccess(published ? "link" : "restricted")
               }}
