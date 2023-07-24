@@ -22,7 +22,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog"
 
-import { Dispatch, SetStateAction, cache, useState } from "react"
+import { Dispatch, SetStateAction, cache, useEffect, useState } from "react"
 import { updatePublished } from "@/actions/update-published"
 import { updateAccessLevels } from "@/actions/update-access-levels"
 import { Check, ChevronsUpDown, Globe, Loader2, Lock } from "lucide-react"
@@ -69,6 +69,10 @@ export const ShareActions = ({
 
   const router = useRouter()
 
+  useEffect(() => {
+    setAccessList(access)
+  }, [access])
+
   const pendingChanges =
     invited.length > 0 ||
     Object.keys(accessUpdateQue).length > 0 ||
@@ -77,17 +81,9 @@ export const ShareActions = ({
     <Dialog
       open={open}
       onOpenChange={(o) => {
-        console.log(
-          invited.length,
-          Object.keys(accessUpdateQue).length,
-          generalAccess,
-          published ? "link" : "restricted",
-          open
-        )
         if (open && pendingChanges) {
           setAlertOpen(true)
         } else {
-          console.log("wooo")
           setOpen(o)
         }
       }}
