@@ -45,6 +45,7 @@ export const inviteUsers = async ({
     where: { email: { in: invitedUsers.map((u) => u.email) } },
     select: { email: true, id: true, name: true },
   })
+  console.log(foundUsers)
 
   invitedUsers.forEach(async (user) => {
     const dbUser = foundUsers.find((u) => u.email == user.email)
