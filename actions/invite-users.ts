@@ -1,6 +1,7 @@
 "use server"
 
 import { knownUser } from "@/components/share-actions"
+import { sendInviteEmail } from "@/emails/sendInviteEmail"
 import { authOptions } from "@/lib/auth"
 import { db } from "@/lib/db"
 import { AccessLevel } from "@prisma/client"
@@ -24,6 +25,7 @@ export const inviteUsers = async ({
     select: {
       access: { where: { userId: session?.user.id } },
       authorId: true,
+      title: true,
     },
   })
 
@@ -39,13 +41,13 @@ export const inviteUsers = async ({
 
   const foundUsers = await db.user.findMany({
     where: { email: { in: invitedUsers.map((u) => u.email) } },
-    select: { email: true, id: true },
+    select: { email: true, id: true, name: true },
   })
 
   invitedUsers.forEach(async (user) => {
     const dbUser = foundUsers.find((u) => u.email == user.email)
     if (dbUser && dbUser.id != session.user.id) {
-      return await db.access.create({
+      await db.access.create({
         data: {
           userId: dbUser.id,
           postId: room,
@@ -53,7 +55,7 @@ export const inviteUsers = async ({
         },
       })
     } else {
-      return await db.invite.upsert({
+      await db.invite.upsert({
         where: {
           email: user.email,
         },
@@ -71,5 +73,12 @@ export const inviteUsers = async ({
         },
       })
     }
+
+    await sendInviteEmail({
+      postName: post.title,
+      invitedBy: { name: session.user.name, email: session.user.email },
+      user: { name: dbUser.name ?? user.email, email: user.email },
+    })
+    console.log("sent email")
   })
 }

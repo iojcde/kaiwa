@@ -88,6 +88,117 @@ export const ShareActions = ({
         }
       }}
     >
+      <DialogTrigger asChild>
+        <Button variant="outline">Share</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="text-xl">
+            Share {` `}
+            &apos;
+            {title}
+            &apos;
+          </DialogTitle>
+        </DialogHeader>
+        <div className="flex gap-2">
+          <FancyMultiSelect
+            selected={invited}
+            setSelected={setInvited}
+            users={users}
+            setUsers={setUsers}
+          />
+          <Select
+            defaultValue={inviteLevel}
+            onValueChange={(v) => setInviteLevel(v as AccessLevel)}
+          >
+            <SelectTrigger className="w-[100px]">
+              <SelectValue placeholder="Access" />
+            </SelectTrigger>
+            <SelectContent className="text-sm">
+              <SelectItem value="VIEWER">Viewer</SelectItem>
+              <SelectItem value="EDITOR">Editor</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="mt-8">
+          <h2>People with Access</h2>
+          <User accessId="0" user={session?.user} level="OWNER" />
+          {accessList?.map((a: Access & { user: User }, i) => (
+            <User
+              accessId={a.id}
+              user={a.user}
+              key={i}
+              level={a.level}
+              setAccessList={setAccessList}
+              setAccessUpdateQue={setAccessUpdateQue}
+            />
+          ))}
+        </div>
+        <div>
+          <h2>General Access</h2>
+          <Select
+            defaultValue="restricted"
+            value={generalAccess}
+            onValueChange={setGeneralAccess}
+          >
+            <div className="mt-2 flex items-center gap-3">
+              <div
+                className={`rounded-full p-2 ${
+                  generalAccess == "link" ? "bg-green-5" : "bg-red-5"
+                }`}
+              >
+                {generalAccess == "link" ? <Globe /> : <Lock />}
+              </div>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Access" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="restricted">Restricted</SelectItem>
+                <SelectItem value="link">Anyone with the link</SelectItem>
+              </SelectContent>
+            </div>
+          </Select>
+        </div>
+
+        <DialogFooter className="flex items-center gap-2">
+          {pendingChanges && (
+            <div className="text-sm text-gray-11">Pending Changes</div>
+          )}
+          <Button
+            onClick={async () => {
+              setIsLoading(true)
+
+              await updatePublished({
+                room,
+                published: generalAccess == "link",
+              })
+
+              await updateAccessLevels(room, accessUpdateQue)
+
+              await inviteUsers({
+                invitedUsers: invited,
+                room,
+                level: inviteLevel,
+              })
+              setAccessUpdateQue({})
+              setInvited([])
+              setIsLoading(false)
+              setOpen(!open)
+
+              router.refresh()
+            }}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              "Save"
+            )}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
       <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -95,120 +206,19 @@ export const ShareActions = ({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Discard</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-        <DialogTrigger asChild>
-          <Button variant="outline">Share</Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="text-xl">
-              Share {` `}
-              &apos;
-              {title}
-              &apos;
-            </DialogTitle>
-          </DialogHeader>
-          <div className="flex gap-2">
-            <FancyMultiSelect
-              selected={invited}
-              setSelected={setInvited}
-              users={users}
-              setUsers={setUsers}
-            />
-            <Select
-              defaultValue={inviteLevel}
-              onValueChange={(v) => setInviteLevel(v as AccessLevel)}
-            >
-              <SelectTrigger className="w-[100px]">
-                <SelectValue placeholder="Access" />
-              </SelectTrigger>
-              <SelectContent className="text-sm">
-                <SelectItem value="VIEWER">Viewer</SelectItem>
-                <SelectItem value="EDITOR">Editor</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="mt-8">
-            <h2>People with Access</h2>
-            <User accessId="0" user={session?.user} level="OWNER" />
-            {accessList?.map((a: Access & { user: User }, i) => (
-              <User
-                accessId={a.id}
-                user={a.user}
-                key={i}
-                level={a.level}
-                setAccessList={setAccessList}
-                setAccessUpdateQue={setAccessUpdateQue}
-              />
-            ))}
-          </div>
-          <div>
-            <h2>General Access</h2>
-            <Select
-              defaultValue="restricted"
-              value={generalAccess}
-              onValueChange={setGeneralAccess}
-            >
-              <div className="mt-2 flex items-center gap-3">
-                <div
-                  className={`rounded-full p-2 ${
-                    generalAccess == "link" ? "bg-green-5" : "bg-red-5"
-                  }`}
-                >
-                  {generalAccess == "link" ? <Globe /> : <Lock />}
-                </div>
-                <SelectTrigger className="w-[200px]">
-                  <SelectValue placeholder="Access" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="restricted">Restricted</SelectItem>
-                  <SelectItem value="link">Anyone with the link</SelectItem>
-                </SelectContent>
-              </div>
-            </Select>
-          </div>
-
-          <DialogFooter className="flex items-center gap-2">
-            {pendingChanges && (
-              <div className="text-sm text-gray-11">Pending Changes</div>
-            )}
-            <Button
-              onClick={async () => {
-                setIsLoading(true)
-
-                await updatePublished({
-                  room,
-                  published: generalAccess == "link",
-                })
-
-                await updateAccessLevels(room, accessUpdateQue)
-
-                await inviteUsers({
-                  invitedUsers: invited,
-                  room,
-                  level: inviteLevel,
-                })
+            <AlertDialogAction
+              onClick={() => {
+                setAlertOpen(false)
+                setOpen(false)
                 setAccessUpdateQue({})
                 setInvited([])
-                setIsLoading(false)
-                setOpen(!open)
-
-                router.refresh()
+                setGeneralAccess(published ? "link" : "restricted")
               }}
             >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                "Save"
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
+              Discard
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
       </AlertDialog>
     </Dialog>
   )
