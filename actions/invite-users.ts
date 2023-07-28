@@ -79,6 +79,7 @@ export const inviteUsers = async ({
 
     await sendInviteEmail({
       postName: post.title,
+      room,
       invitedBy: { name: session.user.name, email: session.user.email },
       user: { name: dbUser?.name ?? user.email, email: user.email },
     })
