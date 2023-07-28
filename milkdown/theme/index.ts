@@ -28,7 +28,7 @@ export const theme = (ctx: Ctx): void => {
             `prose ${
               ctx.get(proseSizeCtx) == "sm"
                 ? "prose-base"
-                : `pb-80 lg:prose-lg`
+                : `max-w-[80ch] pb-80 lg:prose-lg`
             } prose-gray -mx-2 h-full px-2 outline-none dark:prose-invert`,
             attrs?.class || "",
             "milkdown-theme-iojcde"

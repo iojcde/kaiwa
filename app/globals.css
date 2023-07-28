@@ -11,7 +11,7 @@
     @apply border-border dark:border-gray-7;
   }
   body {
-    @apply overflow-x-clip bg-background dark:bg-black text-foreground selection:bg-violet-400/30;
+    @apply overflow-x-clip bg-white dark:bg-black text-foreground selection:bg-violet-400/30;
   }
 
   .font-display {
@@ -68,16 +68,17 @@
 }
  
 
-p > a, a.link{
-  @apply text-violet-500 dark:text-violet-400  dark:decoration-violet-400/20;
-
-  &:hover{     
-  transition: text-decoration-color 150ms;
-    @apply text-violet-400 underline decoration-inherit;
-  }  
-}
- 
-
 .hide-scrollbar::-webkit-scrollbar {
     display: none;
 }
+
+.tippy-box[data-animation='fade'][data-state='hidden'] {
+  opacity: 0; 
+}
+
+
+.tippy-box[data-animation='fade'][data-state='visible'] {
+  opacity: 100;
+}
+
+ 

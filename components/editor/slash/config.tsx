@@ -6,12 +6,14 @@ import {
   insertHrCommand,
   wrapInHeadingCommand,
 } from "@milkdown/preset-commonmark"
-import { Braces, Heading1, Heading2, Heading3, Minus } from "lucide-react"
+import { Braces, Heading1, Heading2, Heading3, LucideIcon, Minus } from "lucide-react"
 import { ReactNode } from "react"
 
 type ConfigItem = {
-  renderer: ReactNode
   onSelect: (ctx: Ctx) => void
+  icon: LucideIcon
+  title: string
+  description: string
 }
 
 const removeSlash = (ctx: Ctx) => {
@@ -31,53 +33,37 @@ export const config: Array<ConfigItem> = [
   {
     onSelect: (ctx: Ctx) =>
       ctx.get(commandsCtx).call(wrapInHeadingCommand.key, 1),
-    renderer: (
-      <div className="flex items-center gap-2">
-        <Heading1 />
-        Large Heading
-      </div>
-    ),
+
+    icon: Heading1,
+    title: "Heading 1",
+    description: "Large heading",
   },
   {
     onSelect: (ctx: Ctx) =>
       ctx.get(commandsCtx).call(wrapInHeadingCommand.key, 2),
-    renderer: (
-      <div className="flex items-center gap-2">
-        <Heading2 />
-        Medium Heading
-      </div>
-    ),
+    icon: Heading2,
+    title: "Heading 2",
+    description: "Medium heading",
   },
   {
     onSelect: (ctx: Ctx) =>
       ctx.get(commandsCtx).call(wrapInHeadingCommand.key, 3),
-    renderer: (
-      <div className="flex items-center gap-2">
-        <span className="material-symbols-outlined text-nord-10 dark:text-nord-9">
-          <Heading3 />
-        </span>
-        Small Heading
-      </div>
-    ),
+    icon: Heading3,
+    title: "Heading 3",
+    description: "Small heading",
   },
   {
     onSelect: (ctx: Ctx) =>
       ctx.get(commandsCtx).call(createCodeBlockCommand.key),
-    renderer: (
-      <div className="flex items-center gap-2">
-        <Braces />
-        Code Block
-      </div>
-    ),
+    icon: Braces,
+    title: "Code Block",
+    description: "Inserts a code block",
   },
   {
     onSelect: (ctx: Ctx) => ctx.get(commandsCtx).call(insertHrCommand.key),
-    renderer: (
-      <div className="flex items-center gap-2">
-        <Minus />
-        Divider
-      </div>
-    ),
+    icon: Minus,
+    title: "Divider",
+    description: "Inserts a divider",
   },
 ].map((item) => ({
   ...item,

@@ -26,16 +26,18 @@ export type InviteEmailProps = {
     name?: string
     email: string
   }
+  room:string
 }
 
 export const InviteEmail = ({
   postName,
+  room,
   user: { name, email },
   invitedBy: { name: invitedBy, email: invitedByEmail },
 }: InviteEmailProps) => (
   <Html>
     <Head />
-    <Preview>The Document {postName} has been shared with you</Preview>
+    <Preview>The post {postName} has been shared with you</Preview>
     <Tailwind>
       <Body className=" bg-white font-sans">
         <Container className="mx-auto mb-[40px] max-w-2xl p-[20px]">
@@ -46,7 +48,7 @@ export const InviteEmail = ({
             Hello {name ?? email},
           </Text>
           <Text className="text-base">
-            {invitedBy} ({invitedByEmail}) has invited you to edit the document{" "}
+            {invitedBy} ({invitedByEmail}) has invited you to edit the post{" "}
             {postName} on Kaiwa.
           </Text>
 
@@ -54,7 +56,7 @@ export const InviteEmail = ({
             pX={20}
             pY={12}
             className="rounded-lg bg-[#000000] font-semibold text-white no-underline"
-            href={`https://kaiwa.jcde.xyz/login`}
+            href={`https://kaiwa.jcde.xyz/login&from=${encodeURIComponent(`/editor/${room}`)}`}
           >
             Open
           </Button>

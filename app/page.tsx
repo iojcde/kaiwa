@@ -51,10 +51,10 @@ export default async function Home() {
           </div>
         </main>
         <div className="gradient"></div>
-        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-white to-transparent blur dark:from-black" />
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-background to-transparent blur dark:from-black" />
       </div>
 
-      <div className=" w-full py-20">
+      <div className=" w-full bg-background py-20">
         <div className="container relative text-center">
           <div className="font-display inline-block rounded-full bg-violet-500 px-4 py-1 text-white">
             Features

@@ -30,7 +30,6 @@ import remarkParse from "remark-parse"
 import remarkRehype from "remark-rehype"
 import { unified } from "unified"
 
-
 const MilkdownEditor: React.FC<{
   room: string
   defaultContent: string
@@ -94,7 +93,7 @@ const MilkdownEditor: React.FC<{
         ctx.update(uploadConfig.key, (prev) => ({
           ...prev,
           uploader,
-        }));
+        }))
       })
       .use(commonmark)
       .use(slash.plugins)
@@ -135,51 +134,52 @@ const MilkdownEditor: React.FC<{
     if (!content) return
     return content.value
   }
-  get()?.action((ctx) => {
-    if (partykitProvider.roomname != "offline-room") {
-      const collabService = ctx.get(collabServiceCtx)
+  useEffect(() => {
+    get()?.action((ctx) => {
+      if (partykitProvider.roomname != "offline-room") {
+        const collabService = ctx.get(collabServiceCtx)
 
-      collabService.setOptions({
-        yCursorOpts: {
-          cursorBuilder: (user) => {
-            const cursor = document.createElement("span")
-            cursor.classList.add("ProseMirror-yjs-cursor")
-            cursor.setAttribute("style", `border-color: ${user.color}`)
-            const userDiv = document.createElement("div")
-            userDiv.setAttribute("style", `background-color: ${user.color}`)
-            userDiv.classList.add("p-1", "px-2", "font-normal", "rounded-lg")
-            userDiv.insertBefore(document.createTextNode(user.name), null)
-            cursor.insertBefore(userDiv, null)
-            return cursor
+        collabService.setOptions({
+          yCursorOpts: {
+            cursorBuilder: (user) => {
+              const cursor = document.createElement("span")
+              cursor.classList.add("ProseMirror-yjs-cursor")
+              cursor.setAttribute("style", `border-color: ${user.color}`)
+              const userDiv = document.createElement("div")
+              userDiv.setAttribute("style", `background-color: ${user.color}`)
+              userDiv.classList.add("p-1", "px-2", "font-normal", "rounded-lg")
+              userDiv.insertBefore(document.createTextNode(user.name), null)
+              cursor.insertBefore(userDiv, null)
+              return cursor
+            },
           },
-        },
-      })
+        })
 
-      collabService
-        // bind doc and awareness
-        .bindDoc(yDoc)
-        .setAwareness(partykitProvider.awareness)
-        // connect yjs with milkdown
-        .connect()
+        collabService
+          // bind doc and awareness
+          .bindDoc(yDoc)
+          .setAwareness(partykitProvider.awareness)
+          // connect yjs with milkdown
+          .connect()
 
-      partykitProvider.once("synced", async (isSynced: boolean) => {
-        ctx.set(placeholderEnabledCtx, true)
+        partykitProvider.once("synced", async (isSynced: boolean) => {
+          ctx.set(placeholderEnabledCtx, true)
 
-        const view = ctx.get(editorViewCtx)
-        view.focus()
-        queueMicrotask(() =>
-          view.setProps({
-            editable: () => accessLevel != "VIEWER",
-          })
-        )
-      })
-    }
-  })
-
+          const view = ctx.get(editorViewCtx)
+          view.focus()
+          queueMicrotask(() =>
+            view.setProps({
+              editable: () => accessLevel != "VIEWER",
+            })
+          )
+        })
+      }
+    })
+  },[partykitProvider])
   return (
     <div
       className={partykitProvider.wsconnected ? "connected" : "disconnected"}
-    > 
+    >
       <Milkdown />
     </div>
   )

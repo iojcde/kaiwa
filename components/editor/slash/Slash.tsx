@@ -20,8 +20,10 @@ export const Slash = () => {
 
     slashProvider.current ??= new SlashProvider({
       content: ref.current,
-      debounce: 50,
+      debounce: 0,
       tippyOptions: {
+        animation: "fade",
+        duration: 150,
         onShow: () => {
           setOpened(true)
           root?.addEventListener("keydown", onKeydown)
@@ -47,19 +49,32 @@ export const Slash = () => {
   return (
     <div className="hidden">
       <div role="tooltip" ref={ref}>
-        <ul className="m-0 w-96 list-none overflow-clip rounded-sm bg-background border text-gray-12 shadow-xl">
-          {config.map((item, i) => (
-            <SlashItem
-              key={i.toString()}
-              index={i}
-              instance={instance}
-              onSelect={(ctx) => item.onSelect(ctx)}
-              selected={i === selected}
-              setSelected={setSelected}
-            >
-              {item.renderer}
-            </SlashItem>
-          ))}
+        <ul className="m-0 w-80 list-none gap-2 overflow-clip rounded-md border bg-background p-2 text-gray-12 shadow-xl">
+          {config.map((item, i) => {
+            const Icon = item.icon
+            return (
+              <SlashItem
+                key={i.toString()}
+                index={i}
+                instance={instance}
+                onSelect={(ctx) => item.onSelect(ctx)}
+                selected={i === selected}
+                setSelected={setSelected}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="rounded border bg-white p-2">
+                    <Icon size={20} />
+                  </div>
+                  <div>
+                    <div className="text-sm font-medium">{item.title}</div>
+                    <div className="text-xs text-gray-11">
+                      {item.description}
+                    </div>
+                  </div>
+                </div>
+              </SlashItem>
+            )
+          })}
         </ul>
       </div>
     </div>

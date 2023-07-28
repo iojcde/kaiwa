@@ -77,9 +77,7 @@ export const CollabProvider = ({
   }
 
   const initProvider = (room: string, token: string) => {
-
-
-    console.log("initprovider", { room, token })
+    console.log("initprovider", { room })
     const newdoc = new Doc()
     setDoc(newdoc)
 
@@ -99,7 +97,6 @@ export const CollabProvider = ({
     p.url = url.toString()
 
     p.connect()
-
     p.awareness.setLocalStateField("user", {
       color: getRandomColor(),
       name: session?.user.name ?? randomUsername(),
@@ -114,7 +111,7 @@ export const CollabProvider = ({
           "color: inherit"
         )
       }
-    }) 
+    })
   }
 
   const value = {

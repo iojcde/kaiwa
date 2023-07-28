@@ -6,14 +6,14 @@ import {
   CommandEmpty,
   CommandGroup,
   CommandInput,
-  CommandItem,
   CommandList,
 } from "@/components/ui/command"
+import { Item } from "./item"
 import { useEffect, useState } from "react"
 import { Dialog, DialogContent } from "../ui/dialog"
 import { useTheme } from "next-themes"
 
-import { Laptop, Moon, SunMedium } from "lucide-react"
+import { Laptop, Moon, Plus, SunMedium } from "lucide-react"
 import { createPost } from "@/actions/create-post"
 import { toast } from "../ui/use-toast"
 import { Post } from "@prisma/client"
@@ -24,6 +24,8 @@ export function CommandMenu() {
   const [search, setSearch] = useState("")
   const [pages, setPages] = useState([])
   const page = pages[pages.length - 1]
+
+  const [tabBoundingBox, setTabBoundingBox] = useState(null)
 
   const { theme, setTheme } = useTheme()
 
@@ -46,19 +48,27 @@ export function CommandMenu() {
     setOpen(open)
   }
 
+  const triggerTheme = (theme: "dark" | "light" | "system") => {
+    setTheme(theme)
+    toggleOpen(false)
+  }
+
   return (
     <Dialog open={open} onOpenChange={toggleOpen}>
-      <DialogContent className="overflow-hidden p-0 shadow-lg">
+      <DialogContent className="top-[20%] max-w-xl translate-y-0 overflow-hidden border-x-0  p-0 shadow-xl data-[state=closed]:slide-out-to-top-[2%] data-[state=open]:slide-in-from-top-[2%]  sm:border-x ">
         <Command
           onKeyDown={(e) => {
             // Escape goes to previous page
             // Backspace goes to previous page when search is empty
-            if (e.key === "Escape" || (e.key === "Backspace" && !search)) {
+            if (
+              (e.key === "Escape" && pages.length > 0) ||
+              (e.key === "Backspace" && !search)
+            ) {
               e.preventDefault()
               setPages((pages) => pages.slice(0, -1))
             }
           }}
-          className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5"
+          className="p-1.5 [&_[cmdk-group-heading]]:relative [&_[cmdk-group-heading]]:z-20  [&_[cmdk-group-heading]]:px-1 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-1 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:flex [&_[cmdk-item]]:items-center [&_[cmdk-item]]:gap-3 [&_[cmdk-item]]:px-3 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5 [&_[cmdk-list-sizer]]:relative [&_[cmdk-list]]:h-[var(--cmdk-list-height)]  [&_[cmdk-list]]:transition-[height]"
         >
           <CommandInput
             value={search}
@@ -66,11 +76,12 @@ export function CommandMenu() {
             placeholder="Type a command or search..."
           />
           <CommandList>
+            <div className="highlight absolute inset-x-0 z-0 rounded-md bg-accent transition" />
             {!page && (
               <>
                 <CommandEmpty>No results found.</CommandEmpty>
-                <CommandGroup heading="Suggestions">
-                  <CommandItem
+                <CommandGroup className="text-gray-11" heading="Editor">
+                  <Item
                     onClick={async () => {
                       let post: Post
                       try {
@@ -85,48 +96,42 @@ export function CommandMenu() {
                       }
                     }}
                   >
-                    New Document
-                  </CommandItem>
-                  <CommandItem onSelect={() => setPages([...pages, "theme"])}>
-                    Change Theme
-                  </CommandItem>
-                  <CommandItem>
-                    <Moon className="mr-2 h-4 w-4" />
-                    Change theme to Dark
-                  </CommandItem>
-                  <CommandItem>
-                    <SunMedium className="mr-2 h-4 w-4" />
-                    Change theme to Light
-                  </CommandItem>
-                  <CommandItem>
-                    <Laptop className="mr-2 h-4 w-4" />
-                    Change theme to System
-                  </CommandItem>
+                    <Plus /> New Document
+                  </Item>
+                </CommandGroup>
 
-                  <CommandItem>Calculator</CommandItem>
+                <CommandGroup className="text-gray-11" heading="General">
+                  <Item onSelect={() => setPages([...pages, "theme"])}>
+                    <Laptop />
+                    Change Theme
+                  </Item>
+                  <Item onSelect={() => triggerTheme("dark")}>
+                    <Moon />
+                    Change theme to Dark
+                  </Item>
+                  <Item onSelect={() => triggerTheme("light")}>
+                    <SunMedium />
+                    Change theme to Light
+                  </Item>
+                  <Item onSelect={() => triggerTheme("system")}>
+                    <Laptop />
+                    Change theme to System
+                  </Item>
+
+                  <Item>Calculator</Item>
                 </CommandGroup>
               </>
             )}
             {page == "theme" && (
               <>
-                <CommandGroup heading="Theme">
-                  <CommandItem
-                    onSelect={() => {
-                      setTheme("light")
-                      toggleOpen(false)
-                    }}
-                  >
-                    <SunMedium className="mr-2 h-4 w-4" /> Light
-                  </CommandItem>
-                  <CommandItem
-                    onSelect={() => {
-                      setTheme("dark")
-                      toggleOpen(false)
-                    }}
-                  >
-                    <Moon className="mr-2 h-4 w-4" />
+                <CommandGroup className="text-gray-11" heading="Theme">
+                  <Item onSelect={() => triggerTheme("light")}>
+                    <SunMedium /> Light
+                  </Item>
+                  <Item onSelect={() => triggerTheme("dark")}>
+                    <Moon />
                     Dark
-                  </CommandItem>
+                  </Item>
                 </CommandGroup>
               </>
             )}

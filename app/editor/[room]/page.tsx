@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth"
 import NextDynamic from "next/dynamic"
 import React from "react"
 import { Loader2 } from "lucide-react"
-import { notFound, useRouter } from "next/navigation"
+import { notFound, redirect, useRouter } from "next/navigation"
 import MilkdownEditor from "./editor"
 // const NoSSREditor = NextDynamic(() => import("@/app/editor/[room]/editor"), {
 //   ssr: false,
@@ -38,7 +38,7 @@ const EditorPage = async ({
       post.access.filter((a) => a.userId == session?.user.id).length == 0 &&
       !post.published)
   ) {
-    notFound()
+    redirect(`/login?from=${encodeURIComponent(`/editor/${room}`)}`)
   }
 
   let accessLevel =

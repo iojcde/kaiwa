@@ -7,6 +7,7 @@ import dynamic from "next/dynamic"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { useUsers } from "y-presence"
+import Image from "next/image"
 
 const Animal = dynamic<{ color: string; name: string }>(
   () => import("react-animals"),
@@ -40,7 +41,7 @@ export const EditorNav = ({ shareButton }) => {
   )
 
   return (
-    <nav className="sticky inset-x-0 top-0 z-20 mx-auto flex w-full max-w-screen-xl items-center justify-between px-6 py-5">
+    <nav className="sticky inset-x-0 top-0  z-20 mx-auto flex w-full max-w-screen-xl items-center justify-between px-6 py-5">
       <Link
         // onClick={() => {
         //   console.log("destroying");
@@ -102,11 +103,15 @@ export const EditorNav = ({ shareButton }) => {
                         } as React.CSSProperties
                       }
                     >
-                      <AvatarImage
-                        className={n == 0 && "h-9 w-9"}
-                        src={user?.photo}
-                        alt={user?.name}
-                      />
+                      {user?.photo && (
+                        <Image
+                          width={64}
+                          height={64}
+                          className={n == 0 && "h-9 w-9"}
+                          src={user?.photo}
+                          alt={user?.name}
+                        />
+                      )}
                       <AvatarFallback>
                         {user && (
                           <Animal
