@@ -150,9 +150,6 @@ export default async function Home() {
             <div className="relative z-20 px-8 py-6 lg:pb-8 lg:pt-0 ">
               <h3 className="font-display flex items-center gap-2 text-xl font-semibold">
                 A powerful command palette{" "}
-                <span className="inline-block rounded-full bg-pink-500 px-4 py-0.5 text-xs font-medium text-white">
-                  Coming soon
-                </span>
               </h3>
               <p className="mt-2 text-sm  text-gray-11 sm:text-base">
                 Kaiwa has a powerful command palette that allows you to do

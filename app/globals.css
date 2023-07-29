@@ -8,7 +8,8 @@
     
   }
   * {
-    @apply border-border dark:border-gray-7;
+    @apply border-border dark:border-gray-7 transition-[outline];
+     
   }
   body {
     @apply overflow-x-clip bg-white dark:bg-black text-foreground selection:bg-violet-400/30;

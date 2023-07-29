@@ -40,8 +40,19 @@ export function CommandMenu() {
         toggleOpen((open) => !open)
       }
     }
+
+    const touch = (e: TouchEvent) => {
+      if (e.touches.length > 1) {
+        toggleOpen((open) => !open)
+      }
+    }
+
     document.addEventListener("keydown", down)
-    return () => document.removeEventListener("keydown", down)
+    document.addEventListener("touchstart", touch)
+    return () => {
+      document.removeEventListener("keydown", down)
+      document.removeEventListener("touchstart", touch)
+    }
   }, [])
 
   const toggleOpen = (open: boolean | ((open: boolean) => boolean)) => {
@@ -65,8 +76,8 @@ export function CommandMenu() {
 
   return (
     <Dialog open={open} onOpenChange={toggleOpen}>
-      <DialogContent className="command-menu max-w-[38rem] gap-0 overflow-hidden border-x-0 p-0 shadow-xl  outline-none  sm:border-x">
-        <div className="flex gap-2 p-2 px-4 text-xs text-gray-11 ">
+      <DialogContent className="command-menu max-w-[38rem] gap-0 overflow-hidden border-x-0 p-0 shadow-xl outline-none   sm:border-x">
+        <div className="flex gap-2 bg-background p-2 px-4 text-xs text-gray-11 ">
           <button className="rounded bg-gray-3 px-2 py-1">Home</button>
           {pages.map((page, i) => (
             <button
@@ -91,11 +102,11 @@ export function CommandMenu() {
               setPages((pages) => pages.slice(0, -1))
             }
           }}
-          className="[&_[cmdk-list-sizer]] p-1.5  [&_[cmdk-group-heading]]:relative  [&_[cmdk-group-heading]]:z-20
+          className="[&_[cmdk-list-sizer]] rounded-none p-1.5  [&_[cmdk-group-heading]]:relative  [&_[cmdk-group-heading]]:z-20
           [&_[cmdk-group-heading]]:px-1.5 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground 
            [&_[cmdk-group]:last-child]:pb-0 [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-1.5 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 
-           [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:flex [&_[cmdk-item]]:items-center [&_[cmdk-item]]:gap-3 [&_[cmdk-item]]:px-3 [&_[cmdk-item]]:py-4 
-           [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5 [&_[cmdk-list-sizer]]:relative [&_[cmdk-list]]:h-[var(--cmdk-list-height)]  [&_[cmdk-list]]:transition-[height]"
+           [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:flex [&_[cmdk-item]]:cursor-pointer [&_[cmdk-item]]:items-center [&_[cmdk-item]]:gap-3 [&_[cmdk-item]]:px-3 
+           [&_[cmdk-item]]:py-4 [&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5 [&_[cmdk-list-sizer]]:relative [&_[cmdk-list]]:h-[var(--cmdk-list-height)] [&_[cmdk-list]]:transition-[height]"
         >
           <CommandInput
             value={search}
@@ -103,7 +114,7 @@ export function CommandMenu() {
             onValueChange={setSearch}
             placeholder="Type a command or search..."
           />
-          <CommandList className="mt-1.5 max-h-[325px]">
+          <CommandList className="mt-1.5 max-h-[135px]">
             <Highlighter setSelected={setSelected} page={page} />
             {!page && (
               <>
@@ -150,11 +161,12 @@ export function CommandMenu() {
 
                   <CommandItem
                     onSelect={() => {
-                      alert("going to dashboard")
                       router.push("/dashboard")
+                      toggleOpen(false)
                     }}
                   >
-                    <Home /> Home
+                    <Home />
+                    Dashboard
                   </CommandItem>
 
                   <CommandItem>
@@ -201,11 +213,6 @@ const Highlighter = ({
       ) as HTMLElement
       // console.log(selectedElement.innerHTML)
 
-      // const rect = selectedElement?.getBoundingClientRect()
-      const wrapper = document.querySelector(
-        ".command-menu [cmdk-list-sizer]"
-      ) as HTMLElement
-
       requestAnimationFrame(() => {
         highlight.style.transform = `translateY(${selectedElement?.offsetTop}px)`
         highlight.style.height = `${selectedElement?.getBoundingClientRect()
@@ -231,6 +238,6 @@ const Highlighter = ({
   }, [page])
 
   return (
-    <div className="highlight absolute inset-x-0 top-0 z-0 rounded-md bg-accent transition" />
+    <div className="highlight absolute inset-x-0 top-0 z-0 rounded-[calc(var(--radius)-1.5px)] bg-accent transition-transform" />
   )
 }

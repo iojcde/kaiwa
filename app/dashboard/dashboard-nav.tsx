@@ -2,14 +2,18 @@
 import Link from "next/link"
 import { ReactNode } from "react"
 import { usePathname } from "next/navigation"
-import { FileText } from "lucide-react"
+import { FileText, Settings } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export const DashboardNav = () => (
-  <div className="hidden w-[200px] flex-col justify-between gap-2 md:flex">
+  <div className="hidden w-[200px] flex-col  gap-2 md:flex">
     <NavLink className="flex items-center gap-2" href="/dashboard">
       <FileText size={16} />
       Posts
+    </NavLink>
+    <NavLink className="flex items-center gap-2" href="/dashboard/settings">
+      <Settings size={16} />
+      Settings
     </NavLink>
   </div>
 )
@@ -27,7 +31,7 @@ const NavLink = ({
   return (
     <Link
       className={cn(
-        "w-full rounded-lg px-4 py-2 text-sm font-medium hover:bg-gray-4",
+        "w-full rounded-lg px-4 py-2 text-sm font-medium hover:bg-accent",
         isActive ? "bg-gray-4" : "",
         className
       )}
