@@ -10,7 +10,7 @@ export const createPost = async () => {
   const session = await getServerSession(authOptions)
 
   if (!session) throw new Error("Unauthorized")
-  
+
   const post = await db.post.create({
     data: {
       id: randomRoomName(),

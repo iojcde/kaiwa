@@ -62,7 +62,7 @@ export const Slash = () => {
                 setSelected={setSelected}
               >
                 <div className="flex items-center gap-3">
-                  <div className="rounded border bg-white p-2">
+                  <div className="rounded border bg-white p-2 dark:bg-black">
                     <Icon size={20} />
                   </div>
                   <div>

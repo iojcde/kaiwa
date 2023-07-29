@@ -27,8 +27,8 @@ export default function RootLayout({
       <body className={cn(Inter.className)}>
         <div className="fixed bottom-0 top-0 w-full overflow-x-auto">
           <Providers>
-            {children}
             <CommandMenu />
+            {children}
           </Providers>
           <Toaster />
         </div>
