@@ -114,7 +114,7 @@ export function CommandMenu() {
             onValueChange={setSearch}
             placeholder="Type a command or search..."
           />
-          <CommandList className="mt-1.5 max-h-[135px]">
+          <CommandList className="mt-1.5 max-h-[325px]">
             <Highlighter setSelected={setSelected} page={page} />
             {!page && (
               <>

@@ -51,7 +51,7 @@ export default async function Home() {
           </div>
         </main>
         <div className="gradient"></div>
-        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-background to-transparent blur dark:from-black" />
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-background to-transparent blur dark:from-background" />
       </div>
 
       <div className=" w-full bg-background py-20">
