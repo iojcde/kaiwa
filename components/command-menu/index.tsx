@@ -76,7 +76,7 @@ export function CommandMenu() {
 
   return (
     <Dialog open={open} onOpenChange={toggleOpen}>
-      <DialogContent className="command-menu max-w-[38rem] gap-0 overflow-hidden border-x-0 p-0 shadow-xl outline-none   sm:border-x">
+      <DialogContent className="command-menu max-w-[38rem] top-auto sm:top-[20%]  bottom-0 sm:bottom-auto  gap-0 overflow-hidden border-x-0 p-0 shadow-xl outline-none transition-[outline]   sm:border-x">
         <div className="flex gap-2 bg-background p-2 px-4 text-xs text-gray-11 ">
           <button className="rounded bg-gray-3 px-2 py-1">Home</button>
           {pages.map((page, i) => (

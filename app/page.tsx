@@ -145,9 +145,9 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="min-w-full snap-center overflow-clip rounded-2xl border bg-white dark:bg-background md:col-span-2 ">
+          <div className="flex min-w-full snap-center flex-col overflow-clip rounded-2xl border bg-white dark:bg-background md:col-span-2 ">
             <CmdkDemo />
-            <div className="relative z-20 px-8 py-6 lg:pb-8 lg:pt-0 ">
+            <div className="relative z-20 mt-auto  px-8 py-6 lg:pb-8 lg:pt-0 ">
               <h3 className="font-display flex items-center gap-2 text-xl font-semibold">
                 A powerful command palette{" "}
               </h3>
@@ -158,6 +158,7 @@ export default async function Home() {
             </div>
           </div>
         </div>
+        <div className="mx-auto mt-6 h-1 w-52 bg-gradient-to-r from-transparent rounded-full to-violet-500 sm:hidden"></div>
       </div>
 
       <div className="relative w-full border-t bg-white py-24 dark:bg-black">
@@ -181,6 +182,7 @@ export default async function Home() {
     </>
   )
 }
+
 export const metadata = {
-  title: "Kaiwa",
+  title: "Kaiwa - Collaborative document editor",
 }

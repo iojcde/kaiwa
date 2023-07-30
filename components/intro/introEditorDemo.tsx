@@ -50,7 +50,7 @@ const MilkdownEditor = () => {
 
   return (
     <div className="p-6">
-      <Milkdown />
+      <Milkdown  />
     </div>
   )
 }

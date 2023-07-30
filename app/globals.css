@@ -8,7 +8,7 @@
     
   }
   * {
-    @apply border-border dark:border-gray-7 transition-[outline];
+    @apply border-border dark:border-gray-7;
      
   }
   body {
@@ -82,4 +82,7 @@
   opacity: 100;
 }
 
+p a {
+  @apply underline underline-offset-2;
+  }
  
