@@ -85,7 +85,6 @@ export const CmdkDemo = () => {
         >
           <CommandInput
             value={search}
-            autoFocus
             onValueChange={setSearch}
             placeholder="Type a command or search..."
           />
