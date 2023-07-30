@@ -19,7 +19,7 @@ export const CmdkDemo = () => {
   const [search, setSearch] = useState("")
   const [pages, setPages] = useState([])
 
-  const [selected, setSelected] = useState("")
+  const [selected, setSelected] = useState(undefined)
   const page = pages[pages.length - 1]
 
   const changePage = (page: string) => {
@@ -55,7 +55,7 @@ export const CmdkDemo = () => {
   return (
     <>
       <div
-        className={` p relative z-10 h-52 overflow-hidden transition-[height] duration-300 dark:bg-black lg:pointer-events-auto ${
+        className={` p relative z-10 h-52 overflow-clip transition-[height] duration-300 dark:bg-black lg:pointer-events-auto ${
           open ? "open lg:h-96" : "lg:h-64"
         }`}
       >
@@ -88,7 +88,7 @@ export const CmdkDemo = () => {
             onValueChange={setSearch}
             placeholder="Type a command or search..."
           />
-          <CommandList className="mt-1.5 max-h-[325px]">
+          <CommandList className="mt-1.5  max-h-[325px] overflow-clip">
             <Highlighter setSelected={setSelected} page={page} />
             {!page && (
               <>
@@ -187,6 +187,7 @@ const Highlighter = ({
     const firstItem = document.querySelector(".command-demo [cmdk-item]")
     if (page && firstItem) {
       firstItem.setAttribute("aria-selected", "true")
+      // console.log('wow')
       setSelected(firstItem.getAttribute("data-value"))
     }
   }, [page])

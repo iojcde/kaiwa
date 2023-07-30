@@ -12,7 +12,7 @@ import {
 import { useEffect, useRef, useState } from "react"
 import { Dialog, DialogContent } from "../ui/dialog"
 import { useTheme } from "next-themes"
-
+import { wait } from "@/lib/utils"
 import { Home, Laptop, Moon, Plus, Settings, SunMedium } from "lucide-react"
 import { createPost } from "@/actions/create-post"
 import { toast } from "../ui/use-toast"
@@ -69,15 +69,23 @@ export function CommandMenu() {
     toggleOpen(false)
   }
 
-  const changePage = (page: string) => {
+  const changePage = async (page: string) => {
+    const commandMenu = document.querySelector(".command-menu") as HTMLElement
+
+    commandMenu.style.transform = `translateX(-50%) scale(0.99)`
+    commandMenu.style.transition = "transform 0.1s ease 0s"
+    await wait(102)
+    commandMenu.style.transform = ``
+    commandMenu.style.transition = ""
+
     setPages((pages) => [...pages, page])
     setSearch("")
   }
 
   return (
     <Dialog open={open} onOpenChange={toggleOpen}>
-      <DialogContent className="command-menu max-w-[38rem] top-auto sm:top-[20%]  bottom-0 sm:bottom-auto  gap-0 overflow-hidden border-x-0 p-0 shadow-xl outline-none transition-[outline]   sm:border-x">
-        <div className="flex gap-2 bg-background p-2 px-4 text-xs text-gray-11 ">
+      <DialogContent className="command-menu ease-ease bottom-0 top-0 flex max-w-[38rem] flex-col  gap-0 overflow-hidden  border-x-0 p-0 shadow-xl outline-none transition-all duration-100  sm:bottom-auto sm:top-[20%] sm:border-x">
+        <div className="flex h-[40px] gap-2 bg-background p-2 px-4 text-xs text-gray-11 ">
           <button className="rounded bg-gray-3 px-2 py-1">Home</button>
           {pages.map((page, i) => (
             <button
@@ -102,7 +110,7 @@ export function CommandMenu() {
               setPages((pages) => pages.slice(0, -1))
             }
           }}
-          className="[&_[cmdk-list-sizer]] rounded-none p-1.5  [&_[cmdk-group-heading]]:relative  [&_[cmdk-group-heading]]:z-20
+          className="[&_[cmdk-list-sizer]] rounded-none p-1.5 [&_[cmdk-group-heading]]:relative  [&_[cmdk-group-heading]]:z-20
           [&_[cmdk-group-heading]]:px-1.5 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground 
            [&_[cmdk-group]:last-child]:pb-0 [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-1.5 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 
            [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:flex [&_[cmdk-item]]:cursor-pointer [&_[cmdk-item]]:items-center [&_[cmdk-item]]:gap-3 [&_[cmdk-item]]:px-3 
@@ -114,7 +122,7 @@ export function CommandMenu() {
             onValueChange={setSearch}
             placeholder="Type a command or search..."
           />
-          <CommandList className="mt-1.5 max-h-[325px]">
+          <CommandList className="mt-1.5 h-full max-h-none  sm:max-h-[325px]">
             <Highlighter setSelected={setSelected} page={page} />
             {!page && (
               <>
@@ -213,11 +221,9 @@ const Highlighter = ({
       ) as HTMLElement
       // console.log(selectedElement.innerHTML)
 
-      requestAnimationFrame(() => {
-        highlight.style.transform = `translateY(${selectedElement?.offsetTop}px)`
-        highlight.style.height = `${selectedElement?.getBoundingClientRect()
-          .height}px`
-      })
+      highlight.style.transform = `translateY(${selectedElement?.offsetTop}px)`
+      highlight.style.height = `${selectedElement?.getBoundingClientRect()
+        .height}px`
     } else {
       highlight.style.transform = `translateY(0)`
       highlight.style.height = `0`
@@ -225,19 +231,20 @@ const Highlighter = ({
   }
 
   const selected = useCommandState((state) => state.value)
+
   useEffect(() => {
     repositionHighlight(selected)
   }, [selected, page])
 
   useEffect(() => {
     const firstItem = document.querySelector(".command-menu [cmdk-item]")
-    if (page && firstItem) {
+    if (firstItem) {
       firstItem.setAttribute("aria-selected", "true")
       setSelected(firstItem.getAttribute("data-value"))
     }
   }, [page])
 
   return (
-    <div className="highlight absolute inset-x-0 top-0 z-0 rounded-[calc(var(--radius)-1.5px)] bg-accent transition-transform" />
+    <div className="highlight ease-ease absolute inset-x-0 top-0 z-0 rounded-[calc(var(--radius)-1.5px)]  bg-accent transition-transform " />
   )
 }

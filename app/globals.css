@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  .ease-ease {
+    transition-timing-function: ease !important;
+  }
+
   :root {
     --radius: 0.75rem;
     
