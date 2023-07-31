@@ -88,7 +88,7 @@ export const CmdkDemo = () => {
             onValueChange={setSearch}
             placeholder="Type a command or search..."
           />
-          <CommandList className="mt-1.5  max-h-[325px] overflow-clip">
+          <CommandList className="mt-1.5  max-h-[325px]">
             <Highlighter setSelected={setSelected} page={page} />
             {!page && (
               <>

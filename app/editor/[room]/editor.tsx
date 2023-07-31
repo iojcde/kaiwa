@@ -175,7 +175,7 @@ const MilkdownEditor: React.FC<{
         })
       }
     })
-  },[partykitProvider])
+  },[partykitProvider,yDoc])
   return (
     <div
       className={partykitProvider.wsconnected ? "connected" : "disconnected"}
