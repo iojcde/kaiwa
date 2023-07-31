@@ -107,7 +107,7 @@ export const EditorNav = ({ shareButton }) => {
                         <Image
                           width={64}
                           height={64}
-                          className={n == 0 && "h-9 w-9"}
+                          className={n == 0 ?"h-9 w-9":''}
                           src={user?.photo}
                           alt={user?.name}
                         />

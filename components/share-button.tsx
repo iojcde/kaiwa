@@ -11,14 +11,14 @@ export const ShareButton = async ({ room }) => {
   const {
     access,
     title,
-    published,
+    public: isPublic,
     author: { knownUserIds },
   } = await db.post.findFirst({
     where: { id: room },
     select: {
       access: { include: { user: true } },
       title: true,
-      published: true,
+      public: true,
       author: { select: { knownUserIds: true } },
     },
   })
@@ -30,7 +30,7 @@ export const ShareButton = async ({ room }) => {
 
   return (
     <ShareActions
-      published={published}
+      isPublic={isPublic}
       room={room}
       title={title}
       session={session}

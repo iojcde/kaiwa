@@ -27,7 +27,7 @@ const EditorPage = async ({
     select: {
       access: { where: { userId: session?.user.id } },
       authorId: true,
-      published: true,
+      public: true,
       content: true,
     },
   })
@@ -36,7 +36,7 @@ const EditorPage = async ({
     !post ||
     (post?.authorId != session?.user.id &&
       post.access.filter((a) => a.userId == session?.user.id).length == 0 &&
-      !post.published)
+      !post.public)
   ) {
     redirect(`/login?from=${encodeURIComponent(`/editor/${room}`)}`)
   }

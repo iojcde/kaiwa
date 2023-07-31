@@ -7,8 +7,8 @@ const wsAuth = async (req: Request) => {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
     })
-  } 
-  
+  }
+
   const { check, room } = await req.json()
 
   const user = await db.user.findFirst({
@@ -37,10 +37,10 @@ const wsAuth = async (req: Request) => {
   } else {
     const post = await db.post.findFirst({
       where: { id: room },
-      select: { published: true },
+      select: { public: true },
     })
 
-    return post.published
+    return post.public
       ? new Response(JSON.stringify({ level: "VIEWER" }))
       : new Response(JSON.stringify({ error: "Unauthorized" }), {
           status: 401,

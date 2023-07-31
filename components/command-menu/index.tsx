@@ -74,11 +74,10 @@ export function CommandMenu() {
 
     commandMenu.style.transform = `translate(-50%, 0) scale(0.99)`
     commandMenu.style.transition = "transform 0.1s ease 0s"
-    setTimeout(()=>{
-      
-    commandMenu.style.transform = ``
-    commandMenu.style.transition = ""
-    },100)
+    setTimeout(() => {
+      commandMenu.style.transform = ``
+      commandMenu.style.transition = ""
+    }, 100)
 
     setPages((pages) => [...pages, page])
     setSearch("")
@@ -86,7 +85,7 @@ export function CommandMenu() {
 
   return (
     <Dialog open={open} onOpenChange={toggleOpen}>
-      <DialogContent className="command-menu ease-ease bottom-0 top-0 flex max-w-[38rem] flex-col gap-0 overflow-hidden  border-x-0 p-0 shadow-xl outline-none transition-all duration-100  sm:bottom-auto sm:top-[20%] sm:border-x">
+      <DialogContent className="command-menu ease-ease bottom-0 top-0 flex max-w-[38rem] flex-col gap-0 overflow-hidden  border-x-0 p-0 shadow-xl outline-none transition-[outline,scale,transform] duration-100  sm:bottom-auto sm:top-[20%] sm:border-x">
         <div className="flex h-[40px] gap-2 bg-background p-2 px-4 text-xs text-gray-11 ">
           <button className="rounded bg-gray-3 px-2 py-1">Home</button>
           {pages.map((page, i) => (
@@ -144,7 +143,7 @@ export function CommandMenu() {
                         })
                       }
 
-                      redirect(`/editor/${post.id}`)
+                      router.push(`/editor/${post.id}`)
                     }}
                   >
                     <Plus /> New Document

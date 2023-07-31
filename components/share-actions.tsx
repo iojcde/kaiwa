@@ -22,8 +22,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog"
 
-import { Dispatch, SetStateAction, cache, useEffect, useState } from "react"
-import { updatePublished } from "@/actions/update-published"
+import { Dispatch, SetStateAction, cache, useEffect, useState } from "react" 
 import { updateAccessLevels } from "@/actions/update-access-levels"
 import { Check, ChevronsUpDown, Globe, Loader2, Lock } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -40,6 +39,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog"
+import { updateVisibility } from "@/actions/update-visibility"
 
 export type knownUser = Record<"id" | "photo" | "name" | "email", string>
 
@@ -48,14 +48,14 @@ export const ShareActions = ({
   title,
   session,
   access,
-  published,
+  isPublic,
   knownUsers,
 }) => {
   const [users, setUsers] = useState<knownUser[]>(knownUsers)
   const [open, setOpen] = useState(false)
   const [alertOpen, setAlertOpen] = useState(false)
   const [generalAccess, setGeneralAccess] = useState(
-    published ? "link" : "restricted"
+    isPublic ? "link" : "restricted"
   )
   const [accessList, setAccessList] = useState<Access[]>(access)
 
@@ -76,7 +76,7 @@ export const ShareActions = ({
   const pendingChanges =
     invited.length > 0 ||
     Object.keys(accessUpdateQue).length > 0 ||
-    generalAccess != (published ? "link" : "restricted")
+    generalAccess != (isPublic ? "link" : "restricted")
   return (
     <Dialog
       open={open}
@@ -168,9 +168,9 @@ export const ShareActions = ({
             onClick={async () => {
               setIsLoading(true)
 
-              await updatePublished({
+              await updateVisibility({
                 room,
-                published: generalAccess == "link",
+                isPublic: generalAccess == "link",
               })
 
               await updateAccessLevels(room, accessUpdateQue)
@@ -213,7 +213,7 @@ export const ShareActions = ({
                 setAccessUpdateQue({})
                 setAccessList(access)
                 setInvited([])
-                setGeneralAccess(published ? "link" : "restricted")
+                setGeneralAccess(isPublic ? "link" : "restricted")
               }}
             >
               Discard
