@@ -11,14 +11,14 @@ export const ShareButton = async ({ room }) => {
   const {
     access,
     title,
-    public: isPublic,
+    isPublic,
     author: { knownUserIds },
   } = await db.post.findFirst({
     where: { id: room },
     select: {
       access: { include: { user: true } },
       title: true,
-      public: true,
+      isPublic: true,
       author: { select: { knownUserIds: true } },
     },
   })

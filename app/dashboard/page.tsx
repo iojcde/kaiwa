@@ -15,7 +15,7 @@ const Dashboard = async () => {
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
-        <h1 className="text-4xl font-bold tracking-tight">Posts</h1>
+        <h1 className="text-4xl font-bold tracking-tight">Your Notes</h1>
         <PostCreateButton />
       </div>
 

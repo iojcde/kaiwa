@@ -12,8 +12,7 @@ import { Footer } from "./footer"
 export default async function Home() {
   return (
     <>
-      <div className="relative overflow-x-hidden pb-16">
-        <IntroNav />
+      <div className="relative overflow-x-hidden pb-16"> 
         <main className="container grid min-h-[calc(100vh-72px)] grid-cols-1 justify-between pb-24 md:h-auto md:grid-cols-[1fr_0.8fr] md:items-center">
           <div>
             <div className="py-20 md:px-6">
@@ -29,8 +28,8 @@ export default async function Home() {
               </h1>
               <p className="mt-4 max-w-[32ch] text-gray-11 md:text-xl">
                 <Balancer>
-                  Kaiwa is a collaborative document editor built on Milkdown,
-                  Y.js, and Partykit.
+                  Kaiwa is an experimental collaborative note-taking app built
+                  on Milkdown, Y.js, and Partykit.
                 </Balancer>
               </p>
               <Link
@@ -158,7 +157,7 @@ export default async function Home() {
             </div>
           </div>
         </div>
-        <div className="mx-auto mt-6 h-1 w-52 bg-gradient-to-r from-transparent rounded-full to-violet-500 sm:hidden"></div>
+        <div className="mx-auto mt-6 h-1 w-52 rounded-full bg-gradient-to-r from-transparent to-violet-500 sm:hidden"></div>
       </div>
 
       <div className="relative w-full border-t bg-white py-24 dark:bg-black">

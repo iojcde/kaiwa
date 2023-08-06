@@ -9,6 +9,6 @@ export const updateVisibility = async ({ room, isPublic }) => {
   if (!session) throw new Error("Unauthorized")
   return await db.post.update({
     where: { id: room },
-    data: { public: isPublic },
+    data: { isPublic },
   })
 }

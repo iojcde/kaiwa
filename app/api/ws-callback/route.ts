@@ -1,6 +1,4 @@
-import { db } from "@/lib/db"
-import { yXmlFragmentToProsemirrorJSON } from "y-prosemirror"
-import { XmlFragment } from "yjs"
+import { db } from "@/lib/db" 
 
 const wsCallback = async (req: Request) => {
   // const auth = req.headers.get("auth")

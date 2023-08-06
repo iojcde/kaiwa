@@ -28,6 +28,7 @@ export default function RootLayout({
         <div className="fixed bottom-0 top-0 w-full overflow-x-auto">
           <Providers>
             <CommandMenu />
+            <Nav />
             {children}
           </Providers>
           <Toaster />

@@ -1,18 +1,20 @@
 import { PrismaClient } from "@prisma/client"
+import { withBark } from "prisma-extension-bark"
+
+const getExtendedPrismaClient = () => {
+  return new PrismaClient().$extends(withBark({ modelNames: ["node"] }))
+}
+
+export type ExtendedPrismaClient = ReturnType<typeof getExtendedPrismaClient>
 
 declare global {
   // eslint-disable-next-line no-var
-  var cachedPrisma: PrismaClient
+  var cachedPrisma: ExtendedPrismaClient | undefined
 }
 
-let prisma: PrismaClient
-if (process.env.NODE_ENV === "production") {
-  prisma = new PrismaClient()
-} else {
-  if (!global.cachedPrisma) {
-    global.cachedPrisma = new PrismaClient()
-  }
-  prisma = global.cachedPrisma
-}
+export const db: ExtendedPrismaClient =
+  global.cachedPrisma || getExtendedPrismaClient()
 
-export const db: PrismaClient = prisma
+if (process.env.NODE_ENV !== "production") {
+  global.cachedPrisma = db
+}

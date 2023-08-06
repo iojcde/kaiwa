@@ -13,8 +13,7 @@ import { useEffect, useRef, useState } from "react"
 import { Dialog, DialogContent } from "../ui/dialog"
 import { useTheme } from "next-themes"
 import { wait } from "@/lib/utils"
-import { Home, Laptop, Moon, Plus, Settings, SunMedium } from "lucide-react"
-import { createPost } from "@/actions/create-post"
+import { Home, Laptop, Moon, Plus, Settings, SunMedium } from "lucide-react" 
 import { toast } from "../ui/use-toast"
 import { Post } from "@prisma/client"
 import { useCommandState } from "cmdk"
@@ -129,23 +128,7 @@ export function CommandMenu() {
               <>
                 <CommandEmpty>No results found.</CommandEmpty>
                 <CommandGroup className="text-gray-11" heading="Editor">
-                  <CommandItem
-                    onSelect={async () => {
-                      let post: Post
-                      try {
-                        post = await createPost()
-                      } catch (e) {
-                        toast({
-                          title: "Something went wrong.",
-                          description:
-                            "Your post was not created. Please try again.",
-                          variant: "destructive",
-                        })
-                      }
-
-                      router.push(`/editor/${post.id}`)
-                    }}
-                  >
+                  <CommandItem>
                     <Plus /> New Document
                   </CommandItem>
                 </CommandGroup>

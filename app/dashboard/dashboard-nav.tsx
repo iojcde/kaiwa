@@ -9,7 +9,7 @@ export const DashboardNav = () => (
   <div className="hidden w-[200px] flex-col  gap-2 md:flex">
     <NavLink className="flex items-center gap-2" href="/dashboard">
       <FileText size={16} />
-      Posts
+      Your Notes
     </NavLink>
     <NavLink className="flex items-center gap-2" href="/dashboard/settings">
       <Settings size={16} />
