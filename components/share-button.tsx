@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth"
 
 import { authOptions } from "@/lib/auth"
-import { db } from "@/lib/db"
+import { db } from "@/lib"
 import { ShareActions } from "./share-actions"
 
 export const ShareButton = async ({ room }) => {

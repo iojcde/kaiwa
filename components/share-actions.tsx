@@ -22,13 +22,13 @@ import {
   DialogTrigger,
 } from "./ui/dialog"
 
-import { Dispatch, SetStateAction, cache, useEffect, useState } from "react" 
+import { Dispatch, SetStateAction, cache, useEffect, useState } from "react"
 import { updateAccessLevels } from "@/actions/update-access-levels"
 import { Check, ChevronsUpDown, Globe, Loader2, Lock } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { FancyMultiSelect } from "./ui/fancy-multi-select"
 import { inviteUsers } from "@/actions/invite-users"
-import { useRouter } from "next/navigation"
+import { useRouter } from "next-nprogress-bar"
 import {
   AlertDialog,
   AlertDialogAction,

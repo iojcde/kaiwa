@@ -2,7 +2,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { NextAuthOptions, getServerSession } from "next-auth"
 import EmailProvider from "next-auth/providers/email"
 import GithubProvider from "next-auth/providers/github"
-import { db } from "./db"
+import { db } from "@/lib/db"
 import { sendVerificationRequest } from "@/emails/sendVerificationEmail"
 
 export const authOptions: NextAuthOptions = {
@@ -34,47 +34,46 @@ export const authOptions: NextAuthOptions = {
         },
       })
 
-      if (dbUser.wsToken == null) {
-        dbUser = await db.user.update({
-          where: { id: dbUser.id },
-          data: {
-            wsToken: require("crypto").randomBytes(256).toString("base64"),
-          },
-        })
-      }
-
-      if (trigger == "signUp") {
-        const invites = await db.invite.findMany({
-          where: { email: token.email },
-        })
-
-        if (invites.length > 0) {
-          await db.access.createMany({
-            data: invites.map((invite) => {
-              return {
-                level: invite.level,
-                postId: invite.postId,
-                userId: dbUser.id,
-              }
-            }),
-          })
-        }
-      }
-
-      // if (!dbUser) {
-      //   if (user) {
-      //     token.id = user?.id;
-      //     token.wsToken =
+      //   if (dbUser.wsToken == null) {
+      //     dbUser = await db.user.update({
+      //       where: { id: dbUser.id },
+      //       data: {
+      //         wsToken: require("crypto").randomBytes(256).toString("base64"),
+      //       },
+      //     })
       //   }
-      //   return token;
-      // }
+
+      //   if (trigger == "signUp") {
+      //     const invites = await db.invite.findMany({
+      //       where: { email: token.email },
+      //     })
+
+      //     if (invites.length > 0) {
+      //       await db.access.createMany({
+      //         data: invites.map((invite) => {
+      //           return {
+      //             level: invite.level,
+      //             postId: invite.postId,
+      //             userId: dbUser.id,
+      //           }
+      //         }),
+      //       })
+      //     }
+      //   }
+
+      //   // if (!dbUser) {
+      //   //   if (user) {
+      //   //     token.id = user?.id;
+      //   //     token.wsToken =
+      //   //   }
+      //   //   return token;
+      //   // }
 
       return {
         id: dbUser.id,
         name: dbUser.name,
         email: dbUser.email,
         picture: dbUser.image,
-        wsToken: dbUser.wsToken,
       }
     },
     async session({ token, session }) {
@@ -83,7 +82,6 @@ export const authOptions: NextAuthOptions = {
         session.user.name = token.name
         session.user.email = token.email
         session.user.image = token.picture
-        session.wsToken = token.wsToken
       }
 
       return session
@@ -91,14 +89,22 @@ export const authOptions: NextAuthOptions = {
   },
 }
 
-export async function verifyCurrentUserHasAccessToPost(postId: string) {
-  const session = await getServerSession(authOptions)
-  const count = await db.post.count({
+export const checkVaultAccess = async (vaultId: number) => {
+  const session = await getServerSession()
+  if (!session) throw new Error("Unauthorized")
+
+  const vault = await db.vault.findUnique({
     where: {
-      id: postId,
-      authorId: session?.user.id,
+      users: {
+        some: {
+          id: {
+            equals: session.user.id,
+          },
+        },
+      },
+      id: vaultId,
     },
   })
 
-  return count > 0
+  if (!vault) throw new Error("Vault not found")
 }

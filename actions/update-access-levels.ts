@@ -1,7 +1,7 @@
 "use server"
 
 import { authOptions } from "@/lib/auth"
-import { db } from "@/lib/db"
+import { db } from "@/lib"
 import { AccessLevel } from "@prisma/client"
 import { getServerSession } from "next-auth"
 

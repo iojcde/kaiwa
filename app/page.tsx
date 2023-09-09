@@ -12,7 +12,8 @@ import { Footer } from "./footer"
 export default async function Home() {
   return (
     <>
-      <div className="relative overflow-x-hidden pb-16"> 
+      <IntroNav />
+      <div className="relative overflow-x-hidden pb-16">
         <main className="container grid min-h-[calc(100vh-72px)] grid-cols-1 justify-between pb-24 md:h-auto md:grid-cols-[1fr_0.8fr] md:items-center">
           <div>
             <div className="py-20 md:px-6">

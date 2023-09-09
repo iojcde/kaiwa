@@ -1,7 +1,7 @@
 "use server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "./auth"
-import { db } from "./db"
+import { db } from "."
 import { AccessLevel } from "@prisma/client"
 
 export const checkPostAccess = async ({ room }) => {

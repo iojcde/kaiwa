@@ -1,21 +1,16 @@
-import { getChildren } from "@/app/editor/[...segments]/sidebar"
-import { TreeNode } from "@/app/editor/[...segments]/sidebar/sidebar-components"
+import { app } from "@/lib/octokit"
 
 const getContent = async (req: Request) => {
-  const props = await req.json()
+  const octokit = await app.getInstallationOctokit(40421197)
 
-  const files = await getChildren(props)
-  return files.map(
-    (file) =>
-      ({
-        id: file.sha,
-        title: file.path,
-        urlPath: `/editor/iojcde-workspace/${file.path.replace("data/", "")}`,
-        type: file.type == "dir" ? "Folder" : "Note",
-        path: file.path,
-        children: [],
-      }) satisfies TreeNode
-  )
+  const { owner, repo, path } = await req.json()
+
+  const res = await octokit.rest.repos.getContent({
+    owner,
+    repo,
+    path,
+  })
+
+  return new Response(Buffer.from(res.data.content, "base64").toString())
 }
-
-export { getContent as GET}
+export { getContent as POST }

@@ -1,4 +1,4 @@
-import { db } from "@/lib/db"
+import { db } from "@/lib"
 
 const wsAuth = async (req: Request) => {
   const auth = req.headers.get("auth")

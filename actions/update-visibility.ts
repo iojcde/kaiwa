@@ -1,6 +1,6 @@
 "use server"
 import { authOptions } from "@/lib/auth"
-import { db } from "@/lib/db"
+import { db } from "@/lib"
 import { getServerSession } from "next-auth"
 
 export const updateVisibility = async ({ room, isPublic }) => {

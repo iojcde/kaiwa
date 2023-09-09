@@ -10,12 +10,13 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String
+  id                Int     @id @default(autoincrement())
+  userId            Int
   type              String
   provider          String
   providerAccountId String
@@ -33,27 +34,25 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           Int      @id @default(autoincrement())
   sessionToken String   @unique
-  userId       String
+  userId       Int
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            Int       @id @default(autoincrement())
   name          String?
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  wsToken       String?   @unique
   accounts      Account[]
   sessions      Session[]
 
   knownUserIds String[] @db.Text
 
-  access Access[]
-  Invite Invite[]
+  vaults Vault[]
 }
 
 model VerificationToken {
@@ -70,28 +69,52 @@ enum AccessLevel {
   EDITOR
 }
 
-model Workspace {
-  id      String @id @default(cuid())
-  segment String @unique
+model Vault {
+  id    Int    @id @default(autoincrement())
+  slug  String @unique
+  name  String
+  users User[]
 
-  Invite Invite[]
+  githubRepoId Int?
+  githubRepo   GithubRepo? @relation(fields: [githubRepoId], references: [id])
+  branch       String
+
+  files File[]
 }
 
-model Access {
-  id     String      @id @default(cuid())
-  level  AccessLevel
-  user   User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
-
-  nodeId String
+model GithubRepo {
+  id             Int     @id @default(autoincrement())
+  owner          String
+  repo           String
+  installationId Int
+  Workspace      Vault[]
 }
 
-model Invite {
-  id          String      @id @default(cuid())
-  email       String      @unique
-  workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  workspaceId String
-  invitedBy   User        @relation(fields: [invitedById], references: [id], onDelete: Cascade)
-  invitedById String
-  level       AccessLevel
+enum FileType {
+  FILE
+  FOLDER
+}
+
+model File {
+  id        Int    @id @default(autoincrement())
+  public_id String @db.VarChar(12)
+
+  path     String @db.VarChar(64)
+  filename String @db.VarChar(128)
+  data     Bytes  @db.ByteA
+
+  vault   Vault @relation(fields: [vaultId], references: [id], onDelete: Cascade)
+  vaultId Int
+
+  deleted Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  latest    Boolean  @default(true)
+
+  type FileType
+
+  @@unique([vaultId, public_id, latest])
+  @@unique([vaultId, path, latest])
+  @@index([public_id, latest], name: "public_id_latest")
 }

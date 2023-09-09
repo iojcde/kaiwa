@@ -3,9 +3,9 @@ import { db } from "@/lib/db"
 import { Loader2, PlusIcon } from "lucide-react"
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
-import { PostCard } from "./post-card"
+import { WorkspaceCard } from "./workspace-card"
 import { authOptions } from "@/lib/auth"
-import { Posts } from "./posts"
+import { Workspaces } from "./workspaces"
 import { Suspense } from "react"
 import { randomRoomName } from "@/lib/randomRoomName"
 import { revalidatePath } from "next/cache"
@@ -22,15 +22,15 @@ const Dashboard = async () => {
       <Suspense
         fallback={
           <div className="divide-border-200 mt-8 divide-y rounded-md border">
-            <PostCard.Skeleton />
-            <PostCard.Skeleton />
-            <PostCard.Skeleton />
-            <PostCard.Skeleton />
-            <PostCard.Skeleton />
+            <WorkspaceCard.Skeleton />
+            <WorkspaceCard.Skeleton />
+            <WorkspaceCard.Skeleton />
+            <WorkspaceCard.Skeleton />
+            <WorkspaceCard.Skeleton />
           </div>
         }
       >
-        <Posts />
+        <Workspaces />
       </Suspense>
     </div>
   )

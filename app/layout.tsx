@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster"
 import { CommandMenu } from "@/components/command-menu"
 
+import { AppProgressBar as ProgressBar } from "next-nprogress-bar"
+
 const Inter = localFont({
   src: "../fonts/InterVariable.woff2",
   display: "swap",
@@ -25,10 +27,10 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body className={cn(Inter.className)}>
+        {" "}
         <div className="fixed bottom-0 top-0 w-full overflow-x-auto">
           <Providers>
             <CommandMenu />
-            <Nav />
             {children}
           </Providers>
           <Toaster />
