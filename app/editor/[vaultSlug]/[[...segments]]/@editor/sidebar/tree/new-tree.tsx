@@ -15,20 +15,12 @@ import { SidebarMenu } from "../sidebar-menu"
 import { onTreeChange } from "@/actions/on-tree-change"
 import { renameFile } from "@/actions/rename-file"
 
-export const NewTree = ({
-  vaultSlug,
-  initialTree,
-  vaultId,
-}: {
-  vaultSlug: string
-  initialTree: Record<string, TreeNode>
-  vaultId: number
-}) => {
-  const [tree, setTree] = useState(initialTree)
+export const NewTree = () => {
+  const { tree, setTree,vaultSlug,vaultId } = useEditorContext()
 
-  const currentPath = decodeURIComponent(usePathname()) 
+  const currentPath = decodeURIComponent(usePathname())
   const [focusedItem, setFocusedItem] = useState(
-    Object.values(initialTree).find((i) => {
+    Object.values(tree).find((i) => {
       return i.urlPath == currentPath.replace(`/editor/${vaultSlug}/`, "")
     })?.index
   )

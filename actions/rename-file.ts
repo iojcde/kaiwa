@@ -11,7 +11,6 @@ export const renameFile = async (
   newFilename: string,
   isFolder: boolean
 ) => {
-  
   checkVaultAccess(vaultId)
   const newFile = await db.file.update({
     where: {
@@ -26,7 +25,7 @@ export const renameFile = async (
         oldPath.split("/").pop(),
         newFilename + (!isFolder ? ".md" : "")
       ),
-      filename: newFilename,
+      filename: newFilename + (!isFolder ? ".md" : ""),
     },
   })
 

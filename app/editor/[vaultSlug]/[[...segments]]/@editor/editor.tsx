@@ -20,11 +20,10 @@ import { ProsemirrorAdapterProvider } from "@prosemirror-adapter/react"
 import { useSlash } from "@/components/editor/slash"
 import { listener, listenerCtx } from "@milkdown/plugin-listener"
 import React, { use, useCallback, useEffect } from "react"
-import { parseFrontmattter } from "@/lib/parseFrontmatter"
-import { Textarea } from "@/components/ui/textarea"
-import { setTitle } from "@/actions/set-title"
 import { usePathname, useRouter } from "next/navigation"
 import { setFileData } from "@/actions/set-file-data"
+import { renameFile } from "@/actions/rename-file"
+import { useEditorContext } from "@/context/EditorContext"
 
 const MilkdownEditor = ({ public_id, filename, path, defaultContent }) => {
   const slash = useSlash()
@@ -34,6 +33,8 @@ const MilkdownEditor = ({ public_id, filename, path, defaultContent }) => {
     await setFileData(1, public_id, markdown)
     console.log("saved")
   }, 2000)
+
+  const { vaultId, tree, setTree } = useEditorContext()
 
   const { get } = useEditor((root) =>
     EditorPrimative.make()
@@ -83,13 +84,26 @@ const MilkdownEditor = ({ public_id, filename, path, defaultContent }) => {
         queueMicrotask(() => view.focus())
       })
 
-      await setTitle(1, public_id, e.target.value + ".md", path)
-      console.log(e.target.value)
+      const newName = e.target.value
 
-      router.refresh()
-      return router.push(
-        currentPath.replace(filename, e.target.value.replace(" ", "+"))
-      )
+      const item = tree[public_id]
+
+      await renameFile(vaultId, public_id, filename, newName, false)
+      let tmp = {
+        ...item,
+        data: newName,
+        urlPath: item.urlPath.replace(
+          item.urlPath.split("/").pop(),
+          newName + ".md"
+        ),
+        path: item.path.replace(item.path.split("/").pop(), newName + ".md"),
+      }
+      setTree((tree) => ({
+        ...tree,
+        [item.index]: tmp,
+      }))
+
+      return router.push(tmp.urlPath)
     }
   }
 

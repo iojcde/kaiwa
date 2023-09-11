@@ -10,6 +10,8 @@ import EditorContext, { EditorContextProvider } from "@/context/EditorContext"
 import { db } from "@/lib/db"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
+import { buildTree } from "@/lib/tree/buildTree"
+
 const EditorLayout: React.FC<{
   children: ReactNode
   intro: ReactNode
@@ -29,16 +31,23 @@ const EditorLayout: React.FC<{
       },
       slug: vaultSlug,
     },
+    include: { files: { where: { latest: true } } },
   })
+
+  const tree = buildTree(vault.files)
 
   if (!vault) throw new Error("Vault not found")
 
   return (
     <div className="flex h-screen">
-      <EditorContextProvider slug={vaultSlug}>
+      <EditorContextProvider
+        vaultId={vault.id}
+        initialTree={tree}
+        slug={vaultSlug}
+      >
         <div className="sticky top-16 hidden h-screen shrink-0 border-r border-neutral-200 dark:border-neutral-800 sm:block">
           <ScrollArea className="h-full">
-            <Sidebar vaultSlug={vaultSlug} />
+            <Sidebar />
           </ScrollArea>
         </div>
         {children}

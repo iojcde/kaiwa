@@ -1,22 +1,15 @@
-import { Button } from "@/components/ui/button"
-import { db } from "@/lib/db"
-import { Loader2, PlusIcon } from "lucide-react"
-import { getServerSession } from "next-auth"
-import { redirect } from "next/navigation"
-import { WorkspaceCard } from "./workspace-card"
+import { WorkspaceCard } from "./vault-card"
 import { authOptions } from "@/lib/auth"
-import { Workspaces } from "./workspaces"
+import { Vaults } from "./vaults"
 import { Suspense } from "react"
-import { randomRoomName } from "@/lib/randomRoomName"
-import { revalidatePath } from "next/cache"
-import { PostCreateButton } from "@/components/post-create-button"
+import Link from "next/link"
 
 const Dashboard = async () => {
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
-        <h1 className="text-4xl font-bold tracking-tight">Your Notes</h1>
-        <PostCreateButton />
+        <h1 className="text-4xl font-bold tracking-tight">Vaults</h1>
+        <Link href="/create-vault">Create Vault</Link>
       </div>
 
       <Suspense
@@ -30,7 +23,7 @@ const Dashboard = async () => {
           </div>
         }
       >
-        <Workspaces />
+        <Vaults />
       </Suspense>
     </div>
   )

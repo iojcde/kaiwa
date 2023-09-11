@@ -6,7 +6,7 @@ import { useRouter } from "next-nprogress-bar"
 import { cn } from "@/lib/utils"
 import { ButtonProps, buttonVariants } from "@/components/ui/button"
 import { toast } from "@/components/ui/use-toast"
-import { createPost } from "@/actions/create-workspace"
+import { createPost } from "@/actions/create-vault"
 import { Post } from "@prisma/client"
 import { Loader2, Plus } from "lucide-react"
 

@@ -13,7 +13,7 @@ export const Providers: React.FC<{ children: ReactNode }> = ({ children }) => {
       <ThemeProvider attribute="class">
         <SessionProvider>
           <TooltipProvider>
-            <ProgressBar />
+            <ProgressBar options={{ showSpinner: false }} />
             {children}
           </TooltipProvider>
         </SessionProvider>
