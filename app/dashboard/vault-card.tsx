@@ -1,6 +1,5 @@
-import { Vault } from "@prisma/client"
-import Link from "next/link"
-import { PostOperations } from "./post-operations"
+
+import Link from "next/link" 
 import { Skeleton } from "@/components/ui/skeleton"
 
 export const WorkspaceCard = ({

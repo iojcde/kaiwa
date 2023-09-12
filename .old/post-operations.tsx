@@ -24,8 +24,6 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { toast } from "@/components/ui/use-toast"
 import { Loader2, MoreVertical, Trash } from "lucide-react"
-import { db } from "@/lib"
-import { deletePost } from "../../actions/delete-post"
 
 interface PostOperationsProps {
   post: Pick<Post, "id" | "title">

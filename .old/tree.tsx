@@ -1,6 +1,6 @@
 "use client"
 
-import { sortTree } from "@/lib/tree/sortTree"
+import { sortTree } from "@/old/sortTree"
 import { Node } from "./tree-components"
 import { cn } from "@/lib/utils"
 import { Suspense, cache, use } from "react"

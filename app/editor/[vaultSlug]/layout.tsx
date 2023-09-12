@@ -1,6 +1,5 @@
 import { ReactNode, cache } from "react"
 import { CollabProvider } from "@/context/CollabContext"
-import { ShareButton } from "@/components/share-button"
 import { App } from "octokit"
 import Link from "next/link"
 import { Nav } from "@/components/nav"

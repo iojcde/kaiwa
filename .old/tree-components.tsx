@@ -13,7 +13,7 @@ import React, {
 } from "react"
 import Link from "next/link"
 import { useParams, usePathname } from "next/navigation"
-import { Label } from "../label"
+import { Label } from "../app/editor/[vaultSlug]/[[...segments]]/@editor/sidebar/label"
 import { cn } from "@/lib/utils"
 import dynamic from "next/dynamic"
 import { ChevronDown } from "lucide-react"
