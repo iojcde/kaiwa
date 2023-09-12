@@ -49,6 +49,7 @@ const MilkdownEditor = ({ public_id, filename, path, defaultContent }) => {
       .use(gfm)
       .use(clipboard)
       .use(placeholder)
+      .use(upload)
       .use(history)
       .use(slash.plugins)
       .use(listener)
