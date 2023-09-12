@@ -22,6 +22,9 @@ import { listener, listenerCtx } from "@milkdown/plugin-listener"
 import React, { use, useCallback, useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { setFileData } from "@/actions/set-file-data"
+
+import { uploader } from "@/milkdown/upload"
+import { upload, uploadConfig } from "@milkdown/plugin-upload"
 import { renameFile } from "@/actions/rename-file"
 import { useEditorContext } from "@/context/EditorContext"
 
@@ -57,6 +60,10 @@ const MilkdownEditor = ({ public_id, filename, path, defaultContent }) => {
 
           await uploadData(markdown)
         })
+        ctx.update(uploadConfig.key, (prev) => ({
+          ...prev,
+          uploader,
+        }))
       })
   )
 
